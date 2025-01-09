@@ -1,0 +1,23 @@
+.img-thumbnail {
+    height: 400px;
+}
+
+.placeholder_Custom {
+    .placeholder-text {
+        position: absolute;
+        top: 73%;
+        left: 10%;
+        transform: translateY(-50%);
+        color: #aaa;
+        pointer-events: none;
+        transition: all 0.2s ease-in-out;
+        font-size: 14px;
+        background: #fff;
+    }
+
+    input:focus+.placeholder-text,
+    .hidden {
+        visibility: hidden;
+        opacity: 0;
+    }
+}

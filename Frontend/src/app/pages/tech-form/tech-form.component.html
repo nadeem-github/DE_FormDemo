@@ -1,0 +1,547 @@
+<section class="py-4 bg-body-secondary">
+    <div class="container-fluid">
+        <h4 class="text-center mb-4">Skill Fusion Tech-Pal Form</h4>
+        <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+            <div class="card shadow-sm rounded-1 mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <h5 class="text-center">Personal Information</h5>
+                            <hr>
+                            <div class="row">
+                                <!-- First Name -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">First Name <span class="text-danger">*</span></label>
+                                    <input type="text" formControlName="firstName" class="form-control shadow-none" />
+                                    <div *ngIf="dataForm.get('firstName')?.touched && dataForm.get('firstName')?.errors?.['required']"
+                                        class="text-danger position-absolute">
+                                        First Name is required.
+                                    </div>
+                                </div>
+
+                                <!-- Last Name -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                                    <input type="text" formControlName="lastName" class="form-control shadow-none" />
+                                    <div *ngIf="dataForm.get('lastName')?.touched && dataForm.get('lastName')?.errors?.['required']"
+                                        class="text-danger position-absolute">
+                                        Last Name is required.
+                                    </div>
+                                </div>
+
+                                <!-- Phone Number -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                    <input type="text" formControlName="phoneNumber" class="form-control shadow-none" />
+                                    <div *ngIf="dataForm.get('phoneNumber')?.touched && dataForm.get('phoneNumber')?.errors?.['required']"
+                                        class="text-danger position-absolute">
+                                        Phone Number is required.
+                                    </div>
+                                    <div *ngIf="dataForm.get('phoneNumber')?.touched && dataForm.get('phoneNumber')?.errors?.['pattern']"
+                                        class="text-danger position-absolute">
+                                        Please enter a valid phone number.
+                                    </div>
+                                </div>
+
+                                <!-- SSN -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">SSN <span class="text-danger">*</span></label>
+                                    <input type="text" formControlName="ssn" class="form-control shadow-none" />
+                                    <div *ngIf="dataForm.get('ssn')?.touched && dataForm.get('ssn')?.errors?.['required']"
+                                        class="text-danger position-absolute">
+                                        SSN is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="row">
+                                    <div class="col-md-7 mb-4">
+                                        <label class="form-label">Emergency Contact Name</label>
+                                        <input type="text" formControlName="emergencyContactName1"
+                                            class="form-control shadow-none" />
+                                        <div *ngIf="isInvalid('emergencyContactName1')" class="text-danger">
+                                            Emergency Contact Name 1 is required.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 mb-4">
+                                        <label class="form-label">Phone Number <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" formControlName="emergencyContactNumber1"
+                                            class="form-control shadow-none" />
+                                        <div *ngIf="dataForm.get('emergencyContactNumber1')?.touched && dataForm.get('emergencyContactNumber1')?.errors?.['required']"
+                                            class="text-danger">
+                                            Phone Number is required.
+                                        </div>
+                                        <div *ngIf="dataForm.get('emergencyContactNumber1')?.touched && dataForm.get('emergencyContactNumber1')?.errors?.['pattern']"
+                                            class="text-danger">
+                                            Please enter a valid phone number.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 mb-4">
+                                        <label class="form-label">Emergency Contact Name</label>
+                                        <input type="text" formControlName="emergencyContactName2"
+                                            class="form-control shadow-none" />
+                                        <div *ngIf="isInvalid('emergencyContactName2')" class="text-danger">
+                                            Emergency Contact Name 2 is required.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 mb-4">
+                                        <label class="form-label">Phone Number</label>
+                                        <input type="text" formControlName="emergencyContactNumber2"
+                                            class="form-control shadow-none" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input class="form-check-input rounded-1 shadow-none" type="checkbox" formControlName="ttiawo">
+                                <label class="form-check-label font-14">This Tech is Accepting Work-Orders</label>
+                            </div>
+                            <div class="d-flex align-items-center mb-4">
+                                <p class="mb-0 me-3 font-14 fw-semibold">Background Check</p>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" formControlName="isAcceptingWorkOrders"
+                                        value="pass" />
+                                    <label class="form-check-label">Pass</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" formControlName="isAcceptingWorkOrders"
+                                        value="none" />
+                                    <label class="form-check-label">None</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <h5 class="text-center">Address</h5>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Address</label>
+                                    <input type="text" formControlName="address" class="form-control shadow-none" />
+                                    <div *ngIf="dataForm.get('address')?.touched && dataForm.get('address')?.errors?.['required']"
+                                        class="text-danger position-absolute">
+                                        Address is required.
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">City</label>
+                                    <input type="text" formControlName="cityName" class="form-control shadow-none" />
+                                    <div *ngIf="isInvalid('city')" class="text-danger">
+                                        City is required.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">State</label>
+                                    <select class="form-select shadow-none" formControlName="stateName">
+                                        <option selected disabled>Select State</option>
+                                        <option value="maharashtra">Maharashtra</option>
+                                        <option value="madhya-pradesh">Madhya Pradesh</option>
+                                        <option value="rajasthan">Rajasthan</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Zip Code</label>
+                                    <input type="text" formControlName="zipCode" class="form-control shadow-none" />
+                                    <div *ngIf="isInvalid('zipCode')" class="text-danger">
+                                        Zip Code is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-2">
+                            <h5 class="text-center">Service Area</h5>
+                            <hr class="my-2">
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label" for="latitude">Latitude</label>
+                                    <input type="text" formControlName="latitude" class="form-control shadow-none" readonly />
+                                    <div *ngIf="isInvalid('latitude')" class="text-danger">
+                                        Latitude is required.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label" for="longitude">Longitude</label>
+                                    <input type="text" formControlName="longitude" class="form-control shadow-none" readonly />
+                                    <div *ngIf="isInvalid('longitude')" class="text-danger">
+                                        Longitude is required.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label" for="radius">Radius (Miles)</label>
+                                    <input type="number" formControlName="radius" class="form-control shadow-none" />
+                                    <div *ngIf="isInvalid('radius')" class="text-danger">
+                                        Radius is required.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4 align-self-end">
+                                    <button class="btn btn-info rounded-1 w-100" (click)="getLocation()" [disabled]="isLoading">
+                                        {{ isLoading ? 'Fetching...' : 'Get Geocode Address' }}
+                                    </button>
+                                </div>
+                            </div>                              
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <h5 class="text-center">Drivers License</h5>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">State of License</label>
+                                    <input type="text" formControlName="stateOfLicense"
+                                        class="form-control shadow-none" />
+                                    <div *ngIf="dataForm.get('stateOfLicense')?.touched && dataForm.get('stateOfLicense')?.errors?.['required']"
+                                        class="text-danger position-absolute">
+                                        State of License is required.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4 position-relative placeholder_Custom">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="date" formControlName="ed" class="form-control shadow-none" (focus)="isFocused = true" (blur)="isFocused = !dataForm.get('ed')?.value" />
+                                    <span class="placeholder-text" [class.hidden]="isFocused || dataForm.get('ed')?.value">
+                                        DD-MMM-YYYY
+                                    </span>
+                                </div>
+                                  
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Identification Number</label>
+                                    <input type="text" formControlName="identificationNumber"
+                                        class="form-control shadow-none" placeholder="Enter Identification Number" />
+                                    <div *ngIf="isInvalid('identificationNumber')" class="text-danger">
+                                        Identification Number is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-check-label">Upload New Drivers License File</label>
+                                <div class="input-group">
+                                    <input type="file" (change)="onFileChange($event, 'undlf')" class="form-control shadow-none" />
+                                </div>
+                                <div *ngIf="isFileInvalid['undlf']" class="text-danger">
+                                    Driver's License file is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm rounded-1 mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <div class="row">
+                                <div class="col-xxl-4 col-xl-4 col-lg-4 align-self-center">
+                                    <p class="mb-0">Security Clearance</p>
+                                </div>
+                                <div class="col-xxl-8 col-xl-8">
+                                    <select class="form-select shadow-none" formControlName="securityClearance">
+                                        <option selected disabled>Select Security Clearance</option>
+                                        <option value="none">None</option>
+                                        <option value="clear">Clear</option>
+                                        <option value="pass">Pass</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="font-14">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input rounded-1 shadow-none" formControlName="tpecheckbox" type="checkbox" value="3 Phase Experienced">
+                                    <label class="form-check-label">3 Phase Experienced</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input rounded-1 shadow-none" type="checkbox" formControlName="vccheckbox" value="Voltage Certification">
+                                    <label class="form-check-label">Voltage Certification</label>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between flex-wrap mb-2">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="hvscRadio" formControlName="hvscRadio" value="1000 Volts String Certification">
+                                        <label class="form-check-label" for="inlineRadio3">1000 Volts String Certification</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="hvscRadio" formControlName="hvscRadio" value="1500 Volts String Certification">
+                                        <label class="form-check-label" for="inlineRadio4">1500 Volts String Certification</label>
+                                    </div>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input rounded-1 shadow-none" type="checkbox" formControlName="rccheckbox" value="Residential Certification">
+                                    <label class="form-check-label">Residential Certification</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input rounded-1 shadow-none" type="checkbox" formControlName="cccheckbox" value="Commercial Certification">
+                                    <label class="form-check-label">Commercial Certification</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input rounded-1 shadow-none" type="checkbox" formControlName="uccheckbox" value="Utility Certification">
+                                    <label class="form-check-label">Utility Certification</label>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <h6 class="text-center mb-0">Tools and Equipment</h6>
+                            <hr>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="form-check mb-2 form-check-inline">
+                                    <input class="form-check-input rounded-1 shadow-none" formControlName="pvcheckbox" type="checkbox" value="PV">
+                                    <label class="form-check-label">PV</label>
+                                </div>
+                                <div class="form-check mb-2 form-check-inline">
+                                    <input class="form-check-input rounded-1 shadow-none" formControlName="evcheckbox" type="checkbox" value="EV">
+                                    <label class="form-check-label">EV</label>
+                                </div>
+                                <div class="form-check mb-2 form-check-inline">
+                                    <input class="form-check-input rounded-1 shadow-none" formControlName="btvcheckbox" type="checkbox" value="BTY">
+                                    <label class="form-check-label">BTY</label>
+                                </div>
+                                <div class="form-check mb-2 form-check-inline">
+                                    <input class="form-check-input rounded-1 shadow-none" formControlName="thermalcheckbox" type="checkbox" value="Thermal">
+                                    <label class="form-check-label">Thermal</label>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-check-label">Special Requirements</label>
+                                <select class="form-select shadow-none" multiple formControlName="optionscheckbox">
+                                    <option value="requirements">Requirements</option>
+                                    <option value="twoManCrew">2 Man Crew</option>
+                                    <option value="laptop">Laptop</option>
+                                    <option value="thermalImaging">Thermal Imaging</option>
+                                </select>
+                            </div>
+                            <hr class="my-2">
+                            <h6 class="text-center mb-0">Tech-Pal Photo</h6>
+                            <hr class="my-2">
+                            <div class="mb-3">
+                                <label class="form-check-label">Upload New Photo</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" (change)="onFileChange($event, 'unp')">
+                                </div>
+                                <div *ngIf="isFileInvalid['unp']" class="text-danger">
+                                    Photo file is required.
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <h6 class="text-center mb-0 text-danger">NPFA-70-E Certification Incomplete</h6>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Title of Certification</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="tocText" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiration Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed1" />
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Identification Number</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in1Text" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-check-label">Upload New Certification File</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" (change)="onFileChange($event, 'uncf')">
+                                </div>
+                                <div *ngIf="isFileInvalid['uncf']" class="text-danger">
+                                    Certification file is required.
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm rounded-1 mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <h6 class="text-center mb-0 text-danger">OSHA Certification Incomplete</h6>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Title of Certification</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="toc1Text" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiration Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed2" />
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">10 Hour or 30 Hour</label>
+                                    <div class="d-flex align-items-center">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="thoth" formControlName="thoth" value="10 Hour">
+                                            <label class="form-check-label font-14" for="hours1">10 Hour</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="thoth" formControlName="thoth" value="30 Hour">
+                                            <label class="form-check-label font-14" for="hours2">30 Hour</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-check-label">Upload New Certification File</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" (change)="onFileChange($event, 'uncf1')">
+                                </div>
+                                <div *ngIf="isFileInvalid['uncf1']" class="text-danger">
+                                    Photo file is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <h6 class="text-center mb-0 text-danger">NABCEP Certification Incomplete</h6>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Title of Certification</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="toc2Text" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiration Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed3" />
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Identification Number</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in2Text" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-check-label">Upload New Certification File</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" (change)="onFileChange($event, 'uncf2')">
+                                </div>
+                                <div *ngIf="isFileInvalid['uncf2']" class="text-danger">
+                                    Photo file is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <!-- <h6 class="text-center text-danger mb-0">License is Incomplete</h6> -->
+                            <h5 class="text-center">Professional License 1</h5>
+                            <hr>
+                
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Title of License</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="tolText" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed4" />
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Identification Number</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in3Text" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-check-label">Upload New License File</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" (change)="onFileChange($event, 'unlf')">
+                                </div>
+                                <div *ngIf="isFileInvalid['unlf']" class="text-danger">
+                                    Photo file is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm rounded-1">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <h5 class="text-center">Professional License 2</h5>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Title of License</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="tol1Text" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed5" />
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Identification Number</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in4Text" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-check-label">Upload New License File</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" (change)="onFileChange($event, 'unlf1')">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <h5 class="text-center">Professional License 3</h5>
+                            <hr>
+                        
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Title of License</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="tol2Text" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed6" />
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Identification Number</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in5Text" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-check-label">Upload New License File</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" (change)="onFileChange($event, 'unlf2')">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                            <h5 class="text-center">Professional License 4</h5>
+                            <hr>
+                        
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Title of License</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="tol3Text" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed7" />
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Identification Number</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in6Text" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-check-label">Upload New License File</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" (change)="onFileChange($event, 'unlf3')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-4 text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <!-- <button type="submit" class="btn btn-primary" [disabled]="dataForm.invalid || isFileInvalid">Submit</button> -->
+            </div>
+        </form>
+    </div>
+</section>
+
+<ngb-toast
+  *ngFor="let toast of toasts"
+  [ngClass]="{ 'bg-success': toast.type === 'success', 'bg-danger': toast.type === 'danger' }"
+  [autohide]="true"
+  [delay]="3000"
+  [header]="toast.type === 'success' ? 'Success!' : 'Error!'">
+  {{ toast.message }}
+</ngb-toast>

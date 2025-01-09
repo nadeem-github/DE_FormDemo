@@ -1,0 +1,14 @@
+.navbar-light {
+    background-color: #0a1f69;
+}
+
+.nav-link {
+    transition: 0.4s;
+
+    &:hover {
+        background-color: #fff;
+        color: #0a1f69 !important;
+        transition: 0.4s;
+        border-radius: 5px;
+    }
+}

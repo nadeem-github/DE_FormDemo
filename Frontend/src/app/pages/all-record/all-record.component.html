@@ -1,0 +1,67 @@
+<section class="py-5">
+    <div class="container-fluid">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">State of License</th>
+                        <th scope="col">Expiry Date</th>
+                        <th scope="col">Identification Number</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="!dataAllUser || dataAllUser.length === 0">
+                        <td colspan="7" class="text-center">No data available</td>
+                    </tr>
+                    <tr *ngFor="let item of dataAllUser">
+                        <td>{{ item.fn }} {{ item.ln }}</td>
+                        <td>{{ item.a }}</td>
+                        <td>{{ item.sol }}</td>
+                        <td>{{ item.ed | date:'MMM dd, yyyy' }}</td>
+                        <td>{{ item.in }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" (click)="editUser(item.id)">
+                                <i class="fa fa-pencil-square" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" (click)="openDeleteModal(item.id)">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<ng-template #confirmModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Confirm Delete</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete this record?
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete(modal)">Delete</button>
+    </div>
+</ng-template>
+
+<div *ngIf="showToast" class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div class="toast show align-items-center text-white bg-{{ toastType }} border-0">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ toastMessage }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"
+                (click)="showToast = false"></button>
+        </div>
+    </div>
+</div>
