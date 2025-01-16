@@ -1,9 +1,9 @@
 {
   "production": {
-    "username": "nnfwxkmy_wco_user",
-    "password": "07X58Z0LLa$i",
+    "username": "root",
+    "password": "Admin123@#$",
     "database": "nnfwxkmy_verification_db",
-    "host": "localhost",
+    "host": "server-626674.skillfusiondatabase.com",
     "port": 3306,
     "dialect": "mysql",
     "logging": false,
