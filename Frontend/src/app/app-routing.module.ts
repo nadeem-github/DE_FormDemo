@@ -4,6 +4,7 @@ import { TechFormComponent } from './pages/tech-form/tech-form.component';
 import { TechFormEditComponent } from './pages/tech-form-edit/tech-form-edit.component';
 import { TechFormUpdateComponent } from './pages/tech-form-update/tech-form-update.component';
 import { AllRecordComponent } from './pages/all-record/all-record.component';
+import { ImportDataComponent } from './pages/import-data/import-data.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'AllRecord', pathMatch: 'full', },
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'TechForm', component: TechFormComponent },
   { path: 'TechFormEdit/:id', component: TechFormEditComponent },
   { path: 'TechFormUpdate', component: TechFormUpdateComponent },
+  { path: 'ImportData', component: ImportDataComponent },
 ];
 
 @NgModule({

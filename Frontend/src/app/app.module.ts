@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AllRecordComponent } from './pages/all-record/all-record.component';
+import { ImportDataComponent } from './pages/import-data/import-data.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AllRecordComponent } from './pages/all-record/all-record.component';
     TechFormComponent,
     TechFormEditComponent,
     TechFormUpdateComponent,
-    AllRecordComponent
+    AllRecordComponent,
+    ImportDataComponent
   ],
   imports: [
     BrowserModule,

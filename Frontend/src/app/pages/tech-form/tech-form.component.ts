@@ -178,7 +178,7 @@ export class TechFormComponent {
 
       this.formDataService.submitFormData(formData).subscribe(
         (response) => {
-          console.log('Form submitted successfully', response);
+          // console.log('Form submitted successfully', response);
           this.showToast('Form submitted successfully!', 'success');
           alert('Record inserted successfully!');
           this.router.navigate(['/AllRecord']);

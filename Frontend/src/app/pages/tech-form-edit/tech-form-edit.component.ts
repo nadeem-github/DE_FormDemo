@@ -100,7 +100,7 @@ export class TechFormEditComponent {
       (response: any) => {
         this.isLoading = false;
         if (response && response.data) {
-          console.log('Received data:', response.data); // Log the received data
+          // console.log('Received data:', response.data);
           this.dataForm.patchValue({
             firstName: response.data.fn,
             lastName: response.data.ln,
@@ -271,7 +271,7 @@ export class TechFormEditComponent {
       this.formDataService.updateFormData(formData).subscribe(
         (response: any) => {
           this.isLoading = false;
-          console.log('Update successful:', response);
+          // console.log('Update successful:', response);
           alert('Record updated successfully!');
           this.router.navigate(['/AllRecord']); // Redirect after success
         },
