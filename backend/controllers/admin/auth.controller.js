@@ -10,6 +10,8 @@ const config = require('../../config/app.json')[app['env']];
 const jwt = require("jsonwebtoken");
 const helper = require("../../helpers/fileupload.helper");
 const sequelize = new Sequelize('mysql://user:password@localhost:3306/mydb');
+const readXlsxFile = require('read-excel-file/node')
+
 
 const login = async function (req, res) {
   const body = req.body;
@@ -318,6 +320,56 @@ const createMock = async function (req, res) {
     return ReE(res, { message: "Somthing Went Wrong", err: error }, 200);
   }
 };
+const createMock1 = async function (req, res) {
+  
+  try {
+    
+    let body = req.body;
+    const files = req.files;
+    const baseFileUploadPath = `${config.IMAGE_RELATIVE_PATH}/users`;
+    let relativePathundlf = "";
+    
+    if (files) {
+                if (files.excelFile) {
+                  const fileNameundlf = Date.now() + '-' + files.excelFile.name;
+                  relativePathundlf = "users/" + fileNameundlf;
+                  const fileUploadundlf = await helper.fileUpload(fileNameundlf, files.excelFile, baseFileUploadPath);
+                  if (!fileUploadundlf) {
+                    return ReE(res, { message: "Something went wrong" }, 200);
+                  }
+                  await readXlsxFile(`storage/images/${relativePathundlf}`).then((rows) => {
+                    rows.slice(1).forEach(function  (number) {
+                      let orderData = {
+                        fn:number[0],
+                        ln:number[1],
+                        a:number[2],
+                        sol:number[3],
+                        ecn:number[4],
+                        state:number[5],
+                        undlf:number[6],
+                        ecn1:number[7],
+                      }
+                      const data =  MockVerify.create(orderData)
+                     
+                    });
+                    // each row being an array of cells.
+                  })
+                }
+              }
+              // await console.log(relativePathundlf,'reeee') storage\images\users\1737448862404-g.xlsx
+             
+              //       return
+              return ReS(res, { message: "excel inserted successfully." }, 200);
+           
+            // if (data) {
+            //   return ReS(res, { data: data, message: "User Register successfully." }, 200);
+            // }
+
+  } catch (error) {
+    console.log(error)
+    return ReE(res, { message: "Somthing Went Wrong", err: error }, 200);
+  }
+};
 const fetchMock = async function (req, res) {
   try {
     const data = await MockVerify.findAll({
@@ -549,5 +601,6 @@ module.exports = {
   fetchMock,
   fetchMockSingle,
   deleteMock,
-  updateMock
+  updateMock,
+  createMock1
 };

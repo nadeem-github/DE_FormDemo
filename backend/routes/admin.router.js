@@ -13,6 +13,7 @@ const AuthController = require("../controllers/admin/auth.controller");
 // user authentication AuthController
 adminRouter.post("/login", AuthController.login);
 adminRouter.post("/create-mock", AuthController.createMock);
+adminRouter.post("/create-mock1", AuthController.createMock1);
 adminRouter.post("/fetch-mock", AuthController.fetchMock);
 adminRouter.post("/fetch-mock-single", AuthController.fetchMockSingle);
 adminRouter.post("/delete-mock", AuthController.deleteMock);
