@@ -373,7 +373,7 @@ const createMock1 = async function (req, res) {
 const fetchMock = async function (req, res) {
   try {
     const data = await MockVerify.findAll({
-      
+      order: [['id', 'DESC']], 
     });
     if (!data) {
       return ReE(res, { message: "No Data Found" }, 200);

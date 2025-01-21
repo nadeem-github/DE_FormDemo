@@ -1,9 +1,9 @@
 {
   "production": {
-    "username": "root",
-    "password": "",
-    "database": "verification_db",
-    "host": "localhost",
+    "username": "nnfwxkmy_wco_user",
+    "password": "07X58Z0LLa$i",
+    "database": "nnfwxkmy_verification_db",
+    "host": "box5749.bluehost.com",
     "port": 3306,
     "dialect": "mysql",
     "logging": false,
