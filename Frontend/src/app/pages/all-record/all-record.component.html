@@ -30,9 +30,11 @@
                     <tr>
                         <th scope="col">Full Name</th>
                         <th scope="col">Address</th>
-                        <th scope="col">State of License</th>
-                        <th scope="col" class="text-nowrap">Expiry Date</th>
-                        <th scope="col">Identification Number</th>
+                        <th scope="col">Phone 1</th>
+                        <th scope="col">Phone 2</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Company</th>
+                        <th scope="col">Website</th>
                         <th scope="col">Edit</th>
                         <th scope="col">Delete</th>
                     </tr>
@@ -45,10 +47,16 @@
                         <td class="texEtllips" placement="top" [title]="item.fn + item.ln">
                             {{ item.fn }} {{ item.ln }}
                         </td>
-                        <td class="texEtllips" [title]="item.ln">{{ item.ln }}</td>
+                        <td class="texEtllips">{{ item.a }}</td>
                         <td>{{ item.sol }}</td>
-                        <td>{{ item.created_at | date: 'MMM dd, yyyy' }}</td>
-                        <td>{{ item.a }}</td>
+                        <td>{{ item.city}}</td>
+                        <td>{{ item.in }}</td>
+                        <td>{{ item.undlf }}</td>
+                        <td>
+                            <a [href]="item.ecn1" target="_blank">
+                                Website
+                            </a>
+                        </td>
                         <td>
                             <button class="btn btn-sm btn-primary" (click)="editUser(item.id)">
                                 <i class="fa fa-pencil-square" aria-hidden="true"></i>
