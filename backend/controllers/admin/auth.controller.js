@@ -340,14 +340,14 @@ const createMock1 = async function (req, res) {
                   await readXlsxFile(`storage/images/${relativePathundlf}`).then((rows) => {
                     rows.slice(1).forEach(function  (number) {
                       let orderData = {
-                        fn:number[0],
-                        ln:number[1],
-                        a:number[2],
-                        sol:number[3],
-                        ecn:number[4],
-                        state:number[5],
-                        undlf:number[6],
-                        ecn1:number[7],
+                        fn:number[6],
+                        ln:number[7],
+                        a:number[1],
+                        sol:number[2],
+                        city:number[3],
+                        in:number[4],
+                        undlf:number[0],
+                        ecn1:number[5],
                       }
                       const data =  MockVerify.create(orderData)
                      
