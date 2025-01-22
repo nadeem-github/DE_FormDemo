@@ -29,11 +29,11 @@
                 <thead>
                     <tr>
                         <th scope="col">Full Name</th>
-                        <th scope="col">Address</th>
+                        <th scope="col">Email</th>
                         <th scope="col">Phone 1</th>
                         <th scope="col">Phone 2</th>
-                        <th scope="col">Email</th>
                         <th scope="col">Company</th>
+                        <th scope="col">Address</th>
                         <th scope="col">Website</th>
                         <th scope="col">Edit</th>
                         <th scope="col">Delete</th>
@@ -41,17 +41,17 @@
                 </thead>
                 <tbody>
                     <tr *ngIf="!filteredData || filteredData.length === 0">
-                        <td colspan="7" class="text-center">No data available</td>
+                        <td colspan="9" class="text-center">No data available</td>
                     </tr>
                     <tr *ngFor="let item of paginatedData">
                         <td class="texEtllips" placement="top" [title]="item.fn + item.ln">
                             {{ item.fn }} {{ item.ln }}
                         </td>
-                        <td class="texEtllips">{{ item.a }}</td>
+                        <td>{{ item.in }}</td>
                         <td>{{ item.sol }}</td>
                         <td>{{ item.city}}</td>
-                        <td>{{ item.in }}</td>
                         <td>{{ item.undlf }}</td>
+                        <td class="texEtllips">{{ item.a }}</td>
                         <td>
                             <a [href]="item.ecn1" target="_blank">
                                 Website
