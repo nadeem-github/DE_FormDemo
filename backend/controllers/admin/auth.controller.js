@@ -639,14 +639,22 @@ const downloadMock = async function (req, res) {
     const timestamp = new Date().toISOString().replace(/[-:.]/g, ""); // Remove special chars
     const fileName = `export_${timestamp}.xlsx`; // Example: export_20250210084500.xlsx
     const filePath = path.join(__dirname, fileName);
+    // console.log(filePath);
     await workbook.xlsx.writeFile(filePath);
-
-    res.download(filePath, fileName, (err) => {
-      if (err) {
-        console.error("Download error:", err);
-        res.status(500).json({ message: "Error downloading file" });
-      }
-    });
+    
+    // res.download(filePath, fileName, (err) => {
+    //   if (err) {
+    //     console.error("Download error:", err);
+    //     res.status(500).json({ message: "Error downloading file" });
+    //   }
+    //   else {
+    //     console.log("File downloaded successfully:", filePath);
+    //     // Optionally delete the file after sending
+    //     setTimeout(() => fs.unlinkSync(filePath), 10000); // Delete after 10 seconds
+    //   }
+    // });
+    // res.json({ filePath, message: "File ready for download" });
+    return ReS(res, { message: "Exported.",filePath }, 200);
   } catch (error) {
     console.error("Error generating Excel file:", error);
     res.status(500).send("Internal Server Error");
