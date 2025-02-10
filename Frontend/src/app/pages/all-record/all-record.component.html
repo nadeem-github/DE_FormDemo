@@ -1,20 +1,28 @@
 <section class="py-4">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-6 col-sm-12 mb-4">
+            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
                 <div class="input-group shadow-sm">
                     <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
                     <input type="text" class="form-control shadow-none rounded-1" placeholder="Search Your Record" [(ngModel)]="searchTerm" (input)="onSearch()">
                 </div>
             </div>
-            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="text-center text-sm-end">
-                    <button class="btn btn-primary me-3" [routerLink]="'../TechForm'">
-                        Add New Record
-                    </button>
-                    <button class="btn btn-success" [routerLink]="'../ImportData'">
-                        Import Record
-                    </button>
+            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-4">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">
+                        Total Record: <strong>{{ dataAllUser.length }}</strong> 
+                    </h5>
+                    <div class="text-center text-sm-end">
+                        <button class="btn rounded-1 btn-primary" [routerLink]="'../TechForm'">
+                            Add New Record
+                        </button>
+                        <button class="btn rounded-1 btn-success mx-3" [routerLink]="'../ImportData'">
+                            Import Record
+                        </button>
+                        <button class="btn rounded-1 btn-info" (click)="exportData()">
+                            Export Record
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -24,17 +32,28 @@
             </div>
         </div>
         
+        <button class="btn btn-danger mb-3" *ngIf="hasSelectedRecords()" (click)="openDeleteMultipleModal()">
+            Delete Selected
+        </button>
+          
         <div class="table-responsive" *ngIf="!isLoading">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th scope="col">
+                            <div class="form-check d-flex align-items-center">
+                                <input class="form-check-input me-2" type="checkbox" (change)="toggleSelectAll($event)">
+                                <label class="form-check-label mb-0" for="flexCheckDefault">
+                                  All
+                                </label>
+                            </div>
+                        </th>
                         <th scope="col">Full Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone 1</th>
                         <th scope="col">Phone 2</th>
                         <th scope="col">Company</th>
                         <th scope="col">Address</th>
-                        <th scope="col">Website</th>
                         <th scope="col">Edit</th>
                         <th scope="col">Delete</th>
                     </tr>
@@ -44,6 +63,11 @@
                         <td colspan="9" class="text-center">No data available</td>
                     </tr>
                     <tr *ngFor="let item of paginatedData">
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" [(ngModel)]="selectedRecords[item.id]" (change)="updateSelection()">
+                            </div>
+                        </td>
                         <td class="texEtllips" placement="top" [title]="item.fn + item.ln">
                             {{ item.fn }} {{ item.ln }}
                         </td>
@@ -52,11 +76,6 @@
                         <td>{{ item.city}}</td>
                         <td>{{ item.undlf }}</td>
                         <td class="texEtllips">{{ item.a }}</td>
-                        <td>
-                            <a [href]="item.ecn1" target="_blank">
-                                Website
-                            </a>
-                        </td>
                         <td>
                             <button class="btn btn-sm btn-primary" (click)="editUser(item.id)">
                                 <i class="fa fa-pencil-square" aria-hidden="true"></i>
@@ -95,6 +114,20 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
         <button type="button" class="btn btn-danger" (click)="confirmDelete(modal)">Delete</button>
+    </div>
+</ng-template>
+
+<ng-template #confirmAllModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Confirm Delete</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete all selected record?
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDeleteMultiple(modal)">Delete</button>
     </div>
 </ng-template>
 

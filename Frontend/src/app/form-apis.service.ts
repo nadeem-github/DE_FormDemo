@@ -9,8 +9,8 @@ import { submitForm } from './submit.model';
 
 export class FormAPIsService {
 
-  // baseURL = 'http://localhost:8002/';
-  baseURL = 'http://50.6.202.250:8002/';
+  baseURL = 'http://localhost:8002/';
+  // baseURL = 'http://50.6.202.250:8002/';
   
 
   constructor(private http: HttpClient) { }
@@ -45,6 +45,10 @@ export class FormAPIsService {
     const payload = { id }; // Send id in the payload
     return this.http.post(`${this.baseURL}api/admin/delete-mock`, payload);
   }
+
+  deleteMultipleUser(ids: number[]): Observable<any> {
+    return this.http.post(`${this.baseURL}api/admin/delete-selected-mock`, ids);
+  }  
 
   importData(data: any): Observable<any> {
     const url = `${this.baseURL}api/admin/create-mock1`;
