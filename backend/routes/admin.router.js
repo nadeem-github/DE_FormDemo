@@ -18,6 +18,7 @@ adminRouter.post("/fetch-mock", AuthController.fetchMock);
 adminRouter.post("/fetch-mock-single", AuthController.fetchMockSingle);
 adminRouter.post("/delete-mock", AuthController.deleteMock);
 adminRouter.post("/delete-selected-mock", AuthController.deleteSelectedMock);
+adminRouter.post("/download-excel", AuthController.downloadMock);
 adminRouter.post("/update-mock", AuthController.updateMock);
 // adminRouter.post("/register",passport.authenticate("jwt", { session: false }), adminMidd.adminUser, AuthController.Register);
 // adminRouter.post("/fetch-user", passport.authenticate("jwt", { session: false }), adminMidd.checkUser, AuthController.fetchUser);

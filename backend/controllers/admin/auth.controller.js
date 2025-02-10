@@ -11,6 +11,9 @@ const jwt = require("jsonwebtoken");
 const helper = require("../../helpers/fileupload.helper");
 const sequelize = new Sequelize('mysql://user:password@localhost:3306/mydb');
 const readXlsxFile = require('read-excel-file/node')
+const ExcelJS = require("exceljs");
+const fs = require("fs");
+const path = require("path");
 
 
 const login = async function (req, res) {
@@ -373,7 +376,7 @@ const createMock1 = async function (req, res) {
 const fetchMock = async function (req, res) {
   try {
     const data = await MockVerify.findAll({
-      order: [['id', 'ASC']],
+      order: [['id', 'DESC']],
     });
     const count = await MockVerify.count();
     if (!data) {
@@ -418,7 +421,8 @@ const deleteMock = async function (req, res) {
 }
 const deleteSelectedMock = async function (req, res) {
   try {
-    const userIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, , 20, 21, 22];
+    const userIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+       15, 16, 17, 18, 19, 20, 21, 22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,0,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100];
     let body = req.body;
     let userId = body.id
     const user = await MockVerify.destroy({
@@ -610,6 +614,46 @@ const updateMock = async function (req, res) {
   }
 
 };
+const downloadMock = async function (req, res) {
+
+  try {
+    const rows = await MockVerify.findAll({
+      attributes: ["fn", "ln", "a", "sol", "city", "in", "undlf", "ecn1"],
+    });
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Data");
+    const extractedData = rows.map(row => row.dataValues);
+
+    if (extractedData.length === 0) {
+      return res.status(404).json({ message: "No data found" });
+    }
+    const headers = ["Company", "Address", "Phone 1", "Phone 2", "Email", "Website", "First Name", "Last Name"]; // Custom header names
+    worksheet.addRow(headers);
+
+    // Add data rows
+    extractedData.forEach(obj => {
+      worksheet.addRow([obj.undlf, obj.a, obj.sol, obj.city, obj.in, obj.ecn1, obj.fn, obj.ln]); // Map data manually
+    });
+    // Save and send file
+    // const fileName = "data.xlsx";
+    const timestamp = new Date().toISOString().replace(/[-:.]/g, ""); // Remove special chars
+    const fileName = `export_${timestamp}.xlsx`; // Example: export_20250210084500.xlsx
+    const filePath = path.join(__dirname, fileName);
+    await workbook.xlsx.writeFile(filePath);
+
+    res.download(filePath, fileName, (err) => {
+      if (err) {
+        console.error("Download error:", err);
+        res.status(500).json({ message: "Error downloading file" });
+      }
+    });
+  } catch (error) {
+    console.error("Error generating Excel file:", error);
+    res.status(500).send("Internal Server Error");
+  }
+
+};
+
 module.exports = {
   login,
   Register,
@@ -622,5 +666,6 @@ module.exports = {
   deleteMock,
   updateMock,
   createMock1,
-  deleteSelectedMock
+  deleteSelectedMock,
+  downloadMock
 };
