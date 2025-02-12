@@ -276,6 +276,88 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    t: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    t1: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    s: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    in7: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    ed8: {
+      allowNull: true,
+      type: DataTypes.DATE,
+    },
+    in8: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    ed9: {
+      allowNull: true,
+      type: DataTypes.DATE,
+    },
+    ev: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bes: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    t2: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    pn3: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    ed10: {
+      allowNull: true,
+      type: DataTypes.DATE,
+    },
+    pn4: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    ed11: {
+      allowNull: true,
+      type: DataTypes.DATE,
+    },
+    in9: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    ed12: {
+      allowNull: true,
+      type: DataTypes.DATE,
+    },
+    c: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    tae1: {
+      type: DataTypes.JSON, // Array of strings
+      allowNull: true,// Optional: enforce that the field cannot be null
+      defaultValue: [], // Default to an empty array
+    },
+    tolcp: {
+      type: DataTypes.ENUM('Yes', 'No'), // Define the allowed values
+      allowNull: true, // Optional: enforce that the field cannot be null
+      defaultValue: 'Yes', // Optional: default value for the status
+    },
+    p: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     deleted_at: {
       allowNull: true,
       type: DataTypes.DATE,
