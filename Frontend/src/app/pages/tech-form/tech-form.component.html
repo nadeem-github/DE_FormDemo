@@ -3,7 +3,7 @@
         <h4 class="text-center mb-4">Skill Fusion Tech-Pal Form</h4>
         <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
             <div class="card shadow-sm rounded-1 mb-4">
-                <div class="card-body p-0">
+                <div class="card-body py-0">
                     <div class="row">
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
                             <h5 class="text-center">Personal Information</h5>
@@ -69,11 +69,11 @@
                                         <input type="text" formControlName="emergencyContactNumber1"
                                             class="form-control shadow-none" />
                                         <div *ngIf="dataForm.get('emergencyContactNumber1')?.touched && dataForm.get('emergencyContactNumber1')?.errors?.['required']"
-                                            class="text-danger">
+                                            class="text-danger position-absolute">
                                             Phone Number is required.
                                         </div>
                                         <div *ngIf="dataForm.get('emergencyContactNumber1')?.touched && dataForm.get('emergencyContactNumber1')?.errors?.['pattern']"
-                                            class="text-danger">
+                                            class="text-danger position-absolute">
                                             Please enter a valid phone number.
                                         </div>
                                     </div>
@@ -224,7 +224,7 @@
             </div>
 
             <div class="card shadow-sm rounded-1 mb-4">
-                <div class="card-body p-0">
+                <div class="card-body py-0">
                     <div class="row">
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
                             <div class="row">
@@ -350,7 +350,7 @@
             </div>
 
             <div class="card shadow-sm rounded-1 mb-4">
-                <div class="card-body p-0">
+                <div class="card-body py-0">
                     <div class="row">
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
                             <h6 class="text-center mb-0 text-danger">OSHA Certification Incomplete</h6>
@@ -448,8 +448,8 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm rounded-1">
-                <div class="card-body p-0">
+            <div class="card shadow-sm rounded-1 mb-4">
+                <div class="card-body py-0">
                     <div class="row">
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3 bgLight">
                             <h5 class="text-center">Professional License 2</h5>
@@ -522,6 +522,215 @@
                                 <label class="form-check-label">Upload New License File</label>
                                 <div class="input-group">
                                     <input type="file" class="form-control" (change)="onFileChange($event, 'unlf3')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm rounded-1 mb-4">
+                <div class="card-body py-0">
+                    <div class="row">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
+                            <h5 class="text-center">All other Professional Certification</h5>
+                            <hr>
+                            <div class="mb-4">
+                                <label class="form-label">Title</label>
+                                <input type="text" class="form-control shadow-none" formControlName="tol1Text" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Identification Number</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in4Text" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed5" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3 bgLight">
+                            <h5 class="text-center">EVIIP Certification</h5>
+                            <hr>
+                        
+                            <div class="mb-4">
+                                <label class="form-label">Title</label>
+                                <input type="text" class="form-control shadow-none" formControlName="tol2Text" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Identification Number</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in5Text" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed6" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
+                            <h5 class="text-center">Years Experience</h5>
+                            <hr>
+                        
+                            <div class="mb-4">
+                                <label class="form-label">Solar</label>
+                                <input type="text" class="form-control shadow-none" formControlName="tol3Text" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Electric Vehicle</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in6Text" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Battery Energy Storage</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="ed7" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm rounded-1 mb-4">
+                <div class="card-body py-0">
+                    <div class="row">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
+                            <h5 class="text-center">State License (List All)</h5>
+                            <hr>
+                            <div class="mb-4">
+                                <label class="form-label">Type</label>
+                                <input type="text" class="form-control shadow-none" formControlName="tol1Text" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Identification Number</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in4Text" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed5" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3 bgLight">
+                            <h5 class="text-center">Vehicle Insurance</h5>
+                            <hr>
+                        
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Policy Number</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in5Text" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiration Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed6" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
+                            <h5 class="text-center">Liability Insurance</h5>
+                            <hr>
+                        
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Policy Number</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in6Text" />
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Expiration Date</label>
+                                    <input type="date" class="form-control shadow-none" formControlName="ed7" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm rounded-1 mb-4">
+                <div class="card-body py-0">
+                    <div class="row">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
+                            <h5 class="text-center">OEM Specific Training Certification (List All) </h5>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Company</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="in4Text" />
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Product</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="ed5" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3 bgLight">
+                            <h5 class="text-center">Tools and Equipment (List All) </h5>
+                            <hr>
+                        
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">PV</label>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="form-check mb-2 form-check-inline">
+                                            <input class="form-check-input rounded-1 shadow-none" formControlName="pvcheckbox" type="checkbox" value="ToolManufacturer">
+                                            <label class="form-check-label fw-semibold font-12">Tool Manufacturer</label>
+                                        </div>
+                                        <div class="form-check mb-2 form-check-inline">
+                                            <input class="form-check-input rounded-1 shadow-none" formControlName="evcheckbox" type="checkbox" value="Tool">
+                                            <label class="form-check-label fw-semibold font-12">Tool</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">EVSE</label>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="form-check mb-2 form-check-inline">
+                                            <input class="form-check-input rounded-1 shadow-none" formControlName="pvcheckbox" type="checkbox" value="ToolManufacturer">
+                                            <label class="form-check-label fw-semibold font-12">Tool Manufacturer</label>
+                                        </div>
+                                        <div class="form-check mb-2 form-check-inline">
+                                            <input class="form-check-input rounded-1 shadow-none" formControlName="evcheckbox" type="checkbox" value="Tool">
+                                            <label class="form-check-label fw-semibold font-12">Tool</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">BTY</label>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="form-check mb-2 form-check-inline">
+                                            <input class="form-check-input rounded-1 shadow-none" formControlName="pvcheckbox" type="checkbox" value="ToolManufacturer">
+                                            <label class="form-check-label fw-semibold font-12">Tool Manufacturer</label>
+                                        </div>
+                                        <div class="form-check mb-2 form-check-inline">
+                                            <input class="form-check-input rounded-1 shadow-none" formControlName="evcheckbox" type="checkbox" value="Tool">
+                                            <label class="form-check-label fw-semibold font-12">Tool</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
+                            <h5 class="text-center">Do You drive an EV</h5>
+                            <hr>
+                        
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <div>
+                                        <p class="mb-0 me-3 font-14 fw-semibold">Type of L2 Charge Port</p>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="typeOfL2" formControlName="typeOfL2" value="Yes" />
+                                            <label class="form-check-label">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="typeOfL2" formControlName="typeOfL2" value="No" />
+                                            <label class="form-check-label">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Expiration Date</label>
+                                    <input type="text" class="form-control shadow-none" formControlName="ed7" />
                                 </div>
                             </div>
                         </div>

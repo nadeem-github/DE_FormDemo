@@ -30,15 +30,15 @@ export class TechFormComponent {
 
   ngOnInit(): void {
     this.dataForm = this.fb.group({
-      firstName: ['',],
-      lastName: ['',],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       address: ['',],
       stateOfLicense: ['',],
-      phoneNumber: ['',], //[Validators.required, Validators.pattern(/^\d{10}$/)]
-      ssn: ['',],
+      phoneNumber: ['', Validators.required, Validators.pattern(/^\d{10}$/)], //[Validators.required, Validators.pattern(/^\d{10}$/)]
+      ssn: ['',Validators.required],
       emergencyContactName1: [''],
       emergencyContactName2: [''],
-      emergencyContactNumber1: [''],
+      emergencyContactNumber1: ['', Validators.required, Validators.pattern(/^\d{10}$/)],
       emergencyContactNumber2: [''],
       isAcceptingWorkOrders: ['yes'], // Default to 'yes'
       stateName: [''],
