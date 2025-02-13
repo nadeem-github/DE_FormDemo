@@ -51,8 +51,8 @@ export class AllRecordComponent {
       (response) => {
         console.log('Fetched data:', response); // Debugging - Check if the latest data is received
         this.dataAllUser = response.data;
-        this.filteredData = [...this.dataAllUser]; 
-        this.updatePaginatedData(); 
+        this.filteredData = [...this.dataAllUser];
+        this.updatePaginatedData();
         this.isLoading = false;
       },
       (error) => {
@@ -60,7 +60,7 @@ export class AllRecordComponent {
         this.isLoading = false;
       }
     );
-  }  
+  }
 
   updatePaginatedData(): void {
     const startIndex = (this.currentPage - 1) * this.pageSize;
@@ -147,9 +147,27 @@ export class AllRecordComponent {
     }, 3000); // Show the toast for 3 seconds
   }
 
-  exportData(): void {
-    alert('Export data functionality not implemented yet.');
+  exportData() {
+    const payload = { filter: 'all' };  // Tum apne hisaab se payload bhej sakte ho
+    this.shortClipService.exportExcelData(payload).subscribe(
+      (response: Blob) => {
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'data.xlsx';  // File ka naam customize kar sakte ho
+        link.click();
+        window.URL.revokeObjectURL(url);  // URL ko cleanup karo
+      },
+      (error) => {
+        console.error('Download failed:', error);
+      }
+    );
   }
+
+
+
+
 
   // Toggle select all checkboxes (for current page only)
   toggleSelectAll(event: any): void {
@@ -190,31 +208,42 @@ export class AllRecordComponent {
   // Confirm and delete selected records
   confirmDeleteMultiple(modal: any): void {
     modal.close(); // Close modal
-    
-    console.log('Deleting IDs:', this.deleteIds); // Debugging - Check the IDs being sent
-    
-    this.shortClipService.deleteMultipleUser(this.deleteIds)
+
+    if (this.deleteIds.length === 0) {
+      this.showToastMessage('No records selected for deletion.', 'danger');
+      return;
+    }
+
+    const payload = {
+      deleteMultiple: this.deleteIds // Send as { deleteMultiple: [200, 201, 202, ...] }
+    };
+
+    console.log('Payload:', payload); // Debugging - Check the payload structure
+
+    this.shortClipService.deleteMultipleUser(payload)
       .pipe(
         catchError(error => {
           console.error('API Error:', error);
           this.showToastMessage('Failed to delete records. Please try again.', 'danger');
-          console.error('Delete failed:', error);
           return of(null);
         })
       )
       .subscribe(response => {
-        console.log('Delete response:', response); // Debugging - Check the response from the API
-        if (response && response.success) {
+        console.log('Response:', response); // Debugging - Check the response from the API
+        if (response && response.message === "User has been deleted successfully.") {
           this.showToastMessage('Records deleted successfully!', 'success');
           this.getUserList(); // Refresh data
-          // Refresh the data
-          this.getUserList();
-          this.selectedRecords = {};
-          this.deleteIds = [];
+          this.clearSelection(); // Clear selected IDs
         } else {
           this.showToastMessage(response?.message || 'Something went wrong. Please try again.', 'danger');
         }
       });
+  }
+
+
+  clearSelection(): void {
+    this.selectedRecords = {};
+    this.deleteIds = [];
   }
 
 

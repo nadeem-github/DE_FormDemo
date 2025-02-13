@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { submitForm } from './submit.model';
 
@@ -9,9 +9,9 @@ import { submitForm } from './submit.model';
 
 export class FormAPIsService {
 
-  baseURL = 'http://localhost:8002/';
-  // baseURL = 'http://50.6.202.250:8002/';
-  
+  // baseURL = 'http://localhost:8002/';
+  baseURL = 'http://50.6.202.250:8002/';
+
 
   constructor(private http: HttpClient) { }
 
@@ -28,13 +28,13 @@ export class FormAPIsService {
       catchError(this.handleError)
     );
   }
-  
+
   updateFormData(formData: FormData): Observable<any> {
     const url = `${this.baseURL}api/admin/update-mock`;  // Ensure baseURL is properly defined
     return this.http.post<any>(url, formData).pipe(
       catchError(this.handleError)  // Gracefully handle errors
     );
-  }  
+  }
 
   fetchAllData(data: any): Observable<any> {
     const url = `${this.baseURL}api/admin/fetch-mock`;
@@ -46,15 +46,25 @@ export class FormAPIsService {
     return this.http.post(`${this.baseURL}api/admin/delete-mock`, payload);
   }
 
-  deleteMultipleUser(ids: number[]): Observable<any> {
-    return this.http.post(`${this.baseURL}api/admin/delete-selected-mock`, ids);
-  }  
+  deleteMultipleUser(payload: any): Observable<any> {
+    return this.http.post(`${this.baseURL}api/admin/delete-selected-mock`, payload);
+  }
 
   importData(data: any): Observable<any> {
     const url = `${this.baseURL}api/admin/create-mock1`;
     return this.http.post<any>(url, data).pipe(catchError(this.handleError));
   }
-  
+
+  exportExcelData(payload: any) {
+    const url = `${this.baseURL}api/admin/download-excel`; // Tumhari API ka URL
+    return this.http.post(url, payload, {
+      responseType: 'blob',  // File ko blob format mein receive karna
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    });
+  }
+
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
