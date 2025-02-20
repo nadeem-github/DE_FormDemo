@@ -359,24 +359,76 @@ const createMock1 = async function (req, res) {
         if (!fileUploadundlf) {
           return ReE(res, { message: "Something went wrong" }, 200);
         }
+        let headers = {};
+        let headerRowIndex = -1;
         await readXlsxFile(`storage/images/${relativePathundlf}`).then((rows) => {
-          rows.slice(1).forEach(function (number) {
-            let orderData = {
-              fn: number[6],
-              ln: number[7],
-              a: number[1],
-              sol: number[2],
-              city: number[3],
-              in: number[4],
-              undlf: number[0],
-              ecn1: number[5],
+          // Find header row dynamically
+          for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+      
+            if (row.includes("First Name") && row.includes("Last Name")
+              && row.includes("Company") && row.includes("Address") 
+            && row.includes("City") && row.includes("State") 
+            && row.includes("Zip") && row.includes("Country")
+            && row.includes("Phone 1") && row.includes("Phone 2") 
+            && row.includes("Email") && row.includes("Website")
+            && row.includes("Contact") && row.includes("Certification")) {
+              // Found the header row
+              headerRowIndex = i;
+              row.forEach((col, index) => {
+                headers[col.toLowerCase()] = index; // Mapping header name to column index
+              });
+              break;
             }
-            const data = MockVerify.create(orderData)
+          }
+          if (headerRowIndex === -1) {
+            return ReE(res, { message: "Header row not found" }, 400);
+          }
+           // Read data rows after the header row
+    for (let i = headerRowIndex + 1; i < rows.length; i++) {
+      const row = rows[i];
 
-          });
-          // each row being an array of cells.
-        })
-      }
+      let orderData = {
+        fn: row[headers["first name"]] || "",  // Dynamic column mapping
+        ln: row[headers["last name"]] || "",
+        a: row[headers["address"]] || "",
+        sol: row[headers["phone 1"]] || "",
+        city: row[headers["city"]] || "",
+        in: row[headers["email"]] || "",
+        undlf: row[headers["company"]] || "",
+        ecn1: row[headers["website"]] || "",
+        s: row[headers["state"]] || "",
+        tol1: row[headers["zip"]] || "",
+        c: row[headers["country"]] || "",
+        ecn: row[headers["phone 2"]] || "",
+        state: row[headers["contact"]] || "",
+        r: row[headers["certification"]] || "",
+      };
+
+      MockVerify.create(orderData);
+    }
+  });
+}
+
+          // below is the old code
+    //     await readXlsxFile(`storage/images/${relativePathundlf}`).then((rows) => {
+    //       rows.slice(1).forEach(function (number) {
+    //         let orderData = {
+    //           fn: number[6],
+    //           ln: number[7],
+    //           a: number[1],
+    //           sol: number[2],
+    //           city: number[3],
+    //           in: number[4],
+    //           undlf: number[0],
+    //           ecn1: number[5],
+    //         }
+    //         const data = MockVerify.create(orderData)
+
+    //       });
+    //       // each row being an array of cells.
+    //     })
+    //   }
     }
     // await console.log(relativePathundlf,'reeee') storage\images\users\1737448862404-g.xlsx
 
@@ -679,7 +731,7 @@ const downloadMock = async function (req, res) {
     const filePath = path.join(__dirname, fileName);
     // console.log(filePath);
     await workbook.xlsx.writeFile(filePath);
-    
+
     res.download(filePath, fileName, (err) => {
       if (err) {
         console.error("Download error:", err);
