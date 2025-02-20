@@ -84,6 +84,27 @@ export class TechFormComponent {
       tol3Text: ['',],
       ed7: ['',],
       in6Text: ['',],
+      t: ['',],
+      in7: ['',],
+      ed8: ['',],
+      t1: ['',],
+      in8: ['',],
+      ed9: ['',],
+      s: ['',],
+      ev: ['',],
+      bes: ['',],
+      t2: ['',],
+      in9: ['',],
+      ed10: ['',],
+      pn3: ['',],
+      ed11: ['',],
+      pn4: ['',],
+      ed12: ['',],
+      c: ['',],
+      p: ['',],
+      ed13: ['',],
+      tolcp: ['',],
+      tae1: ['',],
     });
   }
 
@@ -162,6 +183,27 @@ export class TechFormComponent {
       formData.append('tol3', this.dataForm.get('tol3Text')?.value);
       formData.append('ed7', this.dataForm.get('ed7')?.value);
       formData.append('in6', this.dataForm.get('in6Text')?.value);
+      formData.append('t', this.dataForm.get('t')?.value);
+      formData.append('in7', this.dataForm.get('in7')?.value);
+      formData.append('ed8', this.dataForm.get('ed8')?.value);
+      formData.append('t1', this.dataForm.get('t1')?.value);
+      formData.append('in8', this.dataForm.get('in8')?.value);
+      formData.append('ed9', this.dataForm.get('ed9')?.value);
+      formData.append('s', this.dataForm.get('s')?.value);
+      formData.append('ev', this.dataForm.get('ev')?.value);
+      formData.append('bes', this.dataForm.get('bes')?.value);
+      formData.append('t2', this.dataForm.get('t2')?.value);
+      formData.append('in9', this.dataForm.get('in9')?.value);
+      formData.append('ed10', this.dataForm.get('ed10')?.value);
+      formData.append('pn3', this.dataForm.get('pn3')?.value);
+      formData.append('ed11', this.dataForm.get('ed11')?.value);
+      formData.append('pn4', this.dataForm.get('pn4')?.value);
+      formData.append('ed12', this.dataForm.get('ed12')?.value);
+      formData.append('c', this.dataForm.get('c')?.value);
+      formData.append('p', this.dataForm.get('p')?.value);
+      formData.append('ed13', this.dataForm.get('ed13')?.value);
+      formData.append('tolcp', this.dataForm.get('tolcp')?.value);
+      formData.append('tae1', this.dataForm.get('tae1')?.value);
 
       for (const controlName in this.dataForm.controls) {
         if (this.dataForm.controls.hasOwnProperty(controlName)) {
