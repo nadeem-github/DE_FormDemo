@@ -11,7 +11,7 @@ export class HomeRemembComponent {
   isLoading = true;
   remembrances: any[] = [];
   requestData = {};
-  baseURL = 'http://localhost:8002/storage/images/'; // Base URL
+  baseURL = 'http://50.6.202.250:8002/storage/images/'; // Base URL
   selectedRemembrance: any = null;
 
   constructor(
