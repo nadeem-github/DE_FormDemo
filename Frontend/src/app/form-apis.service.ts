@@ -66,6 +66,22 @@ export class FormAPIsService {
   }
 
 
+  // Remembrance API
+  getRemembrances(data: any): Observable<any> {
+    const url = `${this.baseURL}api/admin/fetch-remebrance`;
+    return this.http.post<any>(url, data).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  addNewRemembrances(data: FormData): Observable<any> {
+    const url = `${this.baseURL}api/admin/create-remebrance`;
+    return this.http.post<any>(url, data).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
     if (error.error instanceof ErrorEvent) {

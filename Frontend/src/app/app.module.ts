@@ -14,6 +14,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AllRecordComponent } from './pages/all-record/all-record.component';
 import { ImportDataComponent } from './pages/import-data/import-data.component';
+import { RemembranceComponent } from './remember/remembrance/remembrance.component';
+import { HomeRemembComponent } from './remember/home-rememb/home-rememb.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { ImportDataComponent } from './pages/import-data/import-data.component';
     TechFormEditComponent,
     TechFormUpdateComponent,
     AllRecordComponent,
-    ImportDataComponent
+    ImportDataComponent,
+    RemembranceComponent,
+    HomeRemembComponent
   ],
   imports: [
     BrowserModule,

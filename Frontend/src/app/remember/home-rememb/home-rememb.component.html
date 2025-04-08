@@ -1,0 +1,20 @@
+<section class="py-5" id="draggable-section">
+    <div class="container">
+        <div *ngIf="remembrances.length > 0; else noData" class="row">
+            <div class="col-md-1 text-center" *ngFor="let remembrance of remembrances">
+                <img *ngIf="remembrance.rem_symbol" [src]="baseURL + remembrance.rem_symbol" alt="Remembrance Symbol" class="remembrance-img" (click)="toggleDetails(remembrance)">
+                <div *ngIf="selectedRemembrance === remembrance" class="remembrance-details position-fixed text-white p-3 rounded shadow z-3 text-start">
+                    <h4 class="mb-0 mb-3">In memory of <b class="text-uppercase">{{ remembrance.tribute_memory }}</b></h4>
+                    <p class="mb-0 mb-3">
+                        {{ remembrance.tribute_message }}
+                    </p>
+                    <p class="mb-0">Submitted by: {{ remembrance.first_name }} {{ remembrance.last_name }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <ng-template #noData>
+            <p class="text-center text-white">No remembrances found.</p>
+        </ng-template>
+    </div>    
+</section>
