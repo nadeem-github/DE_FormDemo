@@ -20,3 +20,29 @@
         margin-bottom: 0;
     }
 }
+
+
+// Rememberence styles
+
+:root {
+    --bs-primary: #004A49;
+    --bs-secondary: #F2F2F2;
+    --bs-success: #4CAF50;
+    --bs-info: #17A2B8;
+    --bs-warning: #FFC107;
+    --bs-danger: #DC3545;
+    --bs-light: #F8F9FA;
+    --bs-dark: #343A40;
+}
+
+.btnCustom{
+    background-color: var(--bs-primary);
+}
+
+.footerBG{
+    background-color: var(--bs-primary);
+}
+
+.cursorPointer{
+    cursor: pointer;
+}

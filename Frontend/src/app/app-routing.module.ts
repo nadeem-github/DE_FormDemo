@@ -7,13 +7,15 @@ import { AllRecordComponent } from './pages/all-record/all-record.component';
 import { ImportDataComponent } from './pages/import-data/import-data.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'AllRecord', pathMatch: 'full', },
+  { path: '', redirectTo: 'AllRecord', pathMatch: 'full' },
   { path: 'AllRecord', component: AllRecordComponent },
   { path: 'TechForm', component: TechFormComponent },
   { path: 'TechFormEdit/:id', component: TechFormEditComponent },
   { path: 'TechFormUpdate', component: TechFormUpdateComponent },
   { path: 'ImportData', component: ImportDataComponent },
+  { path: '**', redirectTo: '' }
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

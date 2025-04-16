@@ -24,7 +24,7 @@ import { ImportDataComponent } from './pages/import-data/import-data.component';
     TechFormEditComponent,
     TechFormUpdateComponent,
     AllRecordComponent,
-    ImportDataComponent
+    ImportDataComponent,
   ],
   imports: [
     BrowserModule,
