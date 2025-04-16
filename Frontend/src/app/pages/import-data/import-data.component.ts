@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormAPIsService } from 'src/app/form-apis.service';
 
@@ -17,7 +17,7 @@ export class ImportDataComponent {
 
   constructor(private fb: FormBuilder, private apiService: FormAPIsService, private router: Router,) {
     this.importForm = this.fb.group({
-      excelFile: [null], // Form control for file
+      excelFile: [null , Validators.required], // Form control for file
     });
   }
 

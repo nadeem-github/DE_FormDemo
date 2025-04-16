@@ -14,13 +14,6 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AllRecordComponent } from './pages/all-record/all-record.component';
 import { ImportDataComponent } from './pages/import-data/import-data.component';
-import { RemembranceComponent } from './remember/remembrance/remembrance.component';
-import { HomeRemembComponent } from './remember/home-rememb/home-rememb.component';
-import { RouteRemembranceComponent } from './remember/route-remembrance/route-remembrance.component';
-import { HeaderRemembComponent } from './remember/sharedRemembrance/header-rememb/header-rememb.component';
-import { FooterRemembComponent } from './remember/sharedRemembrance/footer-rememb/footer-rememb.component';
-import { DonateNowComponent } from './remember/donate-now/donate-now.component';
-import { SkillfusionLayoutComponent } from './skillfusion-layout/skillfusion-layout.component';
 
 @NgModule({
   declarations: [
@@ -32,13 +25,6 @@ import { SkillfusionLayoutComponent } from './skillfusion-layout/skillfusion-lay
     TechFormUpdateComponent,
     AllRecordComponent,
     ImportDataComponent,
-    RemembranceComponent,
-    HomeRemembComponent,
-    RouteRemembranceComponent,
-    HeaderRemembComponent,
-    FooterRemembComponent,
-    DonateNowComponent,
-    SkillfusionLayoutComponent
   ],
   imports: [
     BrowserModule,
