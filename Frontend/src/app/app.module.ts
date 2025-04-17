@@ -14,6 +14,11 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AllRecordComponent } from './pages/all-record/all-record.component';
 import { ImportDataComponent } from './pages/import-data/import-data.component';
+import { AuthLayoutComponent } from './auth/auth-layout/auth-layout.component';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
+import { DashLayoutComponent } from './pages/dash-layout/dash-layout.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +30,11 @@ import { ImportDataComponent } from './pages/import-data/import-data.component';
     TechFormUpdateComponent,
     AllRecordComponent,
     ImportDataComponent,
+    AuthLayoutComponent,
+    LoginComponent,
+    RegisterComponent,
+    ForgotPassComponent,
+    DashLayoutComponent,
   ],
   imports: [
     BrowserModule,
