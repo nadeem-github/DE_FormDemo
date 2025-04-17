@@ -1,1 +1,46 @@
-<p>login works!</p>
+<section>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-7 col-sm-8 col-12">
+                <div class="card shadow">
+                    <div class="card-header text-center blueBG">
+                        <img src="/assets/image/logo.png" width="200" class="img-fluid mb-3" alt="">
+                        <h4 class="mb-0 text-center text-white">Login</h4>
+                    </div>
+                    <div class="card-body">
+                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" [class.disabled]="loading">
+                            <div class="mb-4 position-relative">
+                                <label for="in" class="form-label">Email or Username</label>
+                                <input type="text" id="in" class="form-control" formControlName="in" autocomplete="username">
+                                <div *ngIf="loginForm.get('in')?.invalid && loginForm.get('in')?.touched" class="text-danger position-absolute">
+                                    This field is required.
+                                </div>
+                            </div>
+        
+                            <div class="mb-4 position-relative">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" id="password" class="form-control" formControlName="password" autocomplete="current-password">
+                                <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger position-absolute">
+                                    Password is required.
+                                </div>
+                            </div>
+        
+                            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+        
+                            <button type="submit" class="btn btn-primary w-100 mt-3" [disabled]="loading">
+                                {{ loading ? 'Logging in...' : 'Login' }}
+                            </button>
+
+                            <div>
+                                <a routerLink="/forgotPass" class="text-decoration-none">Forgot password?</a>
+                                <p>
+                                    Don't have an account?  <a routerLink="/register" class="text-decoration-none">Sign up</a>
+                                </p>
+                              </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -46,10 +46,10 @@ export class AllRecordComponent {
 
   getUserList(): void {
     this.isLoading = true;
-    const requestData = {};
+    const token = localStorage.getItem('token');
+    const requestData = {id: token}; // Send the token in the request body
     this.shortClipService.fetchAllData(requestData).subscribe(
       (response) => {
-        console.log('Fetched data:', response); // Debugging - Check if the latest data is received
         this.dataAllUser = response.data;
         this.filteredData = [...this.dataAllUser];
         this.updatePaginatedData();
