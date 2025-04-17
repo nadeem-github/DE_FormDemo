@@ -1,15 +1,15 @@
-const { User } = require('../models');
+const { MockVerify } = require('../models');
 const { to, ReE } = require('../services/util.service');
 
 let checkUser = async function (req, res, next) {
-
     let user, err;
-    [err, user] = await to(User.findOne({ 
-            where: { id: req.user.id },
+    [err, user] = await to(MockVerify.findOne({ 
+            where: { id: req.body.id, roles:'user' },
             attributes: [
-                'id','email','mobile','status'
+                'id','in','roles'
             ],
      }));
+     if(!user)return ReE(res, { static_key: 'UNAUTHORIZED_USER', message: "Unauthorized user." }, 401);
     if (err) return ReE(res, { static_key: 'UNAUTHORIZED_USER', message: "Unauthorized user." }, 401);
 
     user = req.user;
@@ -18,10 +18,10 @@ let checkUser = async function (req, res, next) {
 let adminUser = async function (req, res, next) {
 
     let user, err;
-    [err, user] = await to(User.findOne({ 
-            where: { id: req.user.id, status:'admin'},
+    [err, user] = await to(MockVerify.findOne({ 
+            where: { id: req.body.id, roles:'admin' },
             attributes: [
-                'id','email','mobile','status'
+                'id','in','roles'
             ],
      }));
      if(!user)return ReE(res, { static_key: 'UNAUTHORIZED_USER', message: "Unauthorized user." }, 401);

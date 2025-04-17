@@ -18,14 +18,13 @@ const path = require("path");
 
 const login = async function (req, res) {
   const body = req.body;
-  let checkUser = await User.findOne({
+  let checkUser = await MockVerify.findOne({
     attributes: [
-      'id', 'name', 'email', 'password', 'interprice', 'otp', 'status', 'is_profile_flag',
-      [sequelize.fn('CONCAT', 'http://165.232.142.62:8002/storage/images/', sequelize.col('profile_pic')), 'fullurl']
+      'id', 'in',  'password','roles'     
     ],
 
     where: {
-      email: body.email
+      in: body.in
     }
   });
 
@@ -33,7 +32,7 @@ const login = async function (req, res) {
 
   const result = await bcrypt_p.compare(body.password, checkUser.password)
   if (!result) return ReE(res, { message: "The password you entered is incorrect please try again to login" }, 400);
-  const token = jwt.sign({ user_id: checkUser.id, email: checkUser.email }, CONFIG.jwt_encryption, { expiresIn: '365d' });
+  const token = jwt.sign({ user_id: checkUser.id, in: checkUser.in }, CONFIG.jwt_encryption, { expiresIn: '365d' });
   return ReS(res, { user: checkUser, token: token });
 };
 const Register = async function (req, res) {
@@ -332,6 +331,9 @@ const createMock = async function (req, res) {
       c: body.c,
       tae1: body.tae1,
       tolcp: body.tolcp,
+      microtrax_course_name: body.microtrax_course_name,
+      microtrax_course_number: body.microtrax_course_number,
+      password: body.password,
 
     })
     if (data) {
@@ -343,7 +345,6 @@ const createMock = async function (req, res) {
   }
 };
 const createMock1 = async function (req, res) {
-
   try {
 
     let body = req.body;
@@ -692,6 +693,8 @@ const updateMock = async function (req, res) {
       c: body.c,
       tae1: body.tae1,
       tolcp: body.tolcp,
+      microtrax_course_name: body.microtrax_course_name,
+      microtrax_course_number: body.microtrax_course_number,
     },
       {
         where: { id: body.id }

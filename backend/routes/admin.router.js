@@ -9,13 +9,17 @@ const AuthController = require("../controllers/admin/auth.controller");
 // user authentication AuthController
 adminRouter.post("/login", AuthController.login);
 adminRouter.post("/create-mock", AuthController.createMock);
-adminRouter.post("/create-mock1", AuthController.createMock1);
-adminRouter.post("/fetch-mock", AuthController.fetchMock);
-adminRouter.post("/fetch-mock-single", AuthController.fetchMockSingle);
-adminRouter.post("/delete-mock", AuthController.deleteMock);
-adminRouter.post("/delete-selected-mock", AuthController.deleteSelectedMock);
-adminRouter.post("/download-excel", AuthController.downloadMock);
-adminRouter.post("/update-mock", AuthController.updateMock);
+
+//admin login
+adminRouter.post("/create-mock1",adminMidd.adminUser, AuthController.createMock1);
+adminRouter.post("/fetch-mock",adminMidd.adminUser, AuthController.fetchMock);
+adminRouter.post("/fetch-mock-single", adminMidd.adminUser, AuthController.fetchMockSingle);
+adminRouter.post("/fetch-mock-single-user",adminMidd.checkUser, AuthController.fetchMockSingle); //this one is checkuser
+adminRouter.post("/delete-mock", adminMidd.adminUser,AuthController.deleteMock);
+adminRouter.post("/delete-selected-mock",adminMidd.adminUser, AuthController.deleteSelectedMock);
+adminRouter.post("/download-excel",adminMidd.adminUser, AuthController.downloadMock);
+adminRouter.post("/update-mock", adminMidd.adminUser,AuthController.updateMock);
+adminRouter.post("/update-mock-user", adminMidd.checkUser,AuthController.updateMock);//this one is checkuser
 
 
 

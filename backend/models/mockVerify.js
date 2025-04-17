@@ -1,4 +1,6 @@
 'use strict';
+const bcrypt = require("bcrypt");
+const bcrypt_p = require("bcrypt-promise");
 const { TE, to } = require("../services/util.service");
 const {
   Model
@@ -29,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.DATE,
     },
-   
+
     pn: {
       type: DataTypes.DECIMAL(12, 0), // Precision 12, Scale 0 (no decimal places)
       allowNull: true,
@@ -97,7 +99,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     sc: {
-      type: DataTypes.ENUM('tpe', 'vc','hvsc','rc','cc','uc','fvsc'), // Define the allowed values
+      type: DataTypes.ENUM('tpe', 'vc', 'hvsc', 'rc', 'cc', 'uc', 'fvsc'), // Define the allowed values
       allowNull: true, // Optional: enforce that the field cannot be null
       defaultValue: 'tpe', // Optional: default value for the status
     },
@@ -145,7 +147,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    options:{
+    options: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
@@ -165,7 +167,7 @@ module.exports = (sequelize, DataTypes) => {
     sr: {
       type: DataTypes.JSON, // Array of strings
       allowNull: true, // Optional: enforce that the field cannot be null
-      defaultValue: [], 
+      defaultValue: [],
     },
     in1: {
       type: DataTypes.STRING,
@@ -358,19 +360,77 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    microtrax_course_name: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    microtrax_course_number: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    roles: {
+      type: DataTypes.ENUM('admin', 'user'), // Define the allowed values
+      allowNull: true, // Optional: enforce that the field cannot be null
+      defaultValue: 'user', // Optional: default value for the status
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     deleted_at: {
       allowNull: true,
       type: DataTypes.DATE,
     }
   },
     {
-    sequelize,
-    modelName: 'MockVerify',
-    tableName: "mock_verifications",
-    createdAt: "created_at",
-    updatedAt: "updated_at",
-    paranoid: true,
-    underscored: true
-  });
+      sequelize,
+      modelName: 'MockVerify',
+      tableName: "mock_verifications",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+      paranoid: true,
+      underscored: true
+    });
+    MockVerify.beforeSave(async (user, options) => {
+      let err;
+  
+      if (user.changed("password")) {
+        let salt, hash;
+        [err, salt] = await to(bcrypt.genSalt(10));
+        if (err) TE(err.message, true);
+  
+        [err, hash] = await to(bcrypt.hash(user.password, salt));
+        if (err) TE(err.message, true);
+  
+        user.password = hash;
+      }
+    });
+  
+    MockVerify.beforeUpdate(async (user, options) => {
+      let err;
+  
+      if (user.changed("password")) {
+        let salt, hash;
+        [err, salt] = await to(bcrypt.genSalt(10));
+        if (err) TE(err.message, true);
+  
+        [err, hash] = await to(bcrypt.hash(user.password, salt));
+        if (err) TE(err.message, true);
+  
+        user.password = hash;
+      }
+    });
+  
+    MockVerify.prototype.comparePassword = async function (pw) {
+      let err, pass;
+      if (!this.password) TE("password not set");
+  
+      [err, pass] = await to(bcrypt_p.compare(pw, this.password));
+      if (err) TE(err);
+  
+      if (!pass) TE("invalid password");
+  
+      return this;
+    };
   return MockVerify;
 };
