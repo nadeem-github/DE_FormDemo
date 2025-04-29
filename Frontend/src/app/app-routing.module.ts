@@ -41,6 +41,7 @@ const routes: Routes = [
       { path: 'TechFormEdit/:id', component: TechFormEditComponent },
       { path: 'TechFormUpdate', component: TechFormUpdateComponent },
       { path: 'ImportData', component: ImportDataComponent },
+      { path: 'adminLayout', component: DashLayoutComponent },
     ],
   },
 
