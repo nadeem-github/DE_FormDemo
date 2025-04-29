@@ -5,6 +5,7 @@
 
 :root {
     --blue-bg: #0a1f69;
+    --blueButton: #0b1e6a;
 }
 
 .font-14 {
@@ -15,20 +16,54 @@
     font-size: 12px;
 }
 
-.bgLight{
+.bgLight {
     background-color: #f3f6ff;
 }
 
-.pagination{
+.pagination {
     @media (min-width: 576px) {
         margin-bottom: 0;
     }
 }
 
-.blueBG{
+.blueBG {
     background-color: var(--blue-bg);
 }
 
-.cursorPointer{
+.cursorPointer {
     cursor: pointer;
+}
+
+.authBg {
+    // background: linear-gradient(180deg, #0a1f69 0%, #0a1f69 100%);
+    background-image: url('assets/image/authBG.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .card {
+        background-color: #fefefef5;
+    }
+
+    .authButton {
+        background-color: var(--blueButton);
+        color: #fff;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+            background-color: #1c37a0;
+            color: #fff;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+    }
 }
