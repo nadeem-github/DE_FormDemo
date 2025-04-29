@@ -19,6 +19,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
 import { DashLayoutComponent } from './pages/dash-layout/dash-layout.component';
+import { AdminSideMenuComponent } from './pages/admin-side-menu/admin-side-menu.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { DashLayoutComponent } from './pages/dash-layout/dash-layout.component';
     RegisterComponent,
     ForgotPassComponent,
     DashLayoutComponent,
+    AdminSideMenuComponent,
   ],
   imports: [
     BrowserModule,

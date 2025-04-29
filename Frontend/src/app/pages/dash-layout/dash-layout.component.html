@@ -1,3 +1,12 @@
 <app-header></app-header>
-<router-outlet></router-outlet>
+<div class="w-100 overflow-x-hidden">
+    <div class="row">
+        <div class="col-2">
+            <app-admin-side-menu></app-admin-side-menu>
+        </div>
+        <div class="col-10">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
 <app-footer></app-footer>
