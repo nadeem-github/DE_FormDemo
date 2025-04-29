@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const fileupload = require('express-fileupload');
-const nodemailer = require('nodemailer');
+
 
 
 //Custome Plugins

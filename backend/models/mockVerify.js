@@ -377,6 +377,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    otp: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     deleted_at: {
       allowNull: true,
       type: DataTypes.DATE,
@@ -406,20 +410,22 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
   
-    MockVerify.beforeUpdate(async (user, options) => {
-      let err;
+    // MockVerify.beforeUpdate(async (user, options) => {
+    //   let err;
   
-      if (user.changed("password")) {
-        let salt, hash;
-        [err, salt] = await to(bcrypt.genSalt(10));
-        if (err) TE(err.message, true);
+    //   if (user.changed("password")) {
+    //     let salt, hash;
+    //     [err, salt] = await to(bcrypt.genSalt(10));
+    //     if (err) TE(err.message, true);
   
-        [err, hash] = await to(bcrypt.hash(user.password, salt));
-        if (err) TE(err.message, true);
+    //     [err, hash] = await to(bcrypt.hash(user.password, salt));
+    //     if (err) TE(err.message, true);
   
-        user.password = hash;
-      }
-    });
+    //     user.password = hash;
+    //     user.set("password", newPassword, { raw: true });
+    //   }
+    // });
+   
   
     MockVerify.prototype.comparePassword = async function (pw) {
       let err, pass;
