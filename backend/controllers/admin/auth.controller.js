@@ -38,16 +38,17 @@ const login = async function (req, res) {
 const Register = async function (req, res) {
   try {
     let body = req.body;
-    let checkUser = await User.findOne({
+    let checkUser = await MockVerify.findOne({
       where: {
-        email: body.email
+        in: body.in
       }
     });
     if (checkUser) return ReE(res, { message: "User already exits please login!" }, 400);
-    const user = await User.create({
-      email: body.email,
+    const user = await MockVerify.create({
+      in: body.in,
+      fn: body.fn,
+      ln: body.ln,
       password: body.password,
-      is_profile_flag: '0',
     });
 
     if (user) {
@@ -351,18 +352,33 @@ const createMock1 = async function (req, res) {
     const files = req.files;
     const baseFileUploadPath = `${config.IMAGE_RELATIVE_PATH}/users`;
     let relativePathundlf = "";
+    let duplicateRows = []; // For storing duplicates
+    let insertedRows = 0;   // Count of successful inserts
 
     if (files) {
       if (files.excelFile) {
         const fileNameundlf = Date.now() + '-' + files.excelFile.name;
         relativePathundlf = "users/" + fileNameundlf;
         const fileUploadundlf = await helper.fileUpload(fileNameundlf, files.excelFile, baseFileUploadPath);
+        const filePath = `storage/images/${relativePathundlf}`;
+        const waitForFile = async (path, timeout = 5000) => {
+          const start = Date.now();
+          while (!fs.existsSync(path)) {
+            if (Date.now() - start > timeout) {
+              throw new Error('File did not appear in time');
+            }
+            await new Promise(res => setTimeout(res, 100)); // Wait 100ms
+          }
+        };
+        
+        await waitForFile(filePath); // ⏳ Wait until file is available
         if (!fileUploadundlf) {
           return ReE(res, { message: "Something went wrong" }, 200);
         }
         let headers = {};
         let headerRowIndex = -1;
-        await readXlsxFile(`storage/images/${relativePathundlf}`).then((rows) => {
+        // await readXlsxFile(`storage/images/${relativePathundlf}`).then((rows) => {
+          const rows = await readXlsxFile(filePath);
           // Find header row dynamically
           for (let i = 0; i < rows.length; i++) {
             const row = rows[i];
@@ -405,10 +421,29 @@ const createMock1 = async function (req, res) {
         state: row[headers["contact"]] || "",
         r: row[headers["certification"]] || "",
       };
+        // Duplicate check based on email and phone1
+        let existing = await MockVerify.findOne({
+          where: {
+            [Op.or]: [
+              { in: orderData.in },
+              // { sol: orderData.sol }
+            ]
+          }
+        });
 
-      MockVerify.create(orderData);
+        if (existing) {
+          duplicateRows.push({
+            row: orderData,
+            reason: "Duplicate entry (email already exists)"
+          });
+        } else {
+          await MockVerify.create(orderData);
+          insertedRows++;
+        }
+
+      // MockVerify.create(orderData);
     }
-  });
+  // });
 }
 
           // below is the old code
@@ -434,6 +469,11 @@ const createMock1 = async function (req, res) {
     // await console.log(relativePathundlf,'reeee') storage\images\users\1737448862404-g.xlsx
 
     //       return
+    return ReS(res, {
+      message: "Excel processed",
+      insertedCount: insertedRows,
+      duplicates: duplicateRows
+    }, 200);
     return ReS(res, { message: "excel inserted successfully." }, 200);
 
     // if (data) {
