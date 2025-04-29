@@ -28,7 +28,10 @@
                                     <span class="input-group-text rounded-start-1">
                                         <i class="fa fa-lock" aria-hidden="true"></i>
                                     </span>
-                                    <input type="password" id="password" class="form-control shadow-none rounded-end-1" placeholder="Enter password" formControlName="password" autocomplete="current-password">
+                                    <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control shadow-none rounded-end-0" placeholder="Enter password" formControlName="password" autocomplete="current-password" />
+                                    <span class="input-group-text bg-white" style="cursor: pointer;" (click)="togglePasswordVisibility()">
+                                        <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
+                                    </span>
                                 </div>
                                 <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger position-absolute">
                                     Password is required.
@@ -53,3 +56,9 @@
         </div>
     </div>
 </section>
+
+<!-- Ngb Toast -->
+<ngb-toast *ngIf="showToast" [autohide]="true" [delay]="3000" [class]="toastClass"
+class="position-fixed bottom-0 end-0 m-3" (hidden)="showToast = false">
+{{ toastMessage }}
+</ngb-toast>

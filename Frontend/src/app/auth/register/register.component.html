@@ -4,73 +4,98 @@
             <div class="col-xxl-5 col-xl-5 col-lg-6 col-md-7 col-sm-8 col-12">
                 <div class="card shadow border-0 rounded-3">
                     <div class="card-header text-center blueBG">
-                        <img src="/assets/image/logo.png" width="200" class="img-fluid mb-3" alt="Logo">
+                        <img src="/assets/image/logo.png" width="200" class="img-fluid mb-3" alt="Logo" />
                         <h4 class="text-center text-white">Register</h4>
                     </div>
                     <div class="card-body p-4">
-                        <form [formGroup]="registerForm" [class.disabled]="loading">
+                        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" [class.disabled]="loading">
+                            <!-- First Name -->
                             <div class="position-relative mb-4">
                                 <label class="form-label">First Name</label>
                                 <div class="input-group">
                                     <span class="input-group-text rounded-start-1">
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                     </span>
-                                    <input type="text" id="firstName" class="form-control shadow-none rounded-end-1" placeholder="Enter First Name" formControlName="firstName" autocomplete="first name">
+                                    <input type="text" id="firstName" class="form-control shadow-none rounded-end-1"
+                                        placeholder="Enter First Name" formControlName="firstName"
+                                        autocomplete="first name" />
                                 </div>
-                                <div *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched" class="text-danger position-absolute">
+                                <div *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
+                                    class="text-danger position-absolute">
                                     First name is required.
                                 </div>
                             </div>
-        
+
+                            <!-- Last Name -->
                             <div class="position-relative mb-4">
                                 <label class="form-label">Last Name</label>
                                 <div class="input-group">
                                     <span class="input-group-text rounded-start-1">
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                     </span>
-                                    <input type="text" id="lastName" class="form-control shadow-none rounded-end-1" placeholder="Enter Last Name" formControlName="lastName" autocomplete="last name">
+                                    <input type="text" id="lastName" class="form-control shadow-none rounded-end-1"
+                                        placeholder="Enter Last Name" formControlName="lastName"
+                                        autocomplete="last name" />
                                 </div>
-                                <div *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched" class="text-danger position-absolute">
+                                <div *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched"
+                                    class="text-danger position-absolute">
                                     Last name is required.
                                 </div>
                             </div>
-                            
+
+                            <!-- Email -->
                             <div class="position-relative mb-4">
                                 <label class="form-label">Email</label>
                                 <div class="input-group">
                                     <span class="input-group-text rounded-start-1">
                                         <i class="fa fa-envelope" aria-hidden="true"></i>
                                     </span>
-                                    <input type="text" id="email" class="form-control shadow-none rounded-end-1" placeholder="Enter email" formControlName="email" autocomplete="email">
+                                    <input type="text" id="email" class="form-control shadow-none rounded-end-1"
+                                        placeholder="Enter email" formControlName="email" autocomplete="email" />
                                 </div>
-                                <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="text-danger position-absolute">
-                                    Email is required.
+                                <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
+                                    class="text-danger position-absolute">
+                                    <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is
+                                        required.</span>
+                                    <span *ngIf="registerForm.get('email')?.errors?.['email']">Invalid email
+                                        format.</span>
+                                    <span *ngIf="registerForm.get('email')?.errors?.['pattern']">Please enter a valid
+                                        email address.</span>
+                                    <span *ngIf="registerForm.get('email')?.errors?.['duplicate']">This email is already
+                                        registered.</span>
                                 </div>
                             </div>
 
+                            <!-- Password -->
                             <div class="position-relative mb-4">
                                 <label class="form-label">Password</label>
                                 <div class="input-group">
                                     <span class="input-group-text rounded-start-1">
                                         <i class="fa fa-lock" aria-hidden="true"></i>
                                     </span>
-                                    <input type="password" id="password" class="form-control shadow-none rounded-end-1" placeholder="Enter password" formControlName="password" autocomplete="password">
+                                    <input [type]="showPassword ? 'text' : 'password'" id="password"
+                                        class="form-control shadow-none" placeholder="Enter password"
+                                        formControlName="password" autocomplete="password" />
+                                    <span class="input-group-text bg-white" style="cursor: pointer;"
+                                        (click)="togglePasswordVisibility()">
+                                        <i class="fa" [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+                                    </span>
                                 </div>
-                                <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="text-danger position-absolute">
+                                <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                                    class="text-danger position-absolute">
                                     Password is required.
                                 </div>
                             </div>
-        
-                            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-        
+
+
+                            <!-- Submit Button -->
                             <button type="submit" class="btn authButton rounded-1 w-100 mt-3" [disabled]="loading">
                                 {{ loading ? 'Creating an Account...' : 'Create Account' }}
                             </button>
 
+                            <!-- Login Link -->
                             <div class="d-flex align-items-center justify-content-evenly mt-3">
                                 <a routerLink="/login" class="nav-link text-danger">Login</a>
-                                <!-- <span class="text-danger">|</span>
-                                <a routerLink="/forgotPass" class="nav-link text-danger">Forgot password?</a> -->
                             </div>
                         </form>
                     </div>
@@ -78,4 +103,10 @@
             </div>
         </div>
     </div>
+
+    <!-- Ngb Toast -->
+    <ngb-toast *ngIf="showToast" [autohide]="true" [delay]="3000" [class]="toastClass"
+        class="position-fixed bottom-0 end-0 m-3" (hidden)="showToast = false">
+        {{ toastMessage }}
+    </ngb-toast>
 </section>

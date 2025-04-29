@@ -13,6 +13,12 @@ export class LoginComponent {
   loading = false;
   errorMessage: string | null = null;
 
+  showPassword = false;
+
+  showToast = false;
+  toastMessage = '';
+  toastClass = 'bg-success text-white';
+
   constructor(
     private fb: FormBuilder,
     private loginService: FormAPIsService,
@@ -28,17 +34,19 @@ export class LoginComponent {
     if (this.loginForm.invalid) return;
 
     this.loading = true;
-    this.errorMessage = null;
 
     this.loginService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.user.id);
         console.log('Login successful:', res.user.id);
-        
+        this.showToastMessage(res.message || 'User login successfully!', 'success');
+
         this.router.navigate(['/AllRecord']);
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Login failed, please enter valid credentials';
+        const errorMessage = err.error?.message || 'Login failed, please enter valid credentials';
+        this.showToastMessage(errorMessage, 'error');
+
         this.loading = false;
         setTimeout(() => {
           this.errorMessage = null;
@@ -46,4 +54,18 @@ export class LoginComponent {
       }
     });
   }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  showToastMessage(message: string, type: 'success' | 'error') {
+    this.toastMessage = message;
+    this.toastClass = type === 'success' ? 'bg-success text-white' : 'bg-danger text-white';
+    this.showToast = true;
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
+  }
+
 }

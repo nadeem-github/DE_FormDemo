@@ -9,8 +9,8 @@ import { submitForm } from './submit.model';
 
 export class FormAPIsService {
 
-  // baseURL = 'http://localhost:8002/';
-  baseURL = 'http://50.6.202.250:8002/';
+  baseURL = 'http://localhost:8002/';
+  // baseURL = 'http://50.6.202.250:8002/';
 
 
   constructor(private http: HttpClient) { }
@@ -68,6 +68,13 @@ export class FormAPIsService {
   login(credentials: { in: string; password: string }): Observable<any> {
     const url = `${this.baseURL}api/admin/login`;
     return this.http.post<any>(url, credentials).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  register(registerUserDetail: { fn: any; ln: any; in: any; password: any; }): Observable<any> {
+    const url = `${this.baseURL}api/admin/register`;
+    return this.http.post<any>(url, registerUserDetail).pipe(
       catchError(this.handleError)
     );
   }

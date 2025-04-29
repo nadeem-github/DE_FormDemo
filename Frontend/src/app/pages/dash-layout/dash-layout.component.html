@@ -1,12 +1,15 @@
 <app-header></app-header>
-<div class="w-100 overflow-x-hidden">
-    <div class="row">
-        <div class="col-2">
-            <app-admin-side-menu></app-admin-side-menu>
-        </div>
-        <div class="col-10">
-            <router-outlet></router-outlet>
-        </div>
-    </div>
+
+<div class="layout-container">
+  <app-admin-side-menu [collapsed]="isSidebarCollapsed"></app-admin-side-menu>
+
+  <div class="main-content" [class.collapsed]="isSidebarCollapsed">
+    <button class="btn toggle-sidebar-btn rounded-start-0 rounded-top-0" (click)="toggleSidebar()">
+      <i class="fa" [class.fa-chevron-left]="!isSidebarCollapsed" [class.fa-chevron-right]="isSidebarCollapsed"></i>
+    </button>
+    
+    <router-outlet></router-outlet>
+  </div>
 </div>
+
 <app-footer></app-footer>
