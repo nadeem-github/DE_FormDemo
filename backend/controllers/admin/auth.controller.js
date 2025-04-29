@@ -14,23 +14,26 @@ const readXlsxFile = require('read-excel-file/node')
 const ExcelJS = require("exceljs");
 const fs = require("fs");
 const path = require("path");
+const nodemailer = require('nodemailer');
 
 
 const login = async function (req, res) {
   const body = req.body;
   let checkUser = await MockVerify.findOne({
     attributes: [
-      'id', 'in',  'password','roles'     
+      'id', 'in', 'password', 'roles'
     ],
 
     where: {
       in: body.in
     }
   });
-
+  
   if (!checkUser) return ReE(res, { message: "Please enter the registered email address. The user not registered with us" }, 400);
 
   const result = await bcrypt_p.compare(body.password, checkUser.password)
+ 
+
   if (!result) return ReE(res, { message: "The password you entered is incorrect please try again to login" }, 400);
   const token = jwt.sign({ user_id: checkUser.id, in: checkUser.in }, CONFIG.jwt_encryption, { expiresIn: '365d' });
   return ReS(res, { user: checkUser, token: token });
@@ -59,68 +62,110 @@ const Register = async function (req, res) {
     return ReE(res, { message: "Somthing Went Wrong", err: error }, 200);
   }
 };
-const fetchUser = async function (req, res) {
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
+}
+const sendOtp = async function (req, res) {
   try {
+    const otp = await generateOTP();
     let body = req.body;
-    let userId = req.user.id
-    const data = await User.findOne({
-      attributes: [
-        'id', 'email', 'profile_pic', 'interprice', 'otp', 'status', 'is_profile_flag'
-        // [sequelize.fn('CONCAT', 'http://165.232.142.62:8002/storage/images/', sequelize.col('profile_pic')), 'fullurl']
-      ],
-      where: { id: userId }
+    let checkUser = await MockVerify.findOne({
+      where: {
+        in: body.in
+      }
     });
-    if (!data) {
-      return ReE(res, { message: "No Data Found" }, 200);
+    if (checkUser) {
+      let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: 'rupeshpantawane62@gmail.com', // Your Gmail email address rj.surya1999@gmail.com
+          pass: 'dufq qdzu rgmv przr' // Your Gmail password
+        }
+      });
+      let mailOptions = {
+        from: 'rupeshpantawane62@gmail.com', // Sender address
+        to: 'rupeshpantawane62@gmail.com', // List of recipients
+        subject: 'verifiaction OTP', // Subject line
+        text: `your otp is ${otp}` // Plain text body
+      };
+      await MockVerify.update({
+        otp: otp,
+      },
+        {
+          where: { id: checkUser.id }
+        });
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log('Error occurred:', error.stack);
+        } else {
+
+          console.log('Email sent:', info.response);
+
+          return  ReS(res, { message: "otp send on your mail" }, 200);
+        }
+      });
     }
-    return ReS(res, { data: data, message: "success" });
+    else {
+      return ReE(res, { message: "User already exits please login!" }, 200);
+    }
   } catch (error) {
     return ReE(res, { message: "Somthing Went Wrong", err: error }, 200);
   }
+
+};
+
+const checkOtp = async function (req, res) {
+  const body = req.body;
+  let checkUser = await MockVerify.findOne({
+    attributes: [
+      'id', 'in', 'otp'
+    ],
+
+    where: {
+      in: body.in,
+      otp: body.otp
+    }
+  });
+
+  if (!checkUser) return ReE(res, { message: "otp and email is not correct match" }, 400);
+
+  return ReS(res, { user: checkUser, message: "otp is correct" }, 200);
 };
 
 const updateRegister = async function (req, res) {
-
   try {
-    const body = req.body;
-    const files = req.files;
-    let userId = req.user.id
-    const baseFileUploadPath = `${config.IMAGE_RELATIVE_PATH}/profile_pic`;
-    let relativePath = "";
-    if (files) {
-      if (files.profile_pic) {
-        const fileName = Date.now() + '-' + files.profile_pic.name;
-        relativePath = "profile_pic/" + fileName;
-        const fileUpload = await helper.fileUpload(fileName, files.profile_pic, baseFileUploadPath);
-        if (!fileUpload) {
-          return ReE(res, { message: "Something went wrong" }, 200);
-        }
-      }
-    }
-    const getUserImage = await User.findOne({
+    let body = req.body;
+    let checkUser = await MockVerify.findOne({
       where: {
-        id: userId
+        in: body.in
       }
     });
+    if (checkUser) {
+      checkUser.password = body.password; // ये plain password है
+    await checkUser.save();
+      // await MockVerify.update({
+      //   password: body.password,
+      // },
+      //   {
+      //     where: { id: checkUser.id },
+      //     individualHooks: true
+      //   });
+        return ReS(res, {  message: "password successfully updated" }, 200);
+    }
+    else {
+      return ReE(res, { message: "invalide email" }, 200);
+    }
 
-    await User.update({
-      name: body.name,
-      status: body.status,
-      interprice: body.interprice,
-      is_profile_flag: "1",
-      profile_pic: relativePath !== "" ? relativePath : getUserImage.profile_pic,
-    },
-      {
-        where: { id: userId }
-      });
 
-    return ReS(res, { message: "User has been updated successfully." }, 200);
+
   } catch (error) {
-    console.log(error);
     return ReE(res, { message: "Somthing Went Wrong", err: error }, 200);
   }
-
 };
+
 const deleteUser = async function (req, res) {
   try {
     let userId = req.user.id
@@ -370,7 +415,7 @@ const createMock1 = async function (req, res) {
             await new Promise(res => setTimeout(res, 100)); // Wait 100ms
           }
         };
-        
+
         await waitForFile(filePath); // ⏳ Wait until file is available
         if (!fileUploadundlf) {
           return ReE(res, { message: "Something went wrong" }, 200);
@@ -378,93 +423,93 @@ const createMock1 = async function (req, res) {
         let headers = {};
         let headerRowIndex = -1;
         // await readXlsxFile(`storage/images/${relativePathundlf}`).then((rows) => {
-          const rows = await readXlsxFile(filePath);
-          // Find header row dynamically
-          for (let i = 0; i < rows.length; i++) {
-            const row = rows[i];
-      
-            if (row.includes("First Name") && row.includes("Last Name")
-              && row.includes("Company") && row.includes("Address") 
-            && row.includes("City") && row.includes("State") 
+        const rows = await readXlsxFile(filePath);
+        // Find header row dynamically
+        for (let i = 0; i < rows.length; i++) {
+          const row = rows[i];
+
+          if (row.includes("First Name") && row.includes("Last Name")
+            && row.includes("Company") && row.includes("Address")
+            && row.includes("City") && row.includes("State")
             && row.includes("Zip") && row.includes("Country")
-            && row.includes("Phone 1") && row.includes("Phone 2") 
+            && row.includes("Phone 1") && row.includes("Phone 2")
             && row.includes("Email") && row.includes("Website")
             && row.includes("Contact") && row.includes("Certification")) {
-              // Found the header row
-              headerRowIndex = i;
-              row.forEach((col, index) => {
-                headers[col.toLowerCase()] = index; // Mapping header name to column index
-              });
-              break;
-            }
+            // Found the header row
+            headerRowIndex = i;
+            row.forEach((col, index) => {
+              headers[col.toLowerCase()] = index; // Mapping header name to column index
+            });
+            break;
           }
-          if (headerRowIndex === -1) {
-            return ReE(res, { message: "Header row not found" }, 400);
-          }
-           // Read data rows after the header row
-    for (let i = headerRowIndex + 1; i < rows.length; i++) {
-      const row = rows[i];
-
-      let orderData = {
-        fn: row[headers["first name"]] || "",  // Dynamic column mapping
-        ln: row[headers["last name"]] || "",
-        a: row[headers["address"]] || "",
-        sol: row[headers["phone 1"]] || "",
-        city: row[headers["city"]] || "",
-        in: row[headers["email"]] || "",
-        undlf: row[headers["company"]] || "",
-        ecn1: row[headers["website"]] || "",
-        s: row[headers["state"]] || "",
-        tol1: row[headers["zip"]] || "",
-        c: row[headers["country"]] || "",
-        ecn: row[headers["phone 2"]] || "",
-        state: row[headers["contact"]] || "",
-        r: row[headers["certification"]] || "",
-      };
-        // Duplicate check based on email and phone1
-        let existing = await MockVerify.findOne({
-          where: {
-            [Op.or]: [
-              { in: orderData.in },
-              // { sol: orderData.sol }
-            ]
-          }
-        });
-
-        if (existing) {
-          duplicateRows.push({
-            row: orderData,
-            reason: "Duplicate entry (email already exists)"
-          });
-        } else {
-          await MockVerify.create(orderData);
-          insertedRows++;
         }
+        if (headerRowIndex === -1) {
+          return ReE(res, { message: "Header row not found" }, 400);
+        }
+        // Read data rows after the header row
+        for (let i = headerRowIndex + 1; i < rows.length; i++) {
+          const row = rows[i];
 
-      // MockVerify.create(orderData);
-    }
-  // });
-}
+          let orderData = {
+            fn: row[headers["first name"]] || "",  // Dynamic column mapping
+            ln: row[headers["last name"]] || "",
+            a: row[headers["address"]] || "",
+            sol: row[headers["phone 1"]] || "",
+            city: row[headers["city"]] || "",
+            in: row[headers["email"]] || "",
+            undlf: row[headers["company"]] || "",
+            ecn1: row[headers["website"]] || "",
+            s: row[headers["state"]] || "",
+            tol1: row[headers["zip"]] || "",
+            c: row[headers["country"]] || "",
+            ecn: row[headers["phone 2"]] || "",
+            state: row[headers["contact"]] || "",
+            r: row[headers["certification"]] || "",
+          };
+          // Duplicate check based on email and phone1
+          let existing = await MockVerify.findOne({
+            where: {
+              [Op.or]: [
+                { in: orderData.in },
+                // { sol: orderData.sol }
+              ]
+            }
+          });
 
-          // below is the old code
-    //     await readXlsxFile(`storage/images/${relativePathundlf}`).then((rows) => {
-    //       rows.slice(1).forEach(function (number) {
-    //         let orderData = {
-    //           fn: number[6],
-    //           ln: number[7],
-    //           a: number[1],
-    //           sol: number[2],
-    //           city: number[3],
-    //           in: number[4],
-    //           undlf: number[0],
-    //           ecn1: number[5],
-    //         }
-    //         const data = MockVerify.create(orderData)
+          if (existing) {
+            duplicateRows.push({
+              row: orderData,
+              reason: "Duplicate entry (email already exists)"
+            });
+          } else {
+            await MockVerify.create(orderData);
+            insertedRows++;
+          }
 
-    //       });
-    //       // each row being an array of cells.
-    //     })
-    //   }
+          // MockVerify.create(orderData);
+        }
+        // });
+      }
+
+      // below is the old code
+      //     await readXlsxFile(`storage/images/${relativePathundlf}`).then((rows) => {
+      //       rows.slice(1).forEach(function (number) {
+      //         let orderData = {
+      //           fn: number[6],
+      //           ln: number[7],
+      //           a: number[1],
+      //           sol: number[2],
+      //           city: number[3],
+      //           in: number[4],
+      //           undlf: number[0],
+      //           ecn1: number[5],
+      //         }
+      //         const data = MockVerify.create(orderData)
+
+      //       });
+      //       // each row being an array of cells.
+      //     })
+      //   }
     }
     // await console.log(relativePathundlf,'reeee') storage\images\users\1737448862404-g.xlsx
 
@@ -798,7 +843,8 @@ const downloadMock = async function (req, res) {
 module.exports = {
   login,
   Register,
-  fetchUser,
+  sendOtp,
+  checkOtp,
   updateRegister,
   deleteUser,
   createMock,

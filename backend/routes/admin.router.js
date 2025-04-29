@@ -9,6 +9,9 @@ const AuthController = require("../controllers/admin/auth.controller");
 // user authentication AuthController
 adminRouter.post("/login", AuthController.login);
 adminRouter.post("/register", AuthController.Register);
+adminRouter.post("/send-otp", AuthController.sendOtp);
+adminRouter.post("/get-otp", AuthController.checkOtp);
+adminRouter.post("/reset-password", AuthController.updateRegister);
 adminRouter.post("/create-mock", AuthController.createMock);
 
 //admin login
