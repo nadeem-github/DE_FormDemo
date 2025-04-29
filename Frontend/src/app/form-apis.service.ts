@@ -9,8 +9,8 @@ import { submitForm } from './submit.model';
 
 export class FormAPIsService {
 
-  baseURL = 'http://localhost:8002/';
-  // baseURL = 'http://50.6.202.250:8002/';
+  // baseURL = 'http://localhost:8002/';
+  baseURL = 'http://50.6.202.250:8002/';
 
 
   constructor(private http: HttpClient) { }
@@ -77,6 +77,18 @@ export class FormAPIsService {
     return this.http.post<any>(url, registerUserDetail).pipe(
       catchError(this.handleError)
     );
+  }
+
+  sendOtp(email: string): Observable<any> {
+    return this.http.post(`${this.baseURL}api/admin/send-otp`, { in: email });
+  }
+
+  verifyOtp(email: string, otp: string): Observable<any> {
+    return this.http.post(`${this.baseURL}api/admin/get-otp`, { in: email, otp });
+  }
+
+  resetPassword(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.baseURL}api/admin/reset-password`, { in: email, password });
   }
 
 

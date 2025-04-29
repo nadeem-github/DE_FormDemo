@@ -89,7 +89,8 @@
 
 
                             <!-- Submit Button -->
-                            <button type="submit" class="btn authButton rounded-1 w-100 mt-3" [disabled]="loading">
+                            <button type="submit" class="btn authButton rounded-1 w-100 mt-3" [disabled]="registerForm.invalid ||loading">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
                                 {{ loading ? 'Creating an Account...' : 'Create Account' }}
                             </button>
 

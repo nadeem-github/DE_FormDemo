@@ -8,32 +8,125 @@
                         <h4 class="text-center text-white">Forgot Password</h4>
                     </div>
                     <div class="card-body p-4">
-                        <form [formGroup]="forgotPasswordForm" [class.disabled]="loading">
+                        <!-- STEP 1: Email -->
+                        <!-- *ngIf="step === 1" -->
+                        <form *ngIf="step === 1" [formGroup]="emailForm" (ngSubmit)="onSendOtp()">
                             <div class="position-relative mb-4">
-                                <label class="form-label">Email</label>
+                                <label class="form-label">Registered Email</label>
                                 <div class="input-group">
                                     <span class="input-group-text rounded-start-1">
-                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        <i class="fa fa-envelope" aria-hidden="true"></i>
                                     </span>
-                                    <input type="text" id="email" class="form-control shadow-none rounded-end-1" placeholder="Enter email" formControlName="email" autocomplete="email">
+                                    <input type="email" id="email" class="form-control shadow-none rounded-end-1" placeholder="Enter Registered Email" formControlName="in" autocomplete="username">
                                 </div>
-                                <div *ngIf="forgotPasswordForm.get('email')?.invalid && forgotPasswordForm.get('email')?.touched" class="text-danger position-absolute">
-                                    Email is required.
+                                <div *ngIf="emailForm.get('in')?.touched && emailForm.get('in')?.invalid" class="text-danger position-absolute">
+                                    <span *ngIf="emailForm.get('in')?.errors?.['required']">
+                                        Email is required.
+                                    </span>
+                                    <span *ngIf="emailForm.get('in')?.errors?.['email']">
+                                        Invalid email format.
+                                    </span>
+                                    <span *ngIf="emailForm.get('in')?.errors?.['pattern']">
+                                        Please enter a valid email address.
+                                    </span>
+                                    <span *ngIf="emailForm.get('in')?.errors?.['duplicate']">
+                                        This email is already registered.
+                                    </span>
                                 </div>
                             </div>
-        
-                            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-        
-                            <button type="submit" class="btn authButton rounded-1 w-100 mt-3" [disabled]="loading">
-                                {{ loading ? 'Sending Verification Code...' : 'Send Verification Code' }}
+                            <button type="submit" class="btn authButton rounded-1 w-100 mt-3" [disabled]="emailForm.invalid || isSendingOtp">
+                                <span *ngIf="isSendingOtp" class="spinner-border spinner-border-sm me-2"></span>
+                                Send OTP
                             </button>
-
-                            <div class="d-flex align-items-center justify-content-evenly mt-3">
-                                <a routerLink="/register" class="nav-link text-danger">New User Register Here</a>
-                                <span class="text-danger">|</span>
-                                <a routerLink="/login" class="nav-link text-danger">Login</a>
-                            </div>
+                              
                         </form>
+
+                        <!-- STEP 2: OTP -->
+                        <!-- *ngIf="step === 2" -->
+                        <form *ngIf="step === 2" [formGroup]="otpForm" (ngSubmit)="onVerifyOtp()">
+                            <div class="position-relative mb-4">
+                                <label class="form-label">Enter OTP</label>
+                                <div class="input-group">
+                                    <span class="input-group-text rounded-start-1">
+                                        <i class="fa fa-key" aria-hidden="true"></i>
+                                    </span>
+                                    <input type="number" id="otp" class="form-control shadow-none rounded-end-1" maxlength="6" minlength="6" placeholder="Enter OTP" formControlName="otp" autocomplete="username">
+                                </div>
+                                <div *ngIf="otpForm.get('otp')?.touched && otpForm.get('otp')?.invalid" class="text-danger position-absolute">
+                                    <span *ngIf="otpForm.get('otp')?.errors?.['required']">
+                                        OTP is required.
+                                    </span>
+                                    <span *ngIf="otpForm.get('otp')?.errors?.['pattern']">
+                                        OTP must be a 6-digit number.
+                                    </span>
+                                    <span *ngIf="otpForm.get('otp')?.errors?.['duplicate']">
+                                        This OTP is already registered.
+                                    </span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn authButton rounded-1 w-100 mt-3" [disabled]="otpForm.invalid || isVerifyingOtp">
+                                <span *ngIf="isVerifyingOtp" class="spinner-border spinner-border-sm me-2"></span>
+                                Verify OTP
+                            </button>
+                              
+                        </form>
+
+                        <!-- STEP 3: New Password -->
+                        <!-- *ngIf="step === 3" -->
+                        <form *ngIf="step === 3" [formGroup]="passwordForm" (ngSubmit)="onResetPassword()">
+                            <div class="position-relative mb-4">
+                                <label class="form-label">New Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text rounded-start-1">
+                                        <i class="fa fa-lock" aria-hidden="true"></i>
+                                    </span>
+                                    <input [type]="showPassword ? 'text' : 'password'" id="password"
+                                        class="form-control shadow-none" placeholder="Enter new password"
+                                        formControlName="password" autocomplete="password" />
+                                    <span class="input-group-text bg-white" style="cursor: pointer;"
+                                        (click)="togglePassword()">
+                                        <i class="fa" [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+                                    </span>
+                                </div>
+                                <div *ngIf="passwordForm.get('password')?.invalid && passwordForm.get('password')?.touched"
+                                    class="text-danger position-absolute">
+                                    Password is required.
+                                </div>
+                            </div>
+                            <div class="position-relative mb-4">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text rounded-start-1">
+                                        <i class="fa fa-lock" aria-hidden="true"></i>
+                                    </span>
+                                    <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" class="form-control shadow-none" id="confirmPassword" placeholder="Enter Confirm Password" formControlName="confirmPassword" autocomplete="password" />
+                                    <span class="input-group-text bg-white" style="cursor: pointer;"
+                                        (click)="toggleConfirmPassword()">
+                                        <i class="fa" [ngClass]="showConfirmPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+                                    </span>
+                                </div>
+                                <div *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched"
+                                    class="text-danger position-absolute">
+                                    Password is required.
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn authButton rounded-1 w-100 mt-3" [disabled]="passwordForm.invalid || isResettingPassword">
+                                <span *ngIf="isResettingPassword" class="spinner-border spinner-border-sm me-2"></span>
+                                Reset Password
+                            </button>
+                              
+                        </form>
+
+                        <!-- Toast Notification -->
+                        <div *ngIf="showToast" class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+                            <div class="toast show"
+                                [ngClass]="toastType === 'success' ? 'bg-success text-white' : 'bg-danger text-white'">
+                                <div class="toast-body">
+                                    {{ toastMessage }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
