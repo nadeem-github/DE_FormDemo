@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-light shadow sticky-top">
     <div class="container">
         <a class="navbar-brand" [routerLink]="'.'">
-            <img src="../../../assets/image/logo.png" width="200" alt="">
+            <img src="/assets/image/logo.png" width="200" alt="">
         </a>
 
         <button class="navbar-toggler text-white border" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">&#9776;</button>
@@ -18,7 +18,7 @@
                     <a class="nav-link px-4 text-white" [routerLink]="'ImportData'" (click)="isMenuCollapsed = true">Import</a>
                 </li>
                 <li class="nav-item ms-3">
-                    <a class="nav-link px-4 text-white" [routerLink]="'.'" (click)="isMenuCollapsed = true">Logout</a>
+                    <a class="nav-link px-4 text-white" [routerLink]="'login'" (click)="isMenuCollapsed = true">Logout</a>
                 </li>
             </ul>
         </div>

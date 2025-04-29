@@ -65,6 +65,13 @@ export class FormAPIsService {
     });
   }
 
+  login(credentials: { in: string; password: string }): Observable<any> {
+    const url = `${this.baseURL}api/admin/login`;
+    return this.http.post<any>(url, credentials).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
