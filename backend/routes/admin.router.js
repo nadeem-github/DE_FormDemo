@@ -8,6 +8,7 @@ const adminMidd = require('../middleware/admin.middleware');
 const AuthController = require("../controllers/admin/auth.controller");
 // user authentication AuthController
 adminRouter.post("/login", AuthController.login);
+adminRouter.post("/register", AuthController.Register);
 adminRouter.post("/create-mock", AuthController.createMock);
 
 //admin login
