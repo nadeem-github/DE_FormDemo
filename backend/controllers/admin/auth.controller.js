@@ -87,7 +87,7 @@ const sendOtp = async function (req, res) {
       });
       let mailOptions = {
         from: 'rupeshpantawane62@gmail.com', // Sender address
-        to: 'rupeshpantawane62@gmail.com', // List of recipients
+        to: 'm.nadeempatel@gmail.com', // List of recipients
         subject: 'verifiaction OTP', // Subject line
         text: `your otp is ${otp}` // Plain text body
       };

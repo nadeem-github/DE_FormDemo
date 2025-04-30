@@ -1,1 +1,8 @@
-<p>admin-side-menu works!</p>
+<nav class="sidebar shadow" [class.collapsed]="collapsed">
+    <ul class="menu-list">
+        <li *ngFor="let item of menuItems" [class.active]="activeItem === item.label" (click)="setActive(item.label)">
+            <i class="{{ item.icon }}"></i>
+            <span class="label text-truncate" *ngIf="!collapsed">{{ item.label }}</span>
+        </li>
+    </ul>
+</nav>

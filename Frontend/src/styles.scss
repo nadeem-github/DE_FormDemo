@@ -67,3 +67,96 @@
         }
     }
 }
+
+.layout-container {
+    display: flex;
+    min-height: 100vh;
+    transition: all 0.3s;
+
+    .sidebar {
+        width: 240px;
+        background-image: url('/assets/image/navBG.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: right;
+        color: white;
+        transition: width 0.3s;
+        overflow: hidden;
+        height: 100vh;
+        position: fixed;
+        z-index: 1000;
+        padding-top: 2.25rem;
+
+        &.collapsed {
+            width: 70px;
+
+            .menu-list li {
+                justify-content: center;
+            }
+
+            .label {
+                display: none;
+            }
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+                padding: 15px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                cursor: pointer;
+                position: relative;
+                transition: background 0.2s;
+
+                &:hover {
+                    background-color: #1c37a0;
+                }
+
+                &.active {
+                    background: linear-gradient(to right, #0a2472 0%, #d3d7e0 100%);
+                    font-weight: bold;
+                    transition: background 0.2s;
+
+                    &::after {
+                        content: '➔';
+                        position: absolute;
+                        right: 0px;
+                        color: #1c37a0;
+                        font-size: 1rem;
+                    }
+                }
+
+                i {
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+
+    .main-content {
+        position: relative;
+        margin-left: 240px;
+        flex: 1;
+        padding: 20px;
+        transition: margin-left 0.3s;
+
+        &.collapsed {
+            margin-left: 70px;
+        }
+
+        .toggle-sidebar-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+        }
+    }
+}

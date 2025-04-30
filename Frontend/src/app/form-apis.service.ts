@@ -72,6 +72,25 @@ export class FormAPIsService {
     );
   }
 
+  register(registerUserDetail: { fn: any; ln: any; in: any; password: any; }): Observable<any> {
+    const url = `${this.baseURL}api/admin/register`;
+    return this.http.post<any>(url, registerUserDetail).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  sendOtp(email: string): Observable<any> {
+    return this.http.post(`${this.baseURL}api/admin/send-otp`, { in: email });
+  }
+
+  verifyOtp(email: string, otp: string): Observable<any> {
+    return this.http.post(`${this.baseURL}api/admin/get-otp`, { in: email, otp });
+  }
+
+  resetPassword(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.baseURL}api/admin/reset-password`, { in: email, password });
+  }
+
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
