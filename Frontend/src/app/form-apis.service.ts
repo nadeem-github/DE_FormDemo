@@ -9,8 +9,8 @@ import { submitForm } from './submit.model';
 
 export class FormAPIsService {
 
-  // baseURL = 'http://localhost:8002/';
-  baseURL = 'http://50.6.202.250:8002/';
+  baseURL = 'http://localhost:8002/';
+  // baseURL = 'http://50.6.202.250:8002/';
 
 
   constructor(private http: HttpClient) { }
