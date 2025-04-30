@@ -1,0 +1,15 @@
+<app-header></app-header>
+
+<div class="layout-container">
+  <app-user-dash-menu [collapsed]="isSidebarCollapsed"></app-user-dash-menu>
+
+  <div class="main-content" [class.collapsed]="isSidebarCollapsed">
+    <button class="btn toggle-sidebar-btn rounded-start-0 rounded-top-0" (click)="toggleSidebar()">
+      <i class="fa" [class.fa-chevron-left]="!isSidebarCollapsed" [class.fa-chevron-right]="isSidebarCollapsed"></i>
+    </button>
+    
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<app-footer></app-footer>

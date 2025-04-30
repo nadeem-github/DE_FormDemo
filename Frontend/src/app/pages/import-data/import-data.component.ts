@@ -17,7 +17,7 @@ export class ImportDataComponent {
 
   constructor(private fb: FormBuilder, private apiService: FormAPIsService, private router: Router,) {
     this.importForm = this.fb.group({
-      excelFile: [null , Validators.required], // Form control for file
+      excelFile: [null, Validators.required], // Form control for file
     });
   }
 
@@ -27,11 +27,15 @@ export class ImportDataComponent {
       this.importForm.patchValue({ excelFile: file });
     }
   }
-
+  accessId:any
   onSubmit(): void {
     if (this.importForm.valid) {
       const formData = new FormData();
       formData.append('excelFile', this.importForm.get('excelFile')?.value);
+      const token = localStorage.getItem('token');
+      const requestData1 = { accessId: token }; // Send the token in the request body
+      this.accessId = requestData1.accessId; // Set ID to be deleted
+      formData.append('accessId', this.accessId); // Append accessId to the request
 
       this.apiService.importData(formData).subscribe({
         next: (response: any) => {

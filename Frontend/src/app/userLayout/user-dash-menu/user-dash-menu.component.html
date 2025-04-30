@@ -1,0 +1,54 @@
+<nav class="sidebar shadow" [class.collapsed]="collapsed">
+    <ul class="menu-list">
+
+        <li [class.active]="activeItem === 'Dashboard'" (click)="setActive('Dashboard')">
+            <a routerLink="/userHome">
+                <i class="fa fa-home"></i>
+                <span class="label text-truncate" *ngIf="!collapsed">Dashboard</span>
+            </a>
+        </li>
+
+        <li [class.active]="activeItem === 'Profile'" (click)="setActive('Profile')">
+            <a routerLink="/userProfile">
+                <i class="fa fa-users"></i>
+                <span class="label text-truncate" *ngIf="!collapsed">Profile</span>
+            </a>
+        </li>
+
+        <!-- <li [class.active]="activeItem === 'Add a record'" (click)="setActive('Add a record')">
+            <a routerLink="/TechForm">
+                <i class="fa fa-plus-circle"></i>
+                <span class="label text-truncate" *ngIf="!collapsed">Add a record</span>
+            </a>
+        </li>
+
+        <li [class.active]="activeItem === 'Import record'" (click)="setActive('Import record')">
+            <a routerLink="/ImportData">
+                <i class="fa fa-cloud-upload"></i>
+                <span class="label text-truncate" *ngIf="!collapsed">Import record</span>
+            </a>
+        </li>
+
+        <li [class.active]="activeItem === 'Export record'" (click)="setActive('Export record')">
+            <a routerLink="/export-record">
+                <i class="fa fa-cloud-download"></i>
+                <span class="label text-truncate" *ngIf="!collapsed">Export record</span>
+            </a>
+        </li>
+
+        <li [class.active]="activeItem === 'Asset map'" (click)="setActive('Asset map')">
+            <a routerLink="/asset-map">
+                <i class="fa fa-map"></i>
+                <span class="label text-truncate" *ngIf="!collapsed">Asset map</span>
+            </a>
+        </li> -->
+
+        <li [class.active]="activeItem === 'Logout'" (click)="setActive('Logout')">
+            <a routerLink="/login">
+                <i class="fa fa-sign-out"></i>
+                <span class="label text-truncate" *ngIf="!collapsed">Logout</span>
+            </a>
+        </li>
+
+    </ul>
+</nav>

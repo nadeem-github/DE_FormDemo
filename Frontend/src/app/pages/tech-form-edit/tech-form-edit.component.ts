@@ -21,6 +21,7 @@ export class TechFormEditComponent {
 
   uploadedFiles: { [key: string]: File | null } = {};
   isFileInvalid: { [key: string]: boolean } = {};
+  accessId: any;
 
   constructor(private fb: FormBuilder, private formDataService: FormAPIsService, private route: ActivatedRoute, private router: Router,) { }
 
@@ -117,6 +118,10 @@ export class TechFormEditComponent {
     const requestData = new FormData();
     requestData.append('id', userId);
 
+    const token = localStorage.getItem('token');
+    const requestData1 = {accessId: token}; // Send the token in the request body
+    this.accessId = requestData1.accessId; // Set ID to be deleted
+    requestData.append('accessId', this.accessId); // Append accessId to the request
     this.formDataService.editFormData(requestData).subscribe(
       (response: any) => {
         this.isLoading = false;

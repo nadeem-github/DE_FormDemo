@@ -20,6 +20,10 @@ import { RegisterComponent } from './auth/register/register.component';
 import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
 import { DashLayoutComponent } from './pages/dash-layout/dash-layout.component';
 import { AdminSideMenuComponent } from './pages/admin-side-menu/admin-side-menu.component';
+import { UserDashboardComponent } from './userLayout/user-dashboard/user-dashboard.component';
+import { UserDashHomeComponent } from './userLayout/user-dash-home/user-dash-home.component';
+import { UserDashProfileComponent } from './userLayout/user-dash-profile/user-dash-profile.component';
+import { UserDashMenuComponent } from './userLayout/user-dash-menu/user-dash-menu.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +41,10 @@ import { AdminSideMenuComponent } from './pages/admin-side-menu/admin-side-menu.
     ForgotPassComponent,
     DashLayoutComponent,
     AdminSideMenuComponent,
+    UserDashboardComponent,
+    UserDashHomeComponent,
+    UserDashProfileComponent,
+    UserDashMenuComponent,
   ],
   imports: [
     BrowserModule,
