@@ -4,7 +4,7 @@ const { to, ReE } = require('../services/util.service');
 let checkUser = async function (req, res, next) {
     let user, err;
     [err, user] = await to(MockVerify.findOne({ 
-            where: { id: req.body.id, roles:'user' },
+            where: { id: req.body.accessId, roles:'user' },
             attributes: [
                 'id','in','roles'
             ],
@@ -19,7 +19,7 @@ let adminUser = async function (req, res, next) {
 
     let user, err;
     [err, user] = await to(MockVerify.findOne({ 
-            where: { id: req.body.id, roles:'admin' },
+            where: { id: req.body.accessId, roles:'admin' },
             attributes: [
                 'id','in','roles'
             ],
