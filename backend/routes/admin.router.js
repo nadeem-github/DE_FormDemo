@@ -12,19 +12,22 @@ adminRouter.post("/register", AuthController.Register);
 adminRouter.post("/send-otp", AuthController.sendOtp);
 adminRouter.post("/get-otp", AuthController.checkOtp);
 adminRouter.post("/reset-password", AuthController.updateRegister);
-adminRouter.post("/create-mock", AuthController.createMock);
+adminRouter.post("/assets", AuthController.assetMap);
+adminRouter.post("/assets-import", AuthController.uploadExcelToDatabase);
 
-//admin login
+
+//admin access
+adminRouter.post("/create-mock",adminMidd.adminUser, AuthController.createMock);
 adminRouter.post("/create-mock1",adminMidd.adminUser, AuthController.createMock1);
 adminRouter.post("/fetch-mock",adminMidd.adminUser, AuthController.fetchMock);
 adminRouter.post("/fetch-mock-single", adminMidd.adminUser, AuthController.fetchMockSingle);
-adminRouter.post("/fetch-mock-single-user",adminMidd.checkUser, AuthController.fetchMockSingle); //this one is checkuser
 adminRouter.post("/delete-mock", adminMidd.adminUser,AuthController.deleteMock);
 adminRouter.post("/delete-selected-mock",adminMidd.adminUser, AuthController.deleteSelectedMock);
 adminRouter.post("/download-excel",adminMidd.adminUser, AuthController.downloadMock);
 adminRouter.post("/update-mock", adminMidd.adminUser,AuthController.updateMock);
-adminRouter.post("/update-mock-user", adminMidd.checkUser,AuthController.updateMock);//this one is checkuser
 
-
+// user access
+adminRouter.post("/fetch-mock-single-user",adminMidd.checkUser, AuthController.fetchMockSingle); 
+adminRouter.post("/update-mock-user", adminMidd.checkUser,AuthController.updateMock);
 
 module.exports = adminRouter;
