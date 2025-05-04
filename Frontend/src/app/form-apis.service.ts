@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { submitForm } from './submit.model';
+import { Asset } from './models/asset/asset.module';
 
 @Injectable({
   providedIn: 'root'
@@ -89,6 +90,17 @@ export class FormAPIsService {
 
   resetPassword(email: string, password: string): Observable<any> {
     return this.http.post(`${this.baseURL}api/admin/reset-password`, { in: email, password });
+  }
+
+  getAssets(station: string = '', portType: string = ''): Observable<Asset[]> {
+    let params = new HttpParams();
+    if (station) params = params.set('station', station);
+    if (portType) params = params.set('portType', portType);
+    return this.http.get<Asset[]>(this.baseURL, { params });
+  }
+
+  getFilters(): Observable<Asset[]> {
+    return this.http.get<Asset[]>(this.baseURL);
   }
 
 

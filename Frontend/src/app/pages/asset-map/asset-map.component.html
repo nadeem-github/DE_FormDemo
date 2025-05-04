@@ -1,1 +1,29 @@
-<p>asset-map works!</p>
+<div class="asset-map-container">
+    <h2 class="title mb-3">Asset Map</h2>
+
+    <form [formGroup]="filterForm" class="filters d-flex flex-wrap gap-3 mb-4 align-items-end">
+        <!-- Station Filter -->
+        <div class="form-group">
+            <label class="form-label fw-bold">Charging Station</label>
+            <select class="form-select" formControlName="station">
+                <option value="">All</option>
+                <option *ngFor="let s of filters.stations" [value]="s">{{ s }}</option>
+            </select>
+        </div>
+
+        <!-- Port Type Filter -->
+        <div class="form-group">
+            <label class="form-label fw-bold">Port Type</label>
+            <select class="form-select" formControlName="portType">
+                <option value="">All</option>
+                <option *ngFor="let p of filters.portTypes" [value]="p">{{ p }}</option>
+            </select>
+        </div>
+    </form>
+
+    <!-- Google Map -->
+    <google-map height="600px" width="100%" [center]="center" [zoom]="zoom" [options]="{ mapTypeControl: false }">
+        <map-marker *ngFor="let asset of assets" [position]="{ lat: +asset.lat, lng: +asset.lng }"
+            [title]="asset.station_name + ' (' + asset.port_type + ')'"></map-marker>
+    </google-map>
+</div>

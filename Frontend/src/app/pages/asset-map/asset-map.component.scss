@@ -1,0 +1,19 @@
+.asset-map-container {
+    padding: 1.5rem;
+
+    .title {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .filters {
+        .form-group {
+            min-width: 200px;
+        }
+    }
+
+    google-map {
+        border-radius: 0.5rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+}
