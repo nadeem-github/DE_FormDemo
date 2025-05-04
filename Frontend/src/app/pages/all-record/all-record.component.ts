@@ -21,6 +21,7 @@ export class AllRecordComponent {
   deleteId!: number; // Store ID for deletion
   loading: boolean = false;
   isLoading = true;
+  accessId: any; // Declare accessId property
 
   selectedRecords: { [key: number]: boolean } = {}; // Track selected checkboxes
   deleteIds: number[] = []; // Store selected IDs
@@ -47,7 +48,7 @@ export class AllRecordComponent {
   getUserList(): void {
     this.isLoading = true;
     const token = localStorage.getItem('token');
-    const requestData = {id: token}; // Send the token in the request body
+    const requestData = {accessId: token}; // Send the token in the request body
     this.shortClipService.fetchAllData(requestData).subscribe(
       (response) => {
         this.dataAllUser = response.data;
@@ -100,13 +101,16 @@ export class AllRecordComponent {
   }
 
   openDeleteModal(id: number) {
+    const token = localStorage.getItem('token');
+    const requestData = {accessId: token}; // Send the token in the request body
     this.deleteId = id; // Set ID to be deleted
+    this.accessId = requestData.accessId; // Set ID to be deleted
     this.modalService.open(this.confirmModal, { centered: true });
   }
 
   confirmDelete(modal: any): void {
     modal.close(); // Close the modal
-    this.shortClipService.deleteUser(this.deleteId)
+    this.shortClipService.deleteUser(this.deleteId, this.accessId)
       .pipe(
         catchError((error) => {
           this.showToastMessage('Failed to delete the record. Please try again.', 'danger');

@@ -2,20 +2,20 @@
     <ul class="menu-list">
 
         <li [class.active]="activeItem === 'Dashboard'" (click)="setActive('Dashboard')">
-            <a routerLink="/AllRecord">
+            <a routerLink="/userHome">
                 <i class="fa fa-home"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Dashboard</span>
             </a>
         </li>
 
-        <li [class.active]="activeItem === 'Active user'" (click)="setActive('Active user')">
-            <a routerLink=".">
+        <li [class.active]="activeItem === 'Profile'" (click)="setActive('Profile')">
+            <a routerLink="/userProfile">
                 <i class="fa fa-users"></i>
-                <span class="label text-truncate" *ngIf="!collapsed">Active user</span>
+                <span class="label text-truncate" *ngIf="!collapsed">Profile</span>
             </a>
         </li>
 
-        <li [class.active]="activeItem === 'Add a record'" (click)="setActive('Add a record')">
+        <!-- <li [class.active]="activeItem === 'Add a record'" (click)="setActive('Add a record')">
             <a routerLink="/TechForm">
                 <i class="fa fa-plus-circle"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Add a record</span>
@@ -29,19 +29,19 @@
             </a>
         </li>
 
-        <!-- <li [class.active]="activeItem === 'Export record'" (click)="setActive('Export record')">
+        <li [class.active]="activeItem === 'Export record'" (click)="setActive('Export record')">
             <a routerLink="/export-record">
                 <i class="fa fa-cloud-download"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Export record</span>
             </a>
-        </li> -->
+        </li>
 
         <li [class.active]="activeItem === 'Asset map'" (click)="setActive('Asset map')">
-            <a routerLink="/assetMap">
+            <a routerLink="/asset-map">
                 <i class="fa fa-map"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Asset map</span>
             </a>
-        </li>
+        </li> -->
 
         <li [class.active]="activeItem === 'Logout'" (click)="setActive('Logout')">
             <a routerLink="/login">

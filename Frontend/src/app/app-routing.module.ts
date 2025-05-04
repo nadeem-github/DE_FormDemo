@@ -11,6 +11,10 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
 import { authGuard } from './guards/auth.guard';
+import { UserDashboardComponent } from './userLayout/user-dashboard/user-dashboard.component';
+import { UserDashHomeComponent } from './userLayout/user-dash-home/user-dash-home.component';
+import { UserDashProfileComponent } from './userLayout/user-dash-profile/user-dash-profile.component';
+import { AssetMapComponent } from './pages/asset-map/asset-map.component';
 
 const routes: Routes = [
 
@@ -34,7 +38,7 @@ const routes: Routes = [
   {
     path: '',
     component: DashLayoutComponent,
-    // canActivateChild: [authGuard],
+    canActivateChild: [authGuard],
     children: [
       { path: 'AllRecord', component: AllRecordComponent },
       { path: 'TechForm', component: TechFormComponent },
@@ -42,6 +46,16 @@ const routes: Routes = [
       { path: 'TechFormUpdate', component: TechFormUpdateComponent },
       { path: 'ImportData', component: ImportDataComponent },
       { path: 'adminLayout', component: DashLayoutComponent },
+      { path: 'assetMap', component: AssetMapComponent },
+    ],
+  },
+  {
+    path: '',
+    component: UserDashboardComponent,
+    canActivateChild: [authGuard],
+    children: [
+      { path: 'userHome', component: UserDashHomeComponent },
+      { path: 'userProfile', component: UserDashProfileComponent },
     ],
   },
 

@@ -41,8 +41,8 @@ export class FormAPIsService {
     return this.http.post<any>(url, data).pipe(catchError(this.handleError));
   }
 
-  deleteUser(id: number): Observable<any> {
-    const payload = { id }; // Send id in the payload
+  deleteUser(id: number, accessId: any): Observable<any> {
+    const payload = { id, accessId }; // Send id in the payload
     return this.http.post(`${this.baseURL}api/admin/delete-mock`, payload);
   }
 
