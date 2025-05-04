@@ -24,6 +24,7 @@ import { UserDashboardComponent } from './userLayout/user-dashboard/user-dashboa
 import { UserDashHomeComponent } from './userLayout/user-dash-home/user-dash-home.component';
 import { UserDashProfileComponent } from './userLayout/user-dash-profile/user-dash-profile.component';
 import { UserDashMenuComponent } from './userLayout/user-dash-menu/user-dash-menu.component';
+import { AssetMapComponent } from './pages/asset-map/asset-map.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { UserDashMenuComponent } from './userLayout/user-dash-menu/user-dash-men
     UserDashHomeComponent,
     UserDashProfileComponent,
     UserDashMenuComponent,
+    AssetMapComponent,
   ],
   imports: [
     BrowserModule,

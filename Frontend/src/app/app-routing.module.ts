@@ -14,6 +14,7 @@ import { authGuard } from './guards/auth.guard';
 import { UserDashboardComponent } from './userLayout/user-dashboard/user-dashboard.component';
 import { UserDashHomeComponent } from './userLayout/user-dash-home/user-dash-home.component';
 import { UserDashProfileComponent } from './userLayout/user-dash-profile/user-dash-profile.component';
+import { AssetMapComponent } from './pages/asset-map/asset-map.component';
 
 const routes: Routes = [
 
@@ -45,6 +46,7 @@ const routes: Routes = [
       { path: 'TechFormUpdate', component: TechFormUpdateComponent },
       { path: 'ImportData', component: ImportDataComponent },
       { path: 'adminLayout', component: DashLayoutComponent },
+      { path: 'assetMap', component: AssetMapComponent },
     ],
   },
   {
