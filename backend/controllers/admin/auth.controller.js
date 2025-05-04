@@ -1,4 +1,4 @@
-var { User, MockVerify } = require("../../models");
+var { User, MockVerify, AssetMap } = require("../../models");
 const authService = require("../../services/auth.service");
 const { to, ReE, ReS, TE } = require("../../services/util.service");
 const { Op, Sequelize } = require("sequelize");
@@ -15,6 +15,7 @@ const ExcelJS = require("exceljs");
 const fs = require("fs");
 const path = require("path");
 const nodemailer = require('nodemailer');
+const xlsx = require('xlsx');
 
 
 const login = async function (req, res) {
@@ -28,11 +29,11 @@ const login = async function (req, res) {
       in: body.in
     }
   });
-  
+
   if (!checkUser) return ReE(res, { message: "Please enter the registered email address. The user not registered with us" }, 400);
 
   const result = await bcrypt_p.compare(body.password, checkUser.password)
- 
+
 
   if (!result) return ReE(res, { message: "The password you entered is incorrect please try again to login" }, 400);
   const token = jwt.sign({ user_id: checkUser.id, in: checkUser.in }, CONFIG.jwt_encryption, { expiresIn: '365d' });
@@ -104,7 +105,7 @@ const sendOtp = async function (req, res) {
 
           console.log('Email sent:', info.response);
 
-          return  ReS(res, { message: "otp send on your mail" }, 200);
+          return ReS(res, { message: "otp send on your mail" }, 200);
         }
       });
     }
@@ -145,7 +146,7 @@ const updateRegister = async function (req, res) {
     });
     if (checkUser) {
       checkUser.password = body.password; // ये plain password है
-    await checkUser.save();
+      await checkUser.save();
       // await MockVerify.update({
       //   password: body.password,
       // },
@@ -153,7 +154,7 @@ const updateRegister = async function (req, res) {
       //     where: { id: checkUser.id },
       //     individualHooks: true
       //   });
-        return ReS(res, {  message: "password successfully updated" }, 200);
+      return ReS(res, { message: "password successfully updated" }, 200);
     }
     else {
       return ReE(res, { message: "invalide email" }, 200);
@@ -839,6 +840,49 @@ const downloadMock = async function (req, res) {
   }
 
 };
+const assetMap = async function (req, res) {
+
+  try {
+    const { station, portType } = req.query;
+
+    const whereClause = {};
+    if (station) {
+      whereClause.station_name = station;
+    }
+    if (portType) {
+      whereClause.port_type = portType;
+    }
+
+    const assets = await AssetMap.findAll({
+      where: whereClause,
+    });
+
+    res.json(assets);
+  } catch (error) {
+    console.error("Error fetching assets:", error);
+    res.status(500).json({ message: "Internal server error", error });
+  }
+
+};
+const uploadExcelToDatabase = async function (req, res) {
+  // async function uploadExcelToDatabase() {
+  const filePath = path.resolve(__dirname, './stations.xlsx');
+  const workbook = await xlsx.readFile(filePath);
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  const data = xlsx.utils.sheet_to_json(sheet);
+
+  for (let row of data) {
+    const { station_name, port_type, lat, lng } = row;
+    await AssetMap.create({
+      station_name,
+      port_type,
+      lat,
+      lng
+    });
+  }
+
+  return ReS(res, { message: " successfully." }, 200);
+}
 
 module.exports = {
   login,
@@ -854,5 +898,7 @@ module.exports = {
   updateMock,
   createMock1,
   deleteSelectedMock,
-  downloadMock
+  downloadMock,
+  assetMap,
+  uploadExcelToDatabase
 };
