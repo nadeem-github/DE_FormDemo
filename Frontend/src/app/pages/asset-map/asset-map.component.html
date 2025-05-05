@@ -1,29 +1,54 @@
-<div class="asset-map-container">
-    <h2 class="title mb-3">Asset Map</h2>
+<div class="asset-map p-3">
+    <h3 class="mb-3">Asset Map</h3>
 
-    <form [formGroup]="filterForm" class="filters d-flex flex-wrap gap-3 mb-4 align-items-end">
-        <!-- Station Filter -->
-        <div class="form-group">
-            <label class="form-label fw-bold">Charging Station</label>
-            <select class="form-select" formControlName="station">
-                <option value="">All</option>
-                <option *ngFor="let s of filters.stations" [value]="s">{{ s }}</option>
-            </select>
-        </div>
-
-        <!-- Port Type Filter -->
-        <div class="form-group">
-            <label class="form-label fw-bold">Port Type</label>
-            <select class="form-select" formControlName="portType">
-                <option value="">All</option>
-                <option *ngFor="let p of filters.portTypes" [value]="p">{{ p }}</option>
-            </select>
-        </div>
+    <form [formGroup]="filterForm" class="row g-3 align-items-end mb-3">
+        <ul class="list-group list-group-horizontal">
+            <li class="list-group-item">
+                <div class="form-check d-flex align-items-center justify-content-center">
+                    <input class="form-check-input me-2" type="radio" formControlName="stationType" value="all" id="allStations" (change)="onFilter()">
+                    <label class="form-check-label" for="allStations">
+                        All Stations ({{ counts.all }})
+                    </label>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="form-check d-flex align-items-center justify-content-center">
+                    <input class="form-check-input me-2" type="radio" formControlName="stationType" value="charging_stations" id="chargingStations" (change)="onFilter()">
+                    <label class="form-check-label" for="chargingStations">
+                        Charging Stations ({{ counts.charging_stations }})
+                    </label>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="form-check d-flex align-items-center justify-content-center">
+                    <input class="form-check-input me-2" type="radio" formControlName="stationType" value="charging_ports" id="chargingPorts" (change)="onFilter()">
+                    <label class="form-check-label" for="chargingPorts">
+                        Charging Ports ({{ counts.charging_ports }})
+                    </label>
+                </div>
+            </li>
+        </ul>
     </form>
 
-    <!-- Google Map -->
-    <google-map height="600px" width="100%" [center]="center" [zoom]="zoom" [options]="{ mapTypeControl: false }">
-        <map-marker *ngFor="let asset of assets" [position]="{ lat: +asset.lat, lng: +asset.lng }"
-            [title]="asset.station_name + ' (' + asset.port_type + ')'"></map-marker>
-    </google-map>
+    <div #mapContainer id="map"></div>
 </div>
+
+<!-- Modal HTML -->
+<ng-template #infoWindowModal let-modal>
+    <div class="modal-header blueBG">
+        <h5 class="modal-title">{{ modalTitle }}</h5>
+        <!-- <i class="fa fa-times text-white fa-2x" aria-hidden="true" (click)="closeModal(modal)"></i> -->
+    </div>
+    <div class="modal-body">
+        <div class="asset-info">
+            <h6><strong>Station Name:</strong> {{ selectedAsset?.station_name | titlecase }}</h6>
+            <p><strong>Port Type:</strong> {{ selectedAsset?.port_type || 'N/A' }}</p>
+            <p><strong>Latitude:</strong> {{ selectedAsset?.lat }}</p>
+            <p><strong>Longitude:</strong> {{ selectedAsset?.lng }}</p>
+        </div>
+    </div>
+    <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary m-0 rounded-1" (click)="closeModal(modal)">Close</button>
+    </div>
+</ng-template>
+  
