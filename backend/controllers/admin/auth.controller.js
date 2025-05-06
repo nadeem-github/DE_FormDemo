@@ -22,7 +22,7 @@ const login = async function (req, res) {
   const body = req.body;
   let checkUser = await MockVerify.findOne({
     attributes: [
-      'id', 'in', 'password', 'roles'
+      'id', 'in', 'password', 'roles', 'fn', 'ln'
     ],
 
     where: {
