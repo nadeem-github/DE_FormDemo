@@ -41,7 +41,15 @@ export class LoginComponent {
         console.log('Login successful:', res.user.id);
         this.showToastMessage(res.message || 'User login successfully!', 'success');
 
-        this.router.navigate(['/AllRecord']);
+        if (res.user.roles === 'user') {
+          this.router.navigate(['/userHome']);
+        } else if (res.user.roles === 'admin') {
+          this.router.navigate(['/AllRecord']);
+        } else {
+          // Optional: handle unknown roles
+          this.router.navigate(['/']);
+        }
+
       },
       error: (err) => {
         const errorMessage = err.error?.message || 'Login failed, please enter valid credentials';

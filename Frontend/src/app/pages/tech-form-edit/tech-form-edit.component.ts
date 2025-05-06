@@ -314,6 +314,8 @@ export class TechFormEditComponent {
         }
       }
 
+      formData.append('accessId', this.accessId);
+      
       // Call the API to update the data
       this.formDataService.updateFormData(formData).subscribe(
         (response: any) => {
