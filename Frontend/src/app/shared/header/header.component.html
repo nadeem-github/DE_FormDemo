@@ -7,11 +7,12 @@
         <button class="navbar-toggler text-white border" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">&#9776;</button>
 
         <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
+            <p class="text-white mb-0 ms-auto h5">
+                <span class="fw-light me-1">Welcome,</span> 
+                <span class="fw-bolder">{{ firstName }} {{ lastName }}!</span>
+            </p>
+            <!-- <ul class="navbar-nav ms-auto">
                 <li class="nav-item ms-3 active">
-                    <a class="nav-link px-4 text-white">Welcome <b>Nadeem Patel</b></a>
-                </li>
-                <!-- <li class="nav-item ms-3 active">
                     <a class="nav-link px-4 text-white" [routerLink]="'AllRecord'" (click)="isMenuCollapsed = true">Home</a>
                 </li>
                 <li class="nav-item ms-3">
@@ -22,8 +23,8 @@
                 </li>
                 <li class="nav-item ms-3">
                     <a class="nav-link px-4 text-white" [routerLink]="'login'" (click)="isMenuCollapsed = true">Logout</a>
-                </li> -->
-            </ul>
+                </li>
+            </ul> -->
         </div>
     </div>
 </nav>

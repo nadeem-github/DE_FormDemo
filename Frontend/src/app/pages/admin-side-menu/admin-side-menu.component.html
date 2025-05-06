@@ -9,7 +9,7 @@
         </li>
 
         <li [class.active]="activeItem === 'Active user'" (click)="setActive('Active user')">
-            <a routerLink=".">
+            <a routerLink="/activeUser">
                 <i class="fa fa-users"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Active user</span>
             </a>
@@ -43,7 +43,7 @@
             </a>
         </li>
 
-        <li [class.active]="activeItem === 'Logout'" (click)="setActive('Logout')">
+        <li [class.active]="activeItem === 'Logout'"  (click)="logout()">
             <a routerLink="/login">
                 <i class="fa fa-sign-out"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Logout</span>

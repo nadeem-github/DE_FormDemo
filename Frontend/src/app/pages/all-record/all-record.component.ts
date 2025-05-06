@@ -44,7 +44,7 @@ export class AllRecordComponent {
 
   // Access ID from localStorage
   get accessId(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem('userId');
   }
 
   ngOnInit(): void {

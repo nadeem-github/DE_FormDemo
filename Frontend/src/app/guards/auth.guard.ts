@@ -1,15 +1,30 @@
-import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { CanActivate, CanActivateChild, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-export const authGuard: CanActivateFn = (route, state) => {
-  const router = inject(Router);
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthGuard implements CanActivate, CanActivateChild {
 
-  const isLoggedIn = !!localStorage.getItem('token'); // Replace with real auth logic
+  constructor(private router: Router) { }
 
-  if (!isLoggedIn) {
-    router.navigate(['/login']);
-    return false;
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('authToken');  // Only allow if token exists
+  }
+  isAdmin(): boolean {
+    return localStorage.getItem('roles') === 'admin';  // Only allow if user is admin
+  }  
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    if (this.isLoggedIn()) {
+      return true;
+    } else {
+      this.router.navigate(['/login']);
+      return false;
+    }
   }
 
-  return true;
-};
+  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    return this.canActivate(route, state);
+  }
+}

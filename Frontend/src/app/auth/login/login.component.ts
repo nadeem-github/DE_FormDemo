@@ -32,36 +32,44 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.invalid) return;
-
+  
     this.loading = true;
-
+  
     this.loginService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
-        localStorage.setItem('token', res.user.id);
-        console.log('Login successful:', res.user.id);
+        localStorage.setItem('authToken', res.token);
+  
+        localStorage.setItem('firstName', res.user.fn);
+        localStorage.setItem('lastName', res.user.ln);
+        localStorage.setItem('userRole', res.user.roles);
+        localStorage.setItem('userId', res.user.id.toString());
+  
         this.showToastMessage(res.message || 'User login successfully!', 'success');
-
+  
         if (res.user.roles === 'user') {
-          this.router.navigate(['/userHome']);
+          this.router.navigate(['/userHome'], { replaceUrl: true });  // replaceUrl lagaya (back press safe)
         } else if (res.user.roles === 'admin') {
-          this.router.navigate(['/AllRecord']);
+          this.router.navigate(['/AllRecord'], { replaceUrl: true }); // replaceUrl lagaya (back press safe)
         } else {
-          // Optional: handle unknown roles
-          this.router.navigate(['/']);
+          this.router.navigate(['/'], { replaceUrl: true });
         }
-
+  
+        this.loading = false;
       },
+  
       error: (err) => {
         const errorMessage = err.error?.message || 'Login failed, please enter valid credentials';
         this.showToastMessage(errorMessage, 'error');
-
+  
         this.loading = false;
+  
         setTimeout(() => {
           this.errorMessage = null;
         }, 5000);
       }
     });
   }
+  
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;

@@ -7,4 +7,12 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
   isMenuCollapsed = true;
+  
+  firstName: string | null = '';
+  lastName: string | null = '';
+
+  ngOnInit(): void {
+    this.firstName = localStorage.getItem('firstName');
+    this.lastName = localStorage.getItem('lastName');
+  }
 }
