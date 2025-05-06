@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { submitForm } from './submit.model';
+import { Asset } from './models/asset/asset.module';
 
 @Injectable({
   providedIn: 'root'
@@ -91,6 +92,9 @@ export class FormAPIsService {
     return this.http.post(`${this.baseURL}api/admin/reset-password`, { in: email, password });
   }
 
+  getAssets(filters: { station?: string; portType?: string }): Observable<any[]> {
+    return this.http.post<any[]>(`${this.baseURL}api/admin/assets`, filters);
+  }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';

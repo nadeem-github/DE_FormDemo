@@ -1,0 +1,22 @@
+.modal-content {
+    border-radius: 15px;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.toast-container {
+    z-index: 1055; // Above modals and everything
+}
+
+.toast.show {
+    display: block;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}

@@ -26,13 +26,52 @@
     </div>
 </section>
 
-<div *ngIf="showToast" class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div class="toast show align-items-center text-white bg-{{ toastType }} border-0">
+<div *ngIf="showToast" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
+    <div class="toast align-items-center text-white bg-{{ toastType }} border-0 show fade" role="alert"
+        aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
             <div class="toast-body">
-                {{ toastMessage }}
+                {{ toastMessage }} {{successMessage}}
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close" (click)="showToast = false"></button>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"
+                (click)="showToast = false"></button>
         </div>
     </div>
 </div>
+  
+
+<ng-template #duplicateModal let-modal>
+    <div class="modal-header bg-danger text-white">
+        <h4 class="modal-title">Duplicate Records ({{ duplicateRecords.length }})</h4>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close"
+            (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let record of duplicateRecords; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ record.row?.fn }}</td>
+                    <td>{{ record.row?.ln }}</td>
+                    <td>{{ record.row?.in }}</td>
+                    <td class="text-danger">{{ record.reason }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="downloadDuplicatesAsExcel()">Download</button>
+        <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+    </div>
+</ng-template>
+  
+  

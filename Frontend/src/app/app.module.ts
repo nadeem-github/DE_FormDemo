@@ -25,6 +25,7 @@ import { UserDashHomeComponent } from './userLayout/user-dash-home/user-dash-hom
 import { UserDashProfileComponent } from './userLayout/user-dash-profile/user-dash-profile.component';
 import { UserDashMenuComponent } from './userLayout/user-dash-menu/user-dash-menu.component';
 import { AssetMapComponent } from './pages/asset-map/asset-map.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { AssetMapComponent } from './pages/asset-map/asset-map.component';
     HttpClientModule,
     NgbDatepickerModule,
     NgbToastModule,
+    GoogleMapsModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
