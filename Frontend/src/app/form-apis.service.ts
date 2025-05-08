@@ -92,9 +92,14 @@ export class FormAPIsService {
     return this.http.post(`${this.baseURL}api/admin/reset-password`, { in: email, password });
   }
 
-  getAssets(filters: { station?: string; portType?: string }): Observable<any[]> {
+  getAssets(filters: { station?: string; portType?: string; accessId: any }): Observable<any[]> {
     return this.http.post<any[]>(`${this.baseURL}api/admin/assets`, filters);
   }
+
+  activeUsers(filters: any): Observable<any[]> {
+    return this.http.post<any[]>(`${this.baseURL}api/admin/active-user`, filters);
+  }
+
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';

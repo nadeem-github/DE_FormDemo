@@ -1,1 +1,26 @@
-<p>active-user works!</p>
+<div class="asset-map p-3">
+    <h3 class="mb-3">Active Users</h3>
+
+    <div #mapContainer id="map"></div>
+</div>
+
+<!-- Modal -->
+<ng-template #infoWindowModal let-modal>
+    <div class="modal-header blueBG">
+        <h5 class="modal-title">{{ modalTitle }}</h5>
+    </div>
+    <div class="modal-body">
+        <div class="asset-info">
+            <h6><strong>First Name:</strong> {{ selectedAsset?.firstName }}</h6>
+            <p><strong>Last Name:</strong> {{ selectedAsset?.lastName }}</p>
+            <p><strong>Latitude:</strong> {{ selectedAsset?.lat }}</p>
+            <p><strong>Longitude:</strong> {{ selectedAsset?.lng }}</p>
+            <p><strong>Address:</strong> {{ selectedAsset?.address || 'N/A' }}</p>
+            <p><strong>Solution:</strong> {{ selectedAsset?.solution || 'N/A' }}</p>
+            <p><strong>City:</strong> {{ selectedAsset?.city || 'N/A' }}</p>
+        </div>
+    </div>
+    <div class="modal-footer py-2">
+        <button type="button" class="btn btn-secondary m-0 rounded-1" (click)="closeModal(modal)">Close</button>
+    </div>
+</ng-template>

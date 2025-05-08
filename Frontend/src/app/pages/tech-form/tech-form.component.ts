@@ -26,6 +26,8 @@ export class TechFormComponent {
   uploadedFiles: { [key: string]: File | null } = {};
   isFileInvalid: { [key: string]: boolean } = {};
 
+  accessId: any;
+
   constructor(private fb: FormBuilder, private formDataService: FormAPIsService, private router: Router,) { }
 
   ngOnInit(): void {
@@ -34,8 +36,8 @@ export class TechFormComponent {
       lastName: ['', Validators.required],
       address: ['',],
       stateOfLicense: ['',],
-      phoneNumber: ['', Validators.required, Validators.pattern(/^\d{10}$/)], //[Validators.required, Validators.pattern(/^\d{10}$/)]
-      ssn: ['',Validators.required],
+      phoneNumber: ['', Validators.required, Validators.pattern(/^\d{10}$/)],
+      ssn: ['', Validators.required],
       emergencyContactName1: [''],
       emergencyContactName2: [''],
       emergencyContactNumber1: ['', Validators.required, Validators.pattern(/^\d{10}$/)],
@@ -128,6 +130,11 @@ export class TechFormComponent {
     if (this.dataForm.valid) {
       const formData = new FormData();
       const formValues: Record<string, any> = {};
+
+      const token = localStorage.getItem('userId');
+      const requestData1 = { accessId: token }; // Send the token in the request body
+      this.accessId = requestData1.accessId; // Set ID to be deleted
+      formData.append('accessId', this.accessId); // Append accessId to the request
 
       formData.append('fn', this.dataForm.get('firstName')?.value);
       formData.append('ln', this.dataForm.get('lastName')?.value);

@@ -52,7 +52,12 @@ export class AssetMapComponent {
   }
 
   fetchAssets(): void {
-    this.assetMapService.getAssets({}).subscribe({
+    const accessId = localStorage.getItem('userId');  // direct localStorage se liya
+
+    const payload = {
+      accessId: accessId
+    };
+    this.assetMapService.getAssets(payload).subscribe({
       next: (data) => {
         this.assets = data;
         this.updateCounts();
