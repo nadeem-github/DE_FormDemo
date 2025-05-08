@@ -17,6 +17,7 @@ adminRouter.post("/assets-import", AuthController.uploadExcelToDatabase);
 
 
 //admin access
+adminRouter.post("/active-user",adminMidd.adminUser, AuthController.activeUsers);
 adminRouter.post("/create-mock",adminMidd.adminUser, AuthController.createMock);
 adminRouter.post("/create-mock1",adminMidd.adminUser, AuthController.createMock1);
 adminRouter.post("/fetch-mock",adminMidd.adminUser, AuthController.fetchMock);

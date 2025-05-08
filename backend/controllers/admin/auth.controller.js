@@ -883,6 +883,33 @@ const uploadExcelToDatabase = async function (req, res) {
 
   return ReS(res, { message: " successfully." }, 200);
 }
+const activeUsers = async function (req, res) {
+  try {
+    // const { station, portType } = req.query;
+
+    // const whereClause = {};
+    // if (station) {
+    //   whereClause.station_name = station;
+    // }
+    // if (portType) {
+    //   whereClause.port_type = portType;
+    // }
+
+    const assets = await MockVerify.findAll({
+      attributes: ["l", "l1","fn", "ln", "a","sol", "city"],
+      where: {
+        l: { [Op.ne]: null },
+        l1: { [Op.ne]: null }
+      }
+    });
+
+    res.json(assets);
+  } catch (error) {
+    console.error("Error fetching assets:", error);
+    res.status(500).json({ message: "Internal server error", error });
+  }
+
+};
 
 module.exports = {
   login,
@@ -900,5 +927,6 @@ module.exports = {
   deleteSelectedMock,
   downloadMock,
   assetMap,
-  uploadExcelToDatabase
+  uploadExcelToDatabase,
+  activeUsers
 };
