@@ -1,54 +1,45 @@
 <nav class="sidebar shadow" [class.collapsed]="collapsed">
     <ul class="menu-list">
-
         <li [class.active]="activeItem === 'Dashboard'" (click)="setActive('Dashboard')">
-            <a routerLink="/AllRecord">
+            <a routerLink="/AllRecord" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-home"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Dashboard</span>
             </a>
         </li>
 
         <li [class.active]="activeItem === 'Active user'" (click)="setActive('Active user')">
-            <a routerLink="/activeUser">
+            <a routerLink="/activeUser" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-users"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Active user</span>
             </a>
         </li>
 
         <li [class.active]="activeItem === 'Add a record'" (click)="setActive('Add a record')">
-            <a routerLink="/TechForm">
+            <a routerLink="/TechForm" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-plus-circle"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Add a record</span>
             </a>
         </li>
 
         <li [class.active]="activeItem === 'Import record'" (click)="setActive('Import record')">
-            <a routerLink="/ImportData">
+            <a routerLink="/ImportData" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-cloud-upload"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Import record</span>
             </a>
         </li>
 
-        <!-- <li [class.active]="activeItem === 'Export record'" (click)="setActive('Export record')">
-            <a routerLink="/export-record">
-                <i class="fa fa-cloud-download"></i>
-                <span class="label text-truncate" *ngIf="!collapsed">Export record</span>
-            </a>
-        </li> -->
-
         <li [class.active]="activeItem === 'Asset map'" (click)="setActive('Asset map')">
-            <a routerLink="/assetMap">
+            <a routerLink="/assetMap" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-map"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Asset map</span>
             </a>
         </li>
 
         <li [class.active]="activeItem === 'Logout'"  (click)="logout()">
-            <a routerLink="/login">
+            <a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-sign-out"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Logout</span>
             </a>
         </li>
-
     </ul>
 </nav>

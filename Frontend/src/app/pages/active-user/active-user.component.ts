@@ -69,14 +69,15 @@ export class ActiveUserComponent {
     this.assets.forEach(asset => {
       const position = new google.maps.LatLng(asset.lat, asset.lng);
 
-      const iconUrl = asset.firstName.toLowerCase() === 'nadeem'
-        ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-        : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+      const iconUrl = 'assets/image/user-location.png';
 
       const marker = new google.maps.Marker({
         position,
         map: this.map,
-        icon: iconUrl,
+        icon: {
+          url: iconUrl,
+          scaledSize: new google.maps.Size(35, 35)
+        },
         title: `${asset.firstName} ${asset.lastName}`
       });
 
@@ -94,6 +95,7 @@ export class ActiveUserComponent {
       this.map.fitBounds(bounds);
     }
   }
+
 
   closeModal(modal: any): void {
     modal.close();

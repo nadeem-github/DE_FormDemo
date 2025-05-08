@@ -22,6 +22,7 @@ export class TechFormComponent {
   latitude: number | null = null;
   longitude: number | null = null;
   uploadedFile: File | null = null;
+  mapUrl: string = '';
 
   uploadedFiles: { [key: string]: File | null } = {};
   isFileInvalid: { [key: string]: boolean } = {};
@@ -259,15 +260,21 @@ export class TechFormComponent {
       alert('Geolocation is not supported by your browser.');
       return;
     }
-
+  
     this.isLoading = true;
-
+  
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+  
         this.dataForm.patchValue({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          latitude: lat,
+          longitude: lng,
         });
+  
+        this.mapUrl = `https://www.google.com/maps?q=${lat},${lng}&hl=es;z=14&output=embed`;
+  
         this.isLoading = false;
       },
       (error) => {

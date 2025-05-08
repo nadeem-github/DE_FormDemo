@@ -49,7 +49,39 @@ export class AssetMapComponent {
       zoom: 5
     };
     this.map = new google.maps.Map(this.gmap.nativeElement, mapOptions);
+  
+    // Zoom change pe icon size adjust karenge
+    this.map.addListener('zoom_changed', () => {
+      this.updateMarkerIcons();
+    });
   }
+
+  updateMarkerIcons(): void {
+    const zoom = this.map.getZoom() || 5;
+  
+    // Zoom ke hisab se size calculate karenge (aap chaho to adjust kar sakte ho)
+    let size = 20;
+    if (zoom >= 10) {
+      size = 40;
+    } else if (zoom >= 7) {
+      size = 30;
+    } else {
+      size = 20;
+    }
+  
+    this.markers.forEach(marker => {
+      const isPort = marker.getTitle()?.includes('charging_ports');
+      const iconUrl = isPort
+        ? 'assets/image/charging-ports.png'
+        : 'assets/image/charging-station.png';
+  
+      marker.setIcon({
+        url: iconUrl,
+        scaledSize: new google.maps.Size(size, size)
+      });
+    });
+  }
+  
 
   fetchAssets(): void {
     const accessId = localStorage.getItem('userId');  // direct localStorage se liya
@@ -83,40 +115,53 @@ export class AssetMapComponent {
     this.plotMarkers();
   }
 
+  // animation: google.maps.Animation.BOUNCE,
+
   plotMarkers(): void {
     this.markers.forEach(marker => marker.setMap(null));
     this.markers = [];
-
+  
     const bounds = new google.maps.LatLngBounds();
-
+  
     this.filteredAssets.forEach(asset => {
       const position = new google.maps.LatLng(+asset.lat, +asset.lng);
-
+  
+      // Yahan custom icons set kar rahe hain
       const iconUrl = asset.station_name.trim() === 'charging_ports'
-        ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-        : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
-
+        ? 'assets/image/charging-ports.png'
+        : 'assets/image/charging-station.png';
+  
       const marker = new google.maps.Marker({
         position,
         map: this.map,
-        icon: iconUrl,
+        icon: {
+          url: iconUrl,
+          scaledSize: new google.maps.Size(35, 35)
+        },
+        // animation: google.maps.Animation.BOUNCE,
         title: `${asset.station_name} (${asset.port_type})`
       });
-
+  
       marker.addListener('click', () => {
-        this.selectedAsset = asset; // Save the selected asset details
-        this.modalTitle = `${asset.station_name} - ${asset.port_type || 'N/A'}`; // Set the title dynamically
-        this.modalService.open(this.infoWindowModal, { size: 'sm', centered: true, backdrop: 'static', keyboard: false, }); // Open modal centered
+        this.selectedAsset = asset;
+        this.modalTitle = `${asset.station_name} - ${asset.port_type || 'N/A'}`;
+        this.modalService.open(this.infoWindowModal, {
+          size: 'sm',
+          centered: true,
+          backdrop: 'static',
+          keyboard: false,
+        });
       });
-
+  
       this.markers.push(marker);
       bounds.extend(position);
     });
-
+  
     if (this.filteredAssets.length > 0) {
       this.map.fitBounds(bounds);
     }
   }
+  
 
   closeModal(modal: any): void {
     modal.close();
