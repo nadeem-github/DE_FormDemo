@@ -118,7 +118,7 @@ export class TechFormEditComponent {
     const requestData = new FormData();
     requestData.append('id', userId);
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('userId');
     const requestData1 = {accessId: token}; // Send the token in the request body
     this.accessId = requestData1.accessId; // Set ID to be deleted
     requestData.append('accessId', this.accessId); // Append accessId to the request
@@ -314,6 +314,8 @@ export class TechFormEditComponent {
         }
       }
 
+      formData.append('accessId', this.accessId);
+      
       // Call the API to update the data
       this.formDataService.updateFormData(formData).subscribe(
         (response: any) => {

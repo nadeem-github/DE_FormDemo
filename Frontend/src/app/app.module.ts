@@ -26,6 +26,7 @@ import { UserDashProfileComponent } from './userLayout/user-dash-profile/user-da
 import { UserDashMenuComponent } from './userLayout/user-dash-menu/user-dash-menu.component';
 import { AssetMapComponent } from './pages/asset-map/asset-map.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { ActiveUserComponent } from './pages/active-user/active-user.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
     UserDashProfileComponent,
     UserDashMenuComponent,
     AssetMapComponent,
+    ActiveUserComponent,
   ],
   imports: [
     BrowserModule,

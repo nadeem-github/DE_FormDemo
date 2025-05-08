@@ -10,20 +10,14 @@ import { AuthLayoutComponent } from './auth/auth-layout/auth-layout.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
-import { authGuard } from './guards/auth.guard';
 import { UserDashboardComponent } from './userLayout/user-dashboard/user-dashboard.component';
 import { UserDashHomeComponent } from './userLayout/user-dash-home/user-dash-home.component';
 import { UserDashProfileComponent } from './userLayout/user-dash-profile/user-dash-profile.component';
 import { AssetMapComponent } from './pages/asset-map/asset-map.component';
+import { ActiveUserComponent } from './pages/active-user/active-user.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-
-  // { path: '', redirectTo: 'AllRecord', pathMatch: 'full' },
-  // { path: 'AllRecord', component: AllRecordComponent },
-  // { path: 'TechForm', component: TechFormComponent },
-  // { path: 'TechFormEdit/:id', component: TechFormEditComponent },
-  // { path: 'TechFormUpdate', component: TechFormUpdateComponent },
-  // { path: 'ImportData', component: ImportDataComponent },
 
   {
     path: '',
@@ -38,7 +32,7 @@ const routes: Routes = [
   {
     path: '',
     component: DashLayoutComponent,
-    canActivateChild: [authGuard],
+    canActivateChild: [AuthGuard],
     children: [
       { path: 'AllRecord', component: AllRecordComponent },
       { path: 'TechForm', component: TechFormComponent },
@@ -47,12 +41,13 @@ const routes: Routes = [
       { path: 'ImportData', component: ImportDataComponent },
       { path: 'adminLayout', component: DashLayoutComponent },
       { path: 'assetMap', component: AssetMapComponent },
+      { path: 'activeUser', component: ActiveUserComponent },
     ],
   },
   {
     path: '',
     component: UserDashboardComponent,
-    canActivateChild: [authGuard],
+    canActivateChild: [AuthGuard],
     children: [
       { path: 'userHome', component: UserDashHomeComponent },
       { path: 'userProfile', component: UserDashProfileComponent },

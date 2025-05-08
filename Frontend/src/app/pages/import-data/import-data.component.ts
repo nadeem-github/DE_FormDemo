@@ -47,7 +47,7 @@ export class ImportDataComponent {
       const formData = new FormData();
       formData.append('excelFile', this.importForm.get('excelFile')?.value);
 
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('userId');
       const requestData1 = { accessId: token };
       this.accessId = requestData1.accessId;
       formData.append('accessId', this.accessId);
