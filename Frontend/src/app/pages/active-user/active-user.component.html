@@ -11,8 +11,7 @@
     </div>
     <div class="modal-body">
         <div class="asset-info">
-            <h6><strong>First Name:</strong> {{ selectedAsset?.firstName }}</h6>
-            <p><strong>Last Name:</strong> {{ selectedAsset?.lastName }}</p>
+            <h6><strong>Full Name:</strong> {{ selectedAsset?.firstName }} {{ selectedAsset?.lastName }}</h6>
             <p><strong>Latitude:</strong> {{ selectedAsset?.lat }}</p>
             <p><strong>Longitude:</strong> {{ selectedAsset?.lng }}</p>
             <p><strong>Address:</strong> {{ selectedAsset?.address || 'N/A' }}</p>
