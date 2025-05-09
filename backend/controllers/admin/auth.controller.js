@@ -81,14 +81,18 @@ const sendOtp = async function (req, res) {
         host: "smtp.gmail.com",
         port: 465,
         secure: true,
+        // auth: {
+        //   user: 'efarnsworth@skillfusion.net', // Your Gmail email address rj.surya1999@gmail.com
+        //   pass: 'lxse bzrd inux bzei' // Your Gmail password
+        // }
         auth: {
           user: 'rupeshpantawane62@gmail.com', // Your Gmail email address rj.surya1999@gmail.com
           pass: 'dufq qdzu rgmv przr' // Your Gmail password
         }
       });
       let mailOptions = {
-        from: 'rupeshpantawane62@gmail.com', // Sender address
-        to: 'm.nadeempatel@gmail.com', // List of recipients
+        from: 'efarnsworth@skillfusion.net', // Sender address
+        to: body.in, // List of recipients
         subject: 'verifiaction OTP', // Subject line
         text: `your otp is ${otp}` // Plain text body
       };

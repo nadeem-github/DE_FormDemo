@@ -17,7 +17,7 @@
         "REQ_BASE_URL": "http://100.119.154.54:3000",
         "IMAGE_RELATIVE_PATH": "storage/images",
         "IMAGE_PATH": "http://100.119.154.54:8002/storage/images",
-        "PORT": 8002,
+        "PORT": 8003,
         "FCM_SERVER_KEY": "AAAA3TCV3nU:APA91bGPGLRIOMZ2vO_EE-0Z4q11T3RWqcMDcKYVpt38QiDbvcmmSlkWrMmfEsbkq-rFd7tkUQtg2DxOTfZR0gxtloDyPISteAlyCaZxWxVQCahKgV_KAmVVBsCOYj27uWD2sl2BWRKW",
         "ADMIN_BASE_URL": "http://admin.medxdev.online/login"
     },
@@ -28,7 +28,7 @@
         "REQ_BASE_URL": "http://100.119.154.54:3000",
         "IMAGE_RELATIVE_PATH": "storage/images",
         "IMAGE_PATH": "http://100.119.154.54:8002/storage/images",
-        "PORT": 8002,
+        "PORT": 8003,
         "FCM_SERVER_KEY": "AAAA3TCV3nU:APA91bGPGLRIOMZ2vO_EE-0Z4q11T3RWqcMDcKYVpt38QiDbvcmmSlkWrMmfEsbkq-rFd7tkUQtg2DxOTfZR0gxtloDyPISteAlyCaZxWxVQCahKgV_KAmVVBsCOYj27uWD2sl2BWRKW",
         "ADMIN_BASE_URL": "http://admin.medxdev.online/login"
     }
