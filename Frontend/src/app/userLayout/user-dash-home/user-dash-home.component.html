@@ -1,1 +1,107 @@
-<p>user-dash-home works!</p>
+<section class="py-4">
+    <div class="container">
+        <!-- Header -->
+        <div class="row align-items-center mb-4">
+            <div class="col-md-6">
+                <h3 class="fw-bold">User Dashboard</h3>
+            </div>
+            <div class="col-md-6 text-md-end text-start mt-3 mt-md-0">
+                <button class="btn btn-primary rounded-pill fw-semibold px-4 py-2 blueBG border-0" [routerLink]="'/userProfile'">
+                    <i class="fa fa-pencil-square me-2"></i> Edit Your Profile
+                </button>
+            </div>
+        </div>
+
+        <!-- Cards -->
+        <div class="row g-4">
+            <!-- Personal Info Card -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Personal Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div *ngIf="isLoading" class="text-center my-5">
+                            <div class="spinner-border text-primary mb-3"></div>
+                            <p class="mb-0">Loading data...</p>
+                        </div>
+
+                        <div *ngIf="!isLoading && userData">
+                            <div class="d-flex mb-3">
+                                <img [src]="userData.undlf ? (imgBaseURL + userData.undlf) : 'assets/image/male.png'" alt="User Image" class="img-thumbnail me-3 shadow-sm" width="200" height="200" />
+                                <div>
+                                    <h5 class="mb-0">{{ userData.fn }} {{ userData.ln }}</h5>
+                                    <small class="text-muted">{{ userData.in }}</small>
+                                    <p><strong>Phone Number:</strong> {{ userData.pn }}</p>
+                                    <p><strong>City:</strong> {{ userData.city }}</p>
+                                    <p><strong>State:</strong> {{ userData.state }}</p>
+                                    <p><strong>Zip Code:</strong> {{ userData.zc }}</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Document Upload Card -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Document Upload</h5>
+                    </div>
+                    <div class="card-body">
+                        <div *ngIf="isLoading" class="text-center my-5">
+                            <div class="spinner-border text-success mb-3"></div>
+                            <p class="mb-0">Loading data...</p>
+                        </div>
+
+                        <!-- Display Documents if Available -->
+                        <div *ngIf="!allDocsMissing">
+                            <div *ngFor="let doc of docKeys">
+                                <div *ngIf="userData?.[doc.key]">
+                                    <p><strong>{{ doc.title }}:</strong></p>
+                                    <img [src]="imgBaseURL + userData?.[doc.key]" alt="{{ doc.title }}" width="200" class="img-thumbnail mb-2" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Show "Upload Documents" Button if All Docs are Missing -->
+                        <div class="d-flex align-items-center justify-content-center text-center h-100" *ngIf="allDocsMissing">
+                            <div>
+                                <p><strong>No documents uploaded yet.</strong></p>
+                                <button class="btn btn-primary rounded-pill fw-semibold blueBG border-0" [routerLink]="'/userProfile'">
+                                    <i class="fa fa-upload" aria-hidden="true"></i> 
+                                    Upload Documents
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Document Missing Card -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">Document Missing</h5>
+                    </div>
+                    <div class="card-body">
+                        <div *ngIf="isLoading" class="text-center my-5">
+                            <div class="spinner-border text-danger mb-3"></div>
+                            <p class="mb-0">Loading data...</p>
+                        </div>
+
+                        <div *ngFor="let doc of docKeys">
+                            <div *ngIf="!userData?.[doc.key]">
+                                <p><strong>{{ doc.title }}:</strong> <span class="badge bg-danger">Missing</span></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

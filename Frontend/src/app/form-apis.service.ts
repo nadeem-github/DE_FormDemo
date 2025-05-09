@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { submitForm } from './submit.model';
+import { submitForm, User } from './submit.model';
 import { Asset } from './models/asset/asset.module';
 
 @Injectable({
@@ -10,55 +10,55 @@ import { Asset } from './models/asset/asset.module';
 
 export class FormAPIsService {
 
-  // baseURL = 'http://localhost:8003/';
-  // baseURL = 'http://50.6.202.250:8002/';
-  baseURL = 'http://50.6.202.250:8003/';
+  // baseURL = 'http://localhost:8003/api/admin/';
+  // baseURL = 'http://50.6.202.250:8002/api/admin/';
+  baseURL = 'http://50.6.202.250:8003/api/admin/';
 
 
   constructor(private http: HttpClient) { }
 
   submitFormData(data: FormData): Observable<any> {
-    const url = `${this.baseURL}api/admin/create-mock`;
+    const url = `${this.baseURL}create-mock`;
     return this.http.post<any>(url, data).pipe(
       catchError(this.handleError)
     );
   }
 
   editFormData(data: FormData): Observable<any> {
-    const url = `${this.baseURL}api/admin/fetch-mock-single`;
+    const url = `${this.baseURL}fetch-mock-single`;
     return this.http.post<any>(url, data).pipe(
       catchError(this.handleError)
     );
   }
 
   updateFormData(formData: FormData): Observable<any> {
-    const url = `${this.baseURL}api/admin/update-mock`;  // Ensure baseURL is properly defined
+    const url = `${this.baseURL}update-mock`;  // Ensure baseURL is properly defined
     return this.http.post<any>(url, formData).pipe(
       catchError(this.handleError)  // Gracefully handle errors
     );
   }
 
   fetchAllData(data: any): Observable<any> {
-    const url = `${this.baseURL}api/admin/fetch-mock`;
+    const url = `${this.baseURL}fetch-mock`;
     return this.http.post<any>(url, data).pipe(catchError(this.handleError));
   }
 
   deleteUser(id: number, accessId: any): Observable<any> {
     const payload = { id, accessId }; // Send id in the payload
-    return this.http.post(`${this.baseURL}api/admin/delete-mock`, payload);
+    return this.http.post(`${this.baseURL}delete-mock`, payload);
   }
 
   deleteMultipleUser(payload: any): Observable<any> {
-    return this.http.post(`${this.baseURL}api/admin/delete-selected-mock`, payload);
+    return this.http.post(`${this.baseURL}delete-selected-mock`, payload);
   }
 
   importData(data: any): Observable<any> {
-    const url = `${this.baseURL}api/admin/create-mock1`;
+    const url = `${this.baseURL}create-mock1`;
     return this.http.post<any>(url, data).pipe(catchError(this.handleError));
   }
 
   exportExcelData(payload: any) {
-    const url = `${this.baseURL}api/admin/download-excel`; // Tumhari API ka URL
+    const url = `${this.baseURL}download-excel`; // Tumhari API ka URL
     return this.http.post(url, payload, {
       responseType: 'blob',  // File ko blob format mein receive karna
       headers: new HttpHeaders({
@@ -68,37 +68,57 @@ export class FormAPIsService {
   }
 
   login(credentials: { in: string; password: string }): Observable<any> {
-    const url = `${this.baseURL}api/admin/login`;
+    const url = `${this.baseURL}login`;
     return this.http.post<any>(url, credentials).pipe(
       catchError(this.handleError)
     );
   }
 
   register(registerUserDetail: { fn: any; ln: any; in: any; password: any; }): Observable<any> {
-    const url = `${this.baseURL}api/admin/register`;
+    const url = `${this.baseURL}register`;
     return this.http.post<any>(url, registerUserDetail).pipe(
       catchError(this.handleError)
     );
   }
 
   sendOtp(email: string): Observable<any> {
-    return this.http.post(`${this.baseURL}api/admin/send-otp`, { in: email });
+    return this.http.post(`${this.baseURL}send-otp`, { in: email });
   }
 
   verifyOtp(email: string, otp: string): Observable<any> {
-    return this.http.post(`${this.baseURL}api/admin/get-otp`, { in: email, otp });
+    return this.http.post(`${this.baseURL}get-otp`, { in: email, otp });
   }
 
   resetPassword(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.baseURL}api/admin/reset-password`, { in: email, password });
+    return this.http.post(`${this.baseURL}reset-password`, { in: email, password });
   }
 
   getAssets(filters: { station?: string; portType?: string; accessId: any }): Observable<any[]> {
-    return this.http.post<any[]>(`${this.baseURL}api/admin/assets`, filters);
+    return this.http.post<any[]>(`${this.baseURL}assets`, filters);
   }
 
   activeUsers(filters: any): Observable<any[]> {
-    return this.http.post<any[]>(`${this.baseURL}api/admin/active-user`, filters);
+    return this.http.post<any[]>(`${this.baseURL}active-user`, filters);
+  }
+
+  userDashData(data: any): Observable<{ data: User; message: string; success: boolean }> {
+    const url = `${this.baseURL}fetch-mock-single-user`;
+    return this.http.post<{ data: User; message: string; success: boolean }>(url, data)
+      .pipe(catchError(this.handleError));
+  }
+
+  editUserData(data: FormData): Observable<any> {
+    const url = `${this.baseURL}fetch-mock-single-user`;
+    return this.http.post<any>(url, data).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  updateUserData(formData: FormData): Observable<any> {
+    const url = `${this.baseURL}update-mock-user`;  // Ensure baseURL is properly defined
+    return this.http.post<any>(url, formData).pipe(
+      catchError(this.handleError)  // Gracefully handle errors
+    );
   }
 
 
