@@ -22,9 +22,12 @@ export class TechFormComponent {
   latitude: number | null = null;
   longitude: number | null = null;
   uploadedFile: File | null = null;
+  mapUrl: string = '';
 
   uploadedFiles: { [key: string]: File | null } = {};
   isFileInvalid: { [key: string]: boolean } = {};
+
+  accessId: any;
 
   constructor(private fb: FormBuilder, private formDataService: FormAPIsService, private router: Router,) { }
 
@@ -34,8 +37,8 @@ export class TechFormComponent {
       lastName: ['', Validators.required],
       address: ['',],
       stateOfLicense: ['',],
-      phoneNumber: ['', Validators.required, Validators.pattern(/^\d{10}$/)], //[Validators.required, Validators.pattern(/^\d{10}$/)]
-      ssn: ['',Validators.required],
+      phoneNumber: ['', Validators.required, Validators.pattern(/^\d{10}$/)],
+      ssn: ['', Validators.required],
       emergencyContactName1: [''],
       emergencyContactName2: [''],
       emergencyContactNumber1: ['', Validators.required, Validators.pattern(/^\d{10}$/)],
@@ -128,6 +131,11 @@ export class TechFormComponent {
     if (this.dataForm.valid) {
       const formData = new FormData();
       const formValues: Record<string, any> = {};
+
+      const token = localStorage.getItem('userId');
+      const requestData1 = { accessId: token }; // Send the token in the request body
+      this.accessId = requestData1.accessId; // Set ID to be deleted
+      formData.append('accessId', this.accessId); // Append accessId to the request
 
       formData.append('fn', this.dataForm.get('firstName')?.value);
       formData.append('ln', this.dataForm.get('lastName')?.value);
@@ -252,15 +260,21 @@ export class TechFormComponent {
       alert('Geolocation is not supported by your browser.');
       return;
     }
-
+  
     this.isLoading = true;
-
+  
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+  
         this.dataForm.patchValue({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          latitude: lat,
+          longitude: lng,
         });
+  
+        this.mapUrl = `https://www.google.com/maps?q=${lat},${lng}&hl=es;z=14&output=embed`;
+  
         this.isLoading = false;
       },
       (error) => {
