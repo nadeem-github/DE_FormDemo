@@ -1,20 +1,12 @@
 <div class="asset-map p-3">
     <h3 class="mb-3">Asset Map</h3>
 
-    <form [formGroup]="filterForm" class="row g-3 align-items-end mb-3">
+    <form [formGroup]="filterForm" class="row g-3 align-items-end mb-4">
         <ul class="list-group list-group-horizontal">
             <li class="list-group-item">
                 <div class="form-check d-flex align-items-center justify-content-center">
-                    <input class="form-check-input me-2" type="radio" formControlName="stationType" value="all" id="allStations" (change)="onFilter()">
-                    <label class="form-check-label" for="allStations">
-                        All Stations ({{ counts.all }})
-                    </label>
-                </div>
-            </li>
-            <li class="list-group-item">
-                <div class="form-check d-flex align-items-center justify-content-center">
                     <input class="form-check-input me-2" type="radio" formControlName="stationType" value="charging_stations" id="chargingStations" (change)="onFilter()">
-                    <label class="form-check-label" for="chargingStations">
+                    <label class="form-check-label fw-bold" for="chargingStations">
                         Charging Stations ({{ counts.charging_stations }})
                     </label>
                 </div>
@@ -22,7 +14,7 @@
             <li class="list-group-item">
                 <div class="form-check d-flex align-items-center justify-content-center">
                     <input class="form-check-input me-2" type="radio" formControlName="stationType" value="charging_ports" id="chargingPorts" (change)="onFilter()">
-                    <label class="form-check-label" for="chargingPorts">
+                    <label class="form-check-label fw-bold" for="chargingPorts">
                         Charging Ports ({{ counts.charging_ports }})
                     </label>
                 </div>
@@ -37,7 +29,6 @@
 <ng-template #infoWindowModal let-modal>
     <div class="modal-header blueBG">
         <h5 class="modal-title">{{ modalTitle }}</h5>
-        <!-- <i class="fa fa-times text-white fa-2x" aria-hidden="true" (click)="closeModal(modal)"></i> -->
     </div>
     <div class="modal-body">
         <div class="asset-info">

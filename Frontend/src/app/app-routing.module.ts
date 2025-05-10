@@ -16,16 +16,16 @@ import { UserDashProfileComponent } from './userLayout/user-dash-profile/user-da
 import { AssetMapComponent } from './pages/asset-map/asset-map.component';
 import { ActiveUserComponent } from './pages/active-user/active-user.component';
 import { AuthGuard } from './guards/auth.guard';
+import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [
-
   {
     path: '',
     component: AuthLayoutComponent,
     children: [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
-      { path: 'login', component: LoginComponent },
-      { path: 'register', component: RegisterComponent },
+      { path: 'login', component: LoginComponent,  canActivate: [LoginGuard] },
+      { path: 'register', component: RegisterComponent,  canActivate: [LoginGuard] },
       { path: 'forgotPass', component: ForgotPassComponent },
     ],
   },
@@ -57,9 +57,11 @@ const routes: Routes = [
   { path: '**', redirectTo: '' }
 ];
 
-
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    onSameUrlNavigation: 'reload',
+    scrollPositionRestoration: 'enabled'
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
