@@ -13,7 +13,8 @@ adminRouter.post("/send-otp", AuthController.sendOtp);
 adminRouter.post("/get-otp", AuthController.checkOtp);
 adminRouter.post("/reset-password", AuthController.updateRegister);
 adminRouter.post("/assets", AuthController.assetMap);
-adminRouter.post("/assets-import", AuthController.uploadExcelToDatabase);
+// adminRouter.post("/assets-import", AuthController.uploadExcelToDatabase);
+adminRouter.post("/assets-import", AuthController.importAsset);
 
 
 //admin access

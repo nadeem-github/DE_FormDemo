@@ -377,6 +377,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    profile_pic: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     otp: {
       type: DataTypes.STRING,
       allowNull: true,

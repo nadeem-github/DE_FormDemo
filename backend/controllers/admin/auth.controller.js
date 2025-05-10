@@ -193,6 +193,16 @@ const createMock = async function (req, res) {
     const files = req.files;
     const selectedOptions = req.body['options[]'];
     const zcvalue = parseFloat(body?.zc);
+    let existing = await MockVerify.findOne({
+      where: {
+        [Op.or]: [
+          { in: body.in },
+        ]
+      }
+    });
+    if (existing) {
+      return ReE(res, { message: "Duplicate entry (email already exists)" }, 200);
+    }
     // const zcvalue = 123123;
     // console.log(typeof(zcvalue))
     // return
@@ -222,8 +232,17 @@ const createMock = async function (req, res) {
     let relativePathunlf1 = "";
     let relativePathunlf2 = "";
     let relativePathunlf3 = "";
+    let profilePic = "";
 
     if (files) {
+      if (files.profile_pic) {
+        const profilePicName = Date.now() + '-' + files.profile_pic.name;
+        profilePic = "users/" + profilePicName;
+        const profilepicname = await helper.fileUpload(profilePicName, files.profile_pic, baseFileUploadPath);
+        if (!profilepicname) {
+          return ReE(res, { message: "Something went wrong" }, 200);
+        }
+      }
       if (files.undlf) {
         const fileNameundlf = Date.now() + '-' + files.undlf.name;
         relativePathundlf = "users/" + fileNameundlf;
@@ -385,6 +404,7 @@ const createMock = async function (req, res) {
       microtrax_course_name: body.microtrax_course_name,
       microtrax_course_number: body.microtrax_course_number,
       password: body.password,
+      profile_pic: profilePic,
 
     })
     if (data) {
@@ -622,8 +642,17 @@ const updateMock = async function (req, res) {
     let relativePathunlf1 = "";
     let relativePathunlf2 = "";
     let relativePathunlf3 = "";
+    let profilePic = "";
 
     if (files) {
+      if (files.profile_pic) {
+        const profilePicName = Date.now() + '-' + files.profile_pic.name;
+        profilePic = "users/" + profilePicName;
+        const profilepicname = await helper.fileUpload(profilePicName, files.profile_pic, baseFileUploadPath);
+        if (!profilepicname) {
+          return ReE(res, { message: "Something went wrong" }, 200);
+        }
+      }
       if (files.undlf) {
         const fileNameundlf = Date.now() + '-' + files.undlf.name;
         relativePathundlf = "users/" + fileNameundlf;
@@ -785,6 +814,7 @@ const updateMock = async function (req, res) {
       tolcp: body.tolcp,
       microtrax_course_name: body.microtrax_course_name,
       microtrax_course_number: body.microtrax_course_number,
+      profile_pic: profilePic,
     },
       {
         where: { id: body.id }
@@ -900,7 +930,7 @@ const activeUsers = async function (req, res) {
     // }
 
     const assets = await MockVerify.findAll({
-      attributes: ["l", "l1","fn", "ln", "a","sol", "city"],
+      attributes: ["l", "l1", "fn", "ln", "a", "sol", "city"],
       where: {
         l: { [Op.ne]: null },
         l1: { [Op.ne]: null }
@@ -913,6 +943,84 @@ const activeUsers = async function (req, res) {
     res.status(500).json({ message: "Internal server error", error });
   }
 
+};
+const importAsset = async function (req, res) {
+  try {
+
+    let body = req.body;
+    const files = req.files;
+    const baseFileUploadPath = `${config.IMAGE_RELATIVE_PATH}/users`;
+    let relativePathundlf = "";
+    // Count of successful inserts
+
+    if (files) {
+      if (files.importAsset) {
+        const fileNameundlf = Date.now() + '-' + files.importAsset.name;
+        relativePathundlf = "users/" + fileNameundlf;
+        const fileUploadundlf = await helper.fileUpload(fileNameundlf, files.importAsset, baseFileUploadPath);
+        const filePath = `storage/images/${relativePathundlf}`;
+        const waitForFile = async (path, timeout = 5000) => {
+          const start = Date.now();
+          while (!fs.existsSync(path)) {
+            if (Date.now() - start > timeout) {
+              throw new Error('File did not appear in time');
+            }
+            await new Promise(res => setTimeout(res, 100)); // Wait 100ms
+          }
+        };
+
+        await waitForFile(filePath); // ⏳ Wait until file is available
+        if (!fileUploadundlf) {
+          return ReE(res, { message: "Something went wrong" }, 200);
+        }
+        let headers = {};
+        let headerRowIndex = -1;
+        // await readXlsxFile(`storage/images/${relativePathundlf}`).then((rows) => {
+        const rows = await readXlsxFile(filePath);
+        // Find header row dynamically
+        for (let i = 0; i < rows.length; i++) {
+          const row = rows[i];
+
+          if (row.includes("station_name") && row.includes("port_type")
+            && row.includes("lat") && row.includes("lng")
+          ) {
+            // Found the header row
+            headerRowIndex = i;
+            row.forEach((col, index) => {
+              headers[col.toLowerCase()] = index; // Mapping header name to column index
+            });
+            break;
+          }
+        }
+        if (headerRowIndex === -1) {
+          return ReE(res, { message: "Header row not found" }, 400);
+        }
+        // Read data rows after the header row
+        for (let i = headerRowIndex + 1; i < rows.length; i++) {
+          const row = rows[i];
+
+          let orderData = {
+            station_name: row[headers["station_name"]] || "",  // Dynamic column mapping
+            port_type: row[headers["port_type"]] || "",
+            lat: row[headers["lat"]] || "",
+            lng: row[headers["lng"]] || "",
+
+          };
+          // Duplicate check based on email and phone1
+          await AssetMap.create(orderData);
+        }
+        // });
+      }
+
+    }
+
+    //       return
+
+    return ReS(res, { message: "Asset inserted successfully." }, 200);
+
+  } catch (error) {
+    return ReE(res, { message: "Somthing Went Wrong", err: error }, 200);
+  }
 };
 
 module.exports = {
@@ -932,5 +1040,6 @@ module.exports = {
   downloadMock,
   assetMap,
   uploadExcelToDatabase,
-  activeUsers
+  activeUsers,
+  importAsset
 };
