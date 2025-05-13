@@ -9,17 +9,19 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(private router: Router) { }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('authToken');  // Only allow if token exists
+    return !!localStorage.getItem('authToken'); // Token exists
   }
+
   isAdmin(): boolean {
-    return localStorage.getItem('roles') === 'admin';  // Only allow if user is admin
-  }  
+    return localStorage.getItem('roles') === 'admin';
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.isLoggedIn()) {
       return true;
     } else {
-      this.router.navigate(['/login']);
+      // Force redirect to login page
+      this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
       return false;
     }
   }

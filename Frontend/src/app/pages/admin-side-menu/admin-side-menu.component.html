@@ -1,41 +1,41 @@
 <nav class="sidebar shadow" [class.collapsed]="collapsed">
     <ul class="menu-list">
-        <li [class.active]="activeItem === 'Dashboard'" (click)="setActive('Dashboard')">
+        <li [class.active]="activeItem === 'Dashboard'" (click)="setActive('Dashboard'); gotoTop();">
             <a routerLink="/AllRecord" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-home"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Dashboard</span>
             </a>
         </li>
 
-        <li [class.active]="activeItem === 'Active user'" (click)="setActive('Active user')">
+        <li [class.active]="activeItem === 'Active user'" (click)="setActive('Active user'); gotoTop();">
             <a routerLink="/activeUser" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-users"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Active user</span>
             </a>
         </li>
 
-        <li [class.active]="activeItem === 'Add a record'" (click)="setActive('Add a record')">
+        <li [class.active]="activeItem === 'Add a record'" (click)="setActive('Add a record'); gotoTop();">
             <a routerLink="/TechForm" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-plus-circle"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Add a record</span>
             </a>
         </li>
 
-        <li [class.active]="activeItem === 'Import record'" (click)="setActive('Import record')">
+        <li [class.active]="activeItem === 'Import record'" (click)="setActive('Import record'); gotoTop();">
             <a routerLink="/ImportData" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-cloud-upload"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Import record</span>
             </a>
         </li>
 
-        <li [class.active]="activeItem === 'Asset map'" (click)="setActive('Asset map')">
+        <li [class.active]="activeItem === 'Asset map'" (click)="setActive('Asset map'); gotoTop();">
             <a routerLink="/assetMap" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-map"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Asset map</span>
             </a>
         </li>
 
-        <li [class.active]="activeItem === 'Logout'"  (click)="logout()">
+        <li [class.active]="activeItem === 'Logout'"  (click)="logout(); gotoTop();">
             <a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-sign-out"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Logout</span>
