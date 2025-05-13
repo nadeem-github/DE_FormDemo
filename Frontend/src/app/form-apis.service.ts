@@ -107,18 +107,14 @@ export class FormAPIsService {
       .pipe(catchError(this.handleError));
   }
 
-  editUserData(data: FormData): Observable<any> {
+  editUserData(data: any): Observable<any> {
     const url = `${this.baseURL}fetch-mock-single-user`;
-    return this.http.post<any>(url, data).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<any>(url, data).pipe(catchError(this.handleError));
   }
 
-  updateUserData(formData: FormData): Observable<any> {
-    const url = `${this.baseURL}update-mock-user`;  // Ensure baseURL is properly defined
-    return this.http.post<any>(url, formData).pipe(
-      catchError(this.handleError)  // Gracefully handle errors
-    );
+  updateUserData(formData: any): Observable<any> {
+    const url = `${this.baseURL}update-mock-user`;
+    return this.http.post<any>(url, formData).pipe(catchError(this.handleError));
   }
 
 
