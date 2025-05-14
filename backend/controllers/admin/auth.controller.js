@@ -81,17 +81,14 @@ const sendOtp = async function (req, res) {
         host: "smtp.gmail.com",
         port: 465,
         secure: true,
-        // auth: {
-        //   user: 'efarnsworth@skillfusion.net', // Your Gmail email address rj.surya1999@gmail.com
-        //   pass: 'lxse bzrd inux bzei' // Your Gmail password
-        // }
         auth: {
-          user: 'rupeshpantawane62@gmail.com', // Your Gmail email address rj.surya1999@gmail.com
-          pass: 'dufq qdzu rgmv przr' // Your Gmail password
+          user: 'skillfusionllc@gmail.com', // Your Gmail email address rj.surya1999@gmail.com
+          pass: 'gkok dxiw dbrr bthq' // Your Gmail password
         }
+       
       });
       let mailOptions = {
-        from: 'efarnsworth@skillfusion.net', // Sender address
+        from: 'skillfusionllc@gmail.com', // Sender address
         to: body.in, // List of recipients
         subject: 'verifiaction OTP', // Subject line
         text: `your otp is ${otp}` // Plain text body
@@ -114,7 +111,7 @@ const sendOtp = async function (req, res) {
       });
     }
     else {
-      return ReE(res, { message: "User already exits please login!" }, 200);
+      return ReE(res, { message: "invalide user!" }, 200);
     }
   } catch (error) {
     return ReE(res, { message: "Somthing Went Wrong", err: error }, 200);
