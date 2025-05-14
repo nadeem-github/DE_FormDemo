@@ -12,10 +12,10 @@ adminRouter.post("/register", AuthController.Register);
 adminRouter.post("/send-otp", AuthController.sendOtp);
 adminRouter.post("/get-otp", AuthController.checkOtp);
 adminRouter.post("/reset-password", AuthController.updateRegister);
-adminRouter.post("/assets", AuthController.assetMap);
-adminRouter.post("/assets1", AuthController.assetMap1);
-adminRouter.post("/assets-importtt", AuthController.uploadExcelToDatabase);
-adminRouter.post("/assets-importtt1", AuthController.uploadExcelToDatabase1);
+adminRouter.post("/assets-port", AuthController.assetMap);
+adminRouter.post("/assets-charging", AuthController.assetMap1);
+adminRouter.post("/assets-import-port", AuthController.uploadExcelToDatabase);
+adminRouter.post("/assets-import-charging", AuthController.uploadExcelToDatabase1);
 adminRouter.post("/assets-import", AuthController.importAsset);
 
 
