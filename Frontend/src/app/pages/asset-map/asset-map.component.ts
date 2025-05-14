@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FormAPIsService } from 'src/app/form-apis.service';
 import { Asset } from 'src/app/models/asset/asset.module';
@@ -11,66 +11,132 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./asset-map.component.scss']
 })
 export class AssetMapComponent {
-  @ViewChild('mapContainer', { static: true }) gmap!: ElementRef;
-  @ViewChild('infoWindowModal') infoWindowModal!: ElementRef;
+  @ViewChild('mapContainer', { static: false }) gmap!: ElementRef;
 
   map!: google.maps.Map;
   filterForm: FormGroup;
   assets: any[] = [];
-  filteredAssets: any[] = [];
   markers: google.maps.Marker[] = [];
-  selectedAsset: any;
-  modalTitle: string = 'Asset Details';
-
-  counts = {
-    charging_stations: 0,
-    charging_ports: 0
-  };
 
   constructor(
     private assetMapService: FormAPIsService,
-    private fb: FormBuilder,
-    private modalService: NgbModal
+    private fb: FormBuilder
   ) {
     this.filterForm = this.fb.group({
-      stationType: ['charging_stations'] // default = charging_stations stations
+      stationType: ['charging_stations']
     });
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void { }
+
+  ngAfterViewInit(): void {
     this.initMap();
     this.fetchAssets();
   }
 
   initMap(): void {
     const mapOptions: google.maps.MapOptions = {
-      center: new google.maps.LatLng(28.6139, 77.2090), // Delhi default
+      center: new google.maps.LatLng(37.7749, -122.4194), // valid coordinates
       zoom: 5
     };
     this.map = new google.maps.Map(this.gmap.nativeElement, mapOptions);
 
-    // Zoom change pe icon size adjust karenge
     this.map.addListener('zoom_changed', () => {
       this.updateMarkerIcons();
     });
   }
 
+  fetchAssets(): void {
+    const accessId = localStorage.getItem('userId');
+    const selectedType = this.filterForm.value.stationType;
+    const payload = { accessId };
+
+    const request$ = selectedType === 'charging_stations'
+      ? this.assetMapService.assetsStation(payload)
+      : this.assetMapService.assetsPort(payload);
+
+    request$.subscribe({
+      next: (data) => {
+        this.assets = data;
+        this.plotMarkers();
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  plotMarkers(): void {
+    this.markers.forEach(marker => marker.setMap(null));
+    this.markers = [];
+
+    const bounds = new google.maps.LatLngBounds();
+    const selectedType = this.filterForm.value.stationType;
+
+    this.assets.forEach(asset => {
+      const position = new google.maps.LatLng(+asset.latitude, +asset.longitude);
+
+      const iconUrl = selectedType === 'charging_ports'
+        ? 'assets/image/charging-ports.png'
+        : 'assets/image/charging-station.png';
+
+      const marker = new google.maps.Marker({
+        position,
+        map: this.map,
+        icon: {
+          url: iconUrl,
+          scaledSize: new google.maps.Size(25, 25)
+        },
+        title: asset.station_name
+      });
+
+      const infoWindow = new google.maps.InfoWindow({
+        content: this.generateInfoWindowContent(asset)
+      });
+
+      marker.addListener('click', () => {
+        infoWindow.open(this.map, marker);
+      });
+
+      this.markers.push(marker);
+      bounds.extend(position);
+    });
+
+    if (this.assets.length > 0) {
+      this.map.fitBounds(bounds);
+    }
+  }
+
+  generateInfoWindowContent(asset: any): string {
+    return `
+    <div class="custom-info-window">
+      <p class="station-name font-14 mb-2">
+        <strong>Station Name:</strong>
+        ${asset.station_name || 'N/A'}
+      </p>
+      <p class="address mb-2">
+        <strong>Address:</strong>
+        ${asset.street_address || ''}
+        ${asset.city || ''}, ${asset.state || ''} ${asset.zip || ''}
+      </p>
+      <p class="info-line mb-2"><strong>Phone:</strong> ${asset.station_phone || 'N/A'}</p>
+      <p class="info-line mb-2"><strong>Fuel Type:</strong> ${asset.fuel_type_code || 'N/A'}</p>
+    </div>
+  `;
+  }
+
   updateMarkerIcons(): void {
     const zoom = this.map.getZoom() || 5;
+    let size = 25;
 
-    // Zoom ke hisab se size calculate karenge (aap chaho to adjust kar sakte ho)
-    let size = 20;
     if (zoom >= 10) {
       size = 40;
     } else if (zoom >= 7) {
       size = 30;
-    } else {
-      size = 20;
     }
 
+    const selectedType = this.filterForm.value.stationType;
+
     this.markers.forEach(marker => {
-      const isPort = marker.getTitle()?.includes('charging_ports');
-      const iconUrl = isPort
+      const iconUrl = selectedType === 'charging_ports'
         ? 'assets/image/charging-ports.png'
         : 'assets/image/charging-station.png';
 
@@ -81,86 +147,8 @@ export class AssetMapComponent {
     });
   }
 
-
-  fetchAssets(): void {
-    const accessId = localStorage.getItem('userId');  // direct localStorage se liya
-
-    const payload = {
-      accessId: accessId
-    };
-    this.assetMapService.getAssets(payload).subscribe({
-      next: (data) => {
-        this.assets = data;
-        this.updateCounts();
-        this.applyFilter();
-      },
-      error: (err) => console.error(err)
-    });
-  }
-
-  updateCounts(): void {
-    this.counts.charging_stations = this.assets.filter(a => a.station_name.trim() === 'charging_stations').length;
-    this.counts.charging_ports = this.assets.filter(a => a.station_name.trim() === 'charging_ports').length;
-  }
-
-
-  applyFilter(): void {
-    const selectedType = this.filterForm.value.stationType;
-    this.filteredAssets = this.assets.filter(a => a.station_name.trim() === selectedType);
-    this.plotMarkers();
-  }
-
-
-  // animation: google.maps.Animation.BOUNCE,
-
-  plotMarkers(): void {
-    this.markers.forEach(marker => marker.setMap(null));
-    this.markers = [];
-    const bounds = new google.maps.LatLngBounds();
-    this.filteredAssets.forEach(asset => {
-      const position = new google.maps.LatLng(+asset.lat, +asset.lng);
-      // Yahan custom icons set kar rahe hain
-      const iconUrl = asset.station_name.trim() === 'charging_ports'
-        ? 'assets/image/charging-ports.png'
-        : 'assets/image/charging-station.png';
-
-      const marker = new google.maps.Marker({
-        position,
-        map: this.map,
-        icon: {
-          url: iconUrl,
-          scaledSize: new google.maps.Size(35, 35)
-        },
-        // animation: google.maps.Animation.BOUNCE,
-        title: `${asset.station_name} (${asset.port_type})`
-      });
-
-      marker.addListener('click', () => {
-        this.selectedAsset = asset;
-        this.modalTitle = `${asset.station_name} - ${asset.port_type || 'N/A'}`;
-        this.modalService.open(this.infoWindowModal, {
-          size: 'sm',
-          centered: true,
-          backdrop: 'static',
-          keyboard: false,
-        });
-      });
-
-      this.markers.push(marker);
-      bounds.extend(position);
-    });
-
-    if (this.filteredAssets.length > 0) {
-      this.map.fitBounds(bounds);
-    }
-  }
-
-
-  closeModal(modal: any): void {
-    modal.close();
-  }
-
   onFilter(): void {
-    this.applyFilter();
+    this.fetchAssets();
   }
+
 }

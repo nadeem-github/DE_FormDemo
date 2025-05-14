@@ -5,17 +5,19 @@
         <ul class="list-group list-group-horizontal">
             <li class="list-group-item">
                 <div class="form-check d-flex align-items-center justify-content-center">
-                    <input class="form-check-input me-2" type="radio" formControlName="stationType" value="charging_stations" id="chargingStations" (change)="onFilter()">
+                    <input class="form-check-input me-2" type="radio" formControlName="stationType"
+                        value="charging_stations" id="chargingStations" (change)="onFilter()">
                     <label class="form-check-label fw-bold" for="chargingStations">
-                        Charging Stations ({{ counts.charging_stations }})
+                        Charging Stations
                     </label>
                 </div>
             </li>
             <li class="list-group-item">
                 <div class="form-check d-flex align-items-center justify-content-center">
-                    <input class="form-check-input me-2" type="radio" formControlName="stationType" value="charging_ports" id="chargingPorts" (change)="onFilter()">
+                    <input class="form-check-input me-2" type="radio" formControlName="stationType"
+                        value="charging_ports" id="chargingPorts" (change)="onFilter()">
                     <label class="form-check-label fw-bold" for="chargingPorts">
-                        Charging Ports ({{ counts.charging_ports }})
+                        Charging Ports
                     </label>
                 </div>
             </li>
@@ -24,22 +26,3 @@
 
     <div #mapContainer id="map"></div>
 </div>
-
-<!-- Modal HTML -->
-<ng-template #infoWindowModal let-modal>
-    <div class="modal-header blueBG">
-        <h5 class="modal-title">{{ modalTitle }}</h5>
-    </div>
-    <div class="modal-body">
-        <div class="asset-info">
-            <h6><strong>Station Name:</strong> {{ selectedAsset?.station_name | titlecase }}</h6>
-            <p><strong>Port Type:</strong> {{ selectedAsset?.port_type || 'N/A' }}</p>
-            <p><strong>Latitude:</strong> {{ selectedAsset?.lat }}</p>
-            <p><strong>Longitude:</strong> {{ selectedAsset?.lng }}</p>
-        </div>
-    </div>
-    <div class="modal-footer py-2">
-        <button type="button" class="btn btn-secondary m-0 rounded-1" (click)="closeModal(modal)">Close</button>
-    </div>
-</ng-template>
-  

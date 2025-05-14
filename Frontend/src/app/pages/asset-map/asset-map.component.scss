@@ -41,40 +41,25 @@
     }
 }
 
-.asset-info {
-    font-size: 14px;
-    color: #555;
+.gm-style .custom-info-window {
+    padding: 10px;
+    max-width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    border: 1px solid #ddd;
 }
 
-.asset-info h6 {
+.gm-style .custom-info-window .station-name {
+    margin-bottom: 8px;
     font-size: 16px;
     font-weight: 600;
-    margin-bottom: 10px;
+    color: #333;
 }
 
-.asset-info p {
+.gm-style .custom-info-window .address,
+.gm-style .custom-info-window .info-line {
     font-size: 14px;
-    margin-bottom: 8px;
-}
-
-.modal-content {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.modal-header {
-    background-color: var(--blue-bg);
-    color: white;
-    border-radius: 8px 8px 0 0;
-}
-
-.modal-title {
-    font-weight: 600;
-    font-size: 18px;
-}
-
-.btn-close {
-    color: white;
-    font-size: 20px;
+    color: #444;
+    margin-bottom: 6px;
 }
