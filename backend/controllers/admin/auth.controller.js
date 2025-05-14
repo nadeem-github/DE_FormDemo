@@ -1,4 +1,4 @@
-var { User, MockVerify, AssetMap, Port } = require("../../models");
+var { User, MockVerify, AssetMap, Port,Charging } = require("../../models");
 const authService = require("../../services/auth.service");
 const { to, ReE, ReS, TE } = require("../../services/util.service");
 const { Op, Sequelize } = require("sequelize");
@@ -893,6 +893,36 @@ const assetMap = async function (req, res) {
      const assets = await Port.findAll({
      attributes: ["fuel_type_code", "station_name", "street_address", "intersection_directions",
        "city", "state", "zip","station_phone","latitude","longitude"],
+       limit: 1000,
+    });
+
+    res.json(assets);
+  } catch (error) {
+    console.error("Error fetching assets:", error);
+    res.status(500).json({ message: "Internal server error", error });
+  }
+
+};
+const assetMap1 = async function (req, res) {
+
+  try {
+    const { station, portType } = req.query;
+
+    const whereClause = {};
+    if (station) {
+      whereClause.station_name = station;
+    }
+    if (portType) {
+      whereClause.port_type = portType;
+    }
+
+    // const assets = await AssetMap.findAll({
+    //   where: whereClause,
+    // });
+     const assets = await Charging.findAll({
+     attributes: ["fuel_type_code", "station_name", "street_address", "intersection_directions",
+       "city", "state", "zip","station_phone","latitude","longitude"],
+       limit: 1000,
     });
 
     res.json(assets);
@@ -946,6 +976,77 @@ const uploadExcelToDatabase = async function (req, res) {
 
     // const { fuel_type_code, station_name, street_address, intersection_directions } = row;
     await Port.create({
+      fuel_type_code,
+      station_name,
+      street_address,
+      intersection_directions,
+      city,
+      date_last_confirmed,
+      state,
+      zip,
+      station_phone,
+      status_code,
+      groups_with_access_code,
+      access_days_time,
+      ev_level2_evse_num,
+      ev_network,
+      ev_network_web,
+      geocode_status,
+      latitude,
+      longitude,
+      id1,
+      updated_at,
+      open_date,
+      ev_connector_types,
+      country,
+      groups_with_access_code_french, 
+      access_code,
+      ev_workplace_charging
+    });
+  }
+
+  return ReS(res, { message: " successfully." }, 200);
+}
+const uploadExcelToDatabase1 = async function (req, res) {
+  // async function uploadExcelToDatabase() {
+  const filePath = path.resolve(__dirname, './charging.xlsx');
+  const workbook = await xlsx.readFile(filePath);
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  const data = xlsx.utils.sheet_to_json(sheet);
+
+  for (let row of data) {
+    const fuel_type_code = row["Fuel Type Code"];
+    const station_name = row["Station Name"];
+    const street_address = row["Street Address"];
+    const intersection_directions = row["Intersection Directions"];
+    const city = row["City"];
+    const state = row["State"];
+    const zip = row["ZIP"];
+    const station_phone = row["Station Phone"];
+    const status_code = row["Status Code"];
+    const groups_with_access_code = row["Groups With Access Code"];
+    const access_days_time = row["Access Days Time"];
+    const ev_level2_evse_num = row["EV Level2 EVSE Num"];
+    const ev_network = row["EV Network"];
+    const ev_network_web = row["EV Network Web"];
+    const geocode_status = row["Geocode Status"];
+    const latitude = row["Latitude"];
+    const longitude = row["Longitude"];
+    const serialDate = row["Date Last Confirmed"]; // or actual Excel header
+    const date_last_confirmed = typeof serialDate === "number"
+      ? excelDateToJSDate(serialDate)
+      : null;
+    const id1 = row["ID"];
+    const updated_at = row["Updated At"];
+    const open_date = row["Open Date"];
+    const ev_connector_types = row["EV Connector Types"];
+    const country = row["Country"];
+    const groups_with_access_code_french = row["Groups With Access Code (French)"];
+    const access_code = row["Access Code"];
+    const ev_workplace_charging = row["EV Workplace Charging"];
+
+    // const { fuel_type_code, station_name, street_address, intersection_directions } = row;
+    await Charging.create({
       fuel_type_code,
       station_name,
       street_address,
@@ -1099,7 +1200,9 @@ module.exports = {
   deleteSelectedMock,
   downloadMock,
   assetMap,
+  assetMap1,
   uploadExcelToDatabase,
+  uploadExcelToDatabase1,
   activeUsers,
   importAsset
 };
