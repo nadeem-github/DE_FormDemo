@@ -81,17 +81,14 @@ const sendOtp = async function (req, res) {
         host: "smtp.gmail.com",
         port: 465,
         secure: true,
-        // auth: {
-        //   user: 'efarnsworth@skillfusion.net', // Your Gmail email address rj.surya1999@gmail.com
-        //   pass: 'lxse bzrd inux bzei' // Your Gmail password
-        // }
         auth: {
-          user: 'rupeshpantawane62@gmail.com', // Your Gmail email address rj.surya1999@gmail.com
-          pass: 'dufq qdzu rgmv przr' // Your Gmail password
+          user: 'skillfusionllc@gmail.com', // Your Gmail email address rj.surya1999@gmail.com
+          pass: 'gkok dxiw dbrr bthq' // Your Gmail password
         }
+       
       });
       let mailOptions = {
-        from: 'efarnsworth@skillfusion.net', // Sender address
+        from: 'skillfusionllc@gmail.com', // Sender address
         to: body.in, // List of recipients
         subject: 'verifiaction OTP', // Subject line
         text: `your otp is ${otp}` // Plain text body
@@ -114,7 +111,7 @@ const sendOtp = async function (req, res) {
       });
     }
     else {
-      return ReE(res, { message: "User already exits please login!" }, 200);
+      return ReE(res, { message: "invalide user!" }, 200);
     }
   } catch (error) {
     return ReE(res, { message: "Somthing Went Wrong", err: error }, 200);
@@ -893,7 +890,6 @@ const assetMap = async function (req, res) {
      const assets = await Port.findAll({
      attributes: ["fuel_type_code", "station_name", "street_address", "intersection_directions",
        "city", "state", "zip","station_phone","latitude","longitude"],
-       limit: 1000,
     });
 
     res.json(assets);
@@ -922,7 +918,6 @@ const assetMap1 = async function (req, res) {
      const assets = await Charging.findAll({
      attributes: ["fuel_type_code", "station_name", "street_address", "intersection_directions",
        "city", "state", "zip","station_phone","latitude","longitude"],
-       limit: 1000,
     });
 
     res.json(assets);
@@ -937,146 +932,108 @@ function excelDateToJSDate(serial) {
   return new Date(excelEpoch.getTime() + serial * 86400 * 1000);
 }
 const uploadExcelToDatabase = async function (req, res) {
-  // async function uploadExcelToDatabase() {
-  const filePath = path.resolve(__dirname, './charging.xlsx');
-  const workbook = await xlsx.readFile(filePath);
-  const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  const data = xlsx.utils.sheet_to_json(sheet);
-
-  for (let row of data) {
-    const fuel_type_code = row["Fuel Type Code"];
-    const station_name = row["Station Name"];
-    const street_address = row["Street Address"];
-    const intersection_directions = row["Intersection Directions"];
-    const city = row["City"];
-    const state = row["State"];
-    const zip = row["ZIP"];
-    const station_phone = row["Station Phone"];
-    const status_code = row["Status Code"];
-    const groups_with_access_code = row["Groups With Access Code"];
-    const access_days_time = row["Access Days Time"];
-    const ev_level2_evse_num = row["EV Level2 EVSE Num"];
-    const ev_network = row["EV Network"];
-    const ev_network_web = row["EV Network Web"];
-    const geocode_status = row["Geocode Status"];
-    const latitude = row["Latitude"];
-    const longitude = row["Longitude"];
-    const serialDate = row["Date Last Confirmed"]; // or actual Excel header
-    const date_last_confirmed = typeof serialDate === "number"
-      ? excelDateToJSDate(serialDate)
-      : null;
-    const id1 = row["ID"];
-    const updated_at = row["Updated At"];
-    const open_date = row["Open Date"];
-    const ev_connector_types = row["EV Connector Types"];
-    const country = row["Country"];
-    const groups_with_access_code_french = row["Groups With Access Code (French)"];
-    const access_code = row["Access Code"];
-    const ev_workplace_charging = row["EV Workplace Charging"];
-
-    // const { fuel_type_code, station_name, street_address, intersection_directions } = row;
-    await Port.create({
-      fuel_type_code,
-      station_name,
-      street_address,
-      intersection_directions,
-      city,
-      date_last_confirmed,
-      state,
-      zip,
-      station_phone,
-      status_code,
-      groups_with_access_code,
-      access_days_time,
-      ev_level2_evse_num,
-      ev_network,
-      ev_network_web,
-      geocode_status,
-      latitude,
-      longitude,
-      id1,
-      updated_at,
-      open_date,
-      ev_connector_types,
-      country,
-      groups_with_access_code_french, 
-      access_code,
-      ev_workplace_charging
-    });
-  }
-
-  return ReS(res, { message: " successfully." }, 200);
+   try {
+      const filePath = path.resolve(__dirname, "./port.xlsx");
+      const workbook = await xlsx.readFile(filePath);
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const data = xlsx.utils.sheet_to_json(sheet);
+  
+      const BATCH_SIZE = 1000;
+      const total = data.length;
+  
+      for (let i = 0; i < total; i += BATCH_SIZE) {
+        const batch = data.slice(i, i + BATCH_SIZE);
+  
+        const formattedBatch = batch.map(row => ({
+          fuel_type_code: row["Fuel Type Code"],
+          station_name: row["Station Name"],
+          street_address: row["Street Address"],
+          intersection_directions: row["Intersection Directions"],
+          city: row["City"],
+          state: row["State"],
+          zip: row["ZIP"],
+          station_phone: row["Station Phone"],
+          status_code: row["Status Code"],
+          groups_with_access_code: row["Groups With Access Code"],
+          access_days_time: row["Access Days Time"],
+          ev_level2_evse_num: row["EV Level2 EVSE Num"],
+          ev_network: row["EV Network"],
+          ev_network_web: row["EV Network Web"],
+          geocode_status: row["Geocode Status"],
+          latitude: row["Latitude"],
+          longitude: row["Longitude"],
+          date_last_confirmed: typeof row["Date Last Confirmed"] === "number" ? excelDateToJSDate(row["Date Last Confirmed"]) : null,
+          id1: row["ID"],
+          updated_at: row["Updated At"],
+          open_date: row["Open Date"],
+          ev_connector_types: row["EV Connector Types"],
+          country: row["Country"],
+          groups_with_access_code_french: row["Groups With Access Code (French)"],
+          access_code: row["Access Code"],
+          ev_workplace_charging: row["EV Workplace Charging"]
+        }));
+  
+        await Port.bulkCreate(formattedBatch);
+        // console.log(`Inserted ${i + formattedBatch.length} of ${total} records`);
+      }
+  
+      return ReS(res, { message: "Data inserted successfully." }, 200);
+    } catch (error) {
+      console.error("Error inserting data:", error);
+      return ReE(res, { message: "Error while inserting data.", error }, 500);
+    }
 }
 const uploadExcelToDatabase1 = async function (req, res) {
-  // async function uploadExcelToDatabase() {
-  const filePath = path.resolve(__dirname, './charging.xlsx');
-  const workbook = await xlsx.readFile(filePath);
-  const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  const data = xlsx.utils.sheet_to_json(sheet);
-
-  for (let row of data) {
-    const fuel_type_code = row["Fuel Type Code"];
-    const station_name = row["Station Name"];
-    const street_address = row["Street Address"];
-    const intersection_directions = row["Intersection Directions"];
-    const city = row["City"];
-    const state = row["State"];
-    const zip = row["ZIP"];
-    const station_phone = row["Station Phone"];
-    const status_code = row["Status Code"];
-    const groups_with_access_code = row["Groups With Access Code"];
-    const access_days_time = row["Access Days Time"];
-    const ev_level2_evse_num = row["EV Level2 EVSE Num"];
-    const ev_network = row["EV Network"];
-    const ev_network_web = row["EV Network Web"];
-    const geocode_status = row["Geocode Status"];
-    const latitude = row["Latitude"];
-    const longitude = row["Longitude"];
-    const serialDate = row["Date Last Confirmed"]; // or actual Excel header
-    const date_last_confirmed = typeof serialDate === "number"
-      ? excelDateToJSDate(serialDate)
-      : null;
-    const id1 = row["ID"];
-    const updated_at = row["Updated At"];
-    const open_date = row["Open Date"];
-    const ev_connector_types = row["EV Connector Types"];
-    const country = row["Country"];
-    const groups_with_access_code_french = row["Groups With Access Code (French)"];
-    const access_code = row["Access Code"];
-    const ev_workplace_charging = row["EV Workplace Charging"];
-
-    // const { fuel_type_code, station_name, street_address, intersection_directions } = row;
-    await Charging.create({
-      fuel_type_code,
-      station_name,
-      street_address,
-      intersection_directions,
-      city,
-      date_last_confirmed,
-      state,
-      zip,
-      station_phone,
-      status_code,
-      groups_with_access_code,
-      access_days_time,
-      ev_level2_evse_num,
-      ev_network,
-      ev_network_web,
-      geocode_status,
-      latitude,
-      longitude,
-      id1,
-      updated_at,
-      open_date,
-      ev_connector_types,
-      country,
-      groups_with_access_code_french, 
-      access_code,
-      ev_workplace_charging
-    });
-  }
-
-  return ReS(res, { message: " successfully." }, 200);
+  try {
+      const filePath = path.resolve(__dirname, "./charging.xlsx");
+      const workbook = await xlsx.readFile(filePath);
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const data = xlsx.utils.sheet_to_json(sheet);
+  
+      const BATCH_SIZE = 1000;
+      const total = data.length;
+  
+      for (let i = 0; i < total; i += BATCH_SIZE) {
+        const batch = data.slice(i, i + BATCH_SIZE);
+  
+        const formattedBatch = batch.map(row => ({
+          fuel_type_code: row["Fuel Type Code"],
+          station_name: row["Station Name"],
+          street_address: row["Street Address"],
+          intersection_directions: row["Intersection Directions"],
+          city: row["City"],
+          state: row["State"],
+          zip: row["ZIP"],
+          station_phone: row["Station Phone"],
+          status_code: row["Status Code"],
+          groups_with_access_code: row["Groups With Access Code"],
+          access_days_time: row["Access Days Time"],
+          ev_level2_evse_num: row["EV Level2 EVSE Num"],
+          ev_network: row["EV Network"],
+          ev_network_web: row["EV Network Web"],
+          geocode_status: row["Geocode Status"],
+          latitude: row["Latitude"],
+          longitude: row["Longitude"],
+          date_last_confirmed: typeof row["Date Last Confirmed"] === "number" ? excelDateToJSDate(row["Date Last Confirmed"]) : null,
+          id1: row["ID"],
+          updated_at: row["Updated At"],
+          open_date: row["Open Date"],
+          ev_connector_types: row["EV Connector Types"],
+          country: row["Country"],
+          groups_with_access_code_french: row["Groups With Access Code (French)"],
+          access_code: row["Access Code"],
+          ev_workplace_charging: row["EV Workplace Charging"]
+        }));
+  
+        await Charging.bulkCreate(formattedBatch);
+        // console.log(`Inserted ${i + formattedBatch.length} of ${total} records`);
+      }
+  
+      return ReS(res, { message: "Data inserted successfully." }, 200);
+    } catch (error) {
+      console.error("Error inserting data:", error);
+      return ReE(res, { message: "Error while inserting data.", error }, 500);
+    }
 }
 const activeUsers = async function (req, res) {
   try {
