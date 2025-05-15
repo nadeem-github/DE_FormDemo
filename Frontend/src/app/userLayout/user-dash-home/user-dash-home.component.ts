@@ -14,6 +14,7 @@ export class UserDashHomeComponent {
   userData: User | null = null;
   isLoading = true;
   imgBaseURL = 'http://localhost:8003/storage/images/';
+  // imgBaseURL = 'http://50.6.202.250:8003/storage/images/';
 
   // Keys for documents
   docKeys = [
