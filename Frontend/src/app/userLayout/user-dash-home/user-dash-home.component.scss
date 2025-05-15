@@ -1,0 +1,27 @@
+.documentUpload {
+    img {
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+            transform: scale(1.05);
+            transition: all 0.3s ease-in-out;
+
+        }
+    }
+}
+
+.modal-body{
+    &:focus-visible {
+        outline: none;
+    }
+}
+
+.image-fade {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.image-fade.show {
+    opacity: 1;
+}
