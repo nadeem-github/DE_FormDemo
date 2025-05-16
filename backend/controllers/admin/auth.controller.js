@@ -902,8 +902,8 @@ const assetMap = async function (req, res) {
 const assetMap1 = async function (req, res) {
 
   try {
-    const { station, portType } = req.query;
-    // const { offset = 0, limit = 10000 } = req.query;
+    // const { station, portType } = req.query;
+    const { offset = 0, limit = 10000 } = req.query;
 
 
     const whereClause = {};
@@ -918,8 +918,8 @@ const assetMap1 = async function (req, res) {
     //   where: whereClause,
     // });
     const assets = await Charging.findAll({
-      // offset: parseInt(offset),
-      // limit: parseInt(limit),
+      offset: parseInt(offset),
+      limit: parseInt(limit),
       attributes: ["fuel_type_code", "station_name", "street_address", "intersection_directions",
         "city", "state", "zip", "station_phone", "latitude", "longitude"],
     });
