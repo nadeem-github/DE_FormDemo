@@ -35,8 +35,8 @@
             </a>
         </li>
 
-        <li [class.active]="activeItem === 'Logout'"  (click)="logout(); gotoTop();">
-            <a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <li [class.active]="activeItem === 'Logout'" (click)="logout(); gotoTop();">
+            <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-sign-out"></i>
                 <span class="label text-truncate" *ngIf="!collapsed">Logout</span>
             </a>

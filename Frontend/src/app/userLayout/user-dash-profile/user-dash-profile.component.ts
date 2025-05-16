@@ -21,6 +21,8 @@ export class UserDashProfileComponent {
   uploadedFiles: { [key: string]: File | null } = {};
   isFileInvalid: { [key: string]: boolean } = {};
 
+  mapUrl: string = '';
+
   constructor(
     private fb: FormBuilder,
     private userService: FormAPIsService,
@@ -34,6 +36,7 @@ export class UserDashProfileComponent {
     if (this.userId) {
       this.fetchUserData();
     }
+    this.getLocation();
   }
 
   initializeForm() {
@@ -368,10 +371,16 @@ export class UserDashProfileComponent {
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
         this.dataForm.patchValue({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          latitude: lat,
+          longitude: lng,
         });
+
+        this.mapUrl = `https://www.google.com/maps?q=${lat},${lng}&hl=es;z=14&output=embed`;
+
         this.isLoading = false;
       },
       (error) => {

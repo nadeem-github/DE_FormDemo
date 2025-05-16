@@ -22,6 +22,7 @@ export class TechFormEditComponent {
   uploadedFiles: { [key: string]: File | null } = {};
   isFileInvalid: { [key: string]: boolean } = {};
   accessId: any;
+  mapUrl: string = '';
 
   constructor(private fb: FormBuilder, private formDataService: FormAPIsService, private route: ActivatedRoute, private router: Router,) { }
 
@@ -111,6 +112,7 @@ export class TechFormEditComponent {
     if (this.userId) {
       this.fetchUserData(this.userId);
     }
+    this.getLocation();
   }
 
   fetchUserData(userId: string): void {
@@ -340,15 +342,21 @@ export class TechFormEditComponent {
       alert('Geolocation is not supported by your browser.');
       return;
     }
-
+  
     this.isLoading = true;
-
+  
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+  
         this.dataForm.patchValue({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          latitude: lat,
+          longitude: lng,
         });
+  
+        this.mapUrl = `https://www.google.com/maps?q=${lat},${lng}&hl=es;z=14&output=embed`;
+  
         this.isLoading = false;
       },
       (error) => {
