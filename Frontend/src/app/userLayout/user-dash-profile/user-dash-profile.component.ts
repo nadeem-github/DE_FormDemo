@@ -21,7 +21,11 @@ export class UserDashProfileComponent {
   uploadedFiles: { [key: string]: File | null } = {};
   isFileInvalid: { [key: string]: boolean } = {};
 
+  // imgBaseURL = 'http://localhost:8003/storage/images/';
+  imgBaseURL = 'http://50.6.202.250:8003/storage/images/';
+
   mapUrl: string = '';
+  previewUrls: { [key: string]: string } = {};
 
   constructor(
     private fb: FormBuilder,
@@ -95,9 +99,6 @@ export class UserDashProfileComponent {
       tol3Text: ['',],
       ed7: ['',],
       in6Text: ['',],
-      uncf1: [''],
-      uncf2: [''],
-      unlf: [''],
       t: ['',],
       in7: ['',],
       ed8: ['',],
@@ -120,6 +121,17 @@ export class UserDashProfileComponent {
       tolcp: ['',],
       tae1: ['',],
       profile_pic: ['',],
+
+      undlf: [''],
+      unlf: [''],
+      unlf1: [''],
+      unlf2: [''],
+      unlf3: [''],
+      uncf: [''],
+      uncf1: [''],
+      uncf2: [''],
+      unp: [''],
+
     });
   }
 
@@ -195,7 +207,19 @@ export class UserDashProfileComponent {
             ed10: this.formatDate(data.ed10),
             ed12: this.formatDate(data.ed12),
             ed13: this.formatDate(data.ed13),
-            profile_pic: this.formatDate(data.profile_pic),
+
+            profile_pic: this.imgBaseURL + data.profile_pic,
+            undlf: this.imgBaseURL + data.undlf,
+            unlf: this.imgBaseURL + data.unlf,
+            unlf1: this.imgBaseURL + data.unlf1,
+            unlf2: this.imgBaseURL + data.unlf2,
+            unlf3: this.imgBaseURL + data.unlf3,
+            uncf: this.imgBaseURL + data.uncf,
+            uncf1: this.imgBaseURL + data.uncf1,
+            uncf2: this.imgBaseURL + data.uncf2,
+            unp: this.imgBaseURL + data.unp,
+
+
             t: data.t,
             in7: data.in7,
             t1: data.t1,
@@ -214,6 +238,17 @@ export class UserDashProfileComponent {
             tae1: data.tae1,
 
           });
+          // Set preview image URLs
+          this.previewUrls['profile_pic'] = this.imgBaseURL + data.profile_pic;
+          this.previewUrls['undlf'] = this.imgBaseURL + data.undlf;
+          this.previewUrls['unlf'] = this.imgBaseURL + data.unlf;
+          this.previewUrls['unlf1'] = this.imgBaseURL + data.unlf1;
+          this.previewUrls['unlf2'] = this.imgBaseURL + data.unlf2;
+          this.previewUrls['unlf3'] = this.imgBaseURL + data.unlf3;
+          this.previewUrls['uncf'] = this.imgBaseURL + data.uncf;
+          this.previewUrls['unlf1'] = this.imgBaseURL + data.unlf1;
+          this.previewUrls['unlf2'] = this.imgBaseURL + data.unlf2;
+          this.previewUrls['unp'] = this.imgBaseURL + data.unp;
         }
       },
       error: () => {
@@ -239,21 +274,25 @@ export class UserDashProfileComponent {
     return `${year}-${month}-${day}`;
   }
 
-  onFileChange(event: Event, fileKey: string): void {
+  onFileChange(event: Event, field: string): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
-      this.uploadedFiles[fileKey] = input.files[0];
-      this.isFileInvalid[fileKey] = false;
-    } else {
-      this.uploadedFiles[fileKey] = null;
-      this.isFileInvalid[fileKey] = true;
+      const file = input.files[0];
+      this.uploadedFiles[field] = file;
+
+      // Generate preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewUrls[field] = reader.result as string;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
+
+
   onSubmit() {
     if (this.dataForm.invalid) {
-      // this.dataForm.markAllAsTouched();
-      // return;
 
       const formData = new FormData();
 

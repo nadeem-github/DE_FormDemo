@@ -110,15 +110,14 @@
                                     <label class="form-check-label">None</label>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-check-label">Upload Your Profile Photo</label>
-                                <div class="input-group">
-                                    <input type="file" (change)="onFileChange($event, 'profile_pic')" class="form-control shadow-none" />
-                                </div>
-                                <div *ngIf="isFileInvalid['profile_pic']" class="text-danger">
-                                    Driver's License file is required.
+                            <div class="form-group mb-2">
+                                <label for="profile_pic">Profile Pic</label>
+                                <input type="file" class="form-control" id="profile_pic" (change)="onFileChange($event, 'profile_pic')" />
+                                <div *ngIf="dataForm.get('profile_pic')?.value">
+                                    <img [src]="dataForm.get('profile_pic')?.value" alt="Profile Preview" class="img-thumbnail mt-2" width="120" />
                                 </div>
                             </div>
+
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 bgLight px-4 py-3">
                             <h5 class="text-center">Address</h5>
@@ -218,10 +217,10 @@
                             <div class="mb-3">
                                 <label class="form-check-label">Upload New Drivers License File</label>
                                 <div class="input-group">
-                                    <input type="file" (change)="onFileChange($event, 'undlf')" class="form-control shadow-none" />
+                                    <input type="file" id="undlf" (change)="onFileChange($event, 'undlf')" class="form-control shadow-none" />
                                 </div>
-                                <div *ngIf="isFileInvalid['undlf']" class="text-danger">
-                                    Driver's License file is required.
+                                <div *ngIf="dataForm.get('undlf')?.value">
+                                    <img [src]="dataForm.get('undlf')?.value" alt="DL Front" class="img-thumbnail mt-2" width="120" />
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -324,11 +323,11 @@
                             <div class="mb-3">
                                 <label class="form-check-label">Upload New Photo</label>
                                 <div class="input-group">
-                                    <input type="file" class="form-control" (change)="onFileChange($event, 'unp')">
+                                    <input type="file" id="unp" class="form-control" (change)="onFileChange($event, 'unp')">
                                 </div>
-                                <div *ngIf="isFileInvalid['unp']" class="text-danger">
-                                    Photo file is required.
-                                  </div>
+                                <div *ngIf="dataForm.get('unp')?.value">
+                                    <img [src]="dataForm.get('unp')?.value" alt="DL Front" class="img-thumbnail mt-2" width="120" />
+                                </div>
                             </div>
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
@@ -352,11 +351,11 @@
                             <div class="mb-3">
                                 <label class="form-check-label">Upload New Certification File</label>
                                 <div class="input-group">
-                                    <input type="file" class="form-control" (change)="onFileChange($event, 'uncf')">
+                                    <input type="file" id="uncf" class="form-control" (change)="onFileChange($event, 'uncf')">
                                 </div>
-                                <div *ngIf="isFileInvalid['uncf']" class="text-danger">
-                                    Certification file is required.
-                                  </div>
+                                <div *ngIf="dataForm.get('uncf')?.value">
+                                    <img [src]="dataForm.get('uncf')?.value" alt="DL Front" class="img-thumbnail mt-2" width="120" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -451,10 +450,10 @@
                             <div class="mb-3">
                                 <label class="form-check-label">Upload New License File</label>
                                 <div class="input-group">
-                                    <input type="file" class="form-control" (change)="onFileChange($event, 'unlf')">
+                                    <input type="file" class="form-control" id="unlf" (change)="onFileChange($event, 'unlf')" />
                                 </div>
-                                <div *ngIf="isFileInvalid['unlf']" class="text-danger">
-                                    Photo file is required.
+                                <div *ngIf="dataForm.get('unlf')?.value">
+                                    <img [src]="dataForm.get('unlf')?.value" alt="DL Front" class="img-thumbnail mt-2" width="120" />
                                 </div>
                             </div>
                         </div>
@@ -485,7 +484,10 @@
                             <div class="mb-3">
                                 <label class="form-check-label">Upload New License File</label>
                                 <div class="input-group">
-                                    <input type="file" class="form-control" (change)="onFileChange($event, 'unlf1')">
+                                    <input type="file" class="form-control" id="unlf1" (change)="onFileChange($event, 'unlf1')">
+                                </div>
+                                <div *ngIf="dataForm.get('unlf1')?.value">
+                                    <img [src]="dataForm.get('unlf1')?.value" alt="DL Front" class="img-thumbnail mt-2" width="120" />
                                 </div>
                             </div>
                         </div>
@@ -510,7 +512,10 @@
                             <div class="mb-3">
                                 <label class="form-check-label">Upload New License File</label>
                                 <div class="input-group">
-                                    <input type="file" class="form-control" (change)="onFileChange($event, 'unlf2')">
+                                    <input type="file" class="form-control" id="unlf2" (change)="onFileChange($event, 'unlf2')">
+                                </div>
+                                <div *ngIf="dataForm.get('unlf2')?.value">
+                                    <img [src]="dataForm.get('unlf2')?.value" alt="DL Front" class="img-thumbnail mt-2" width="120" />
                                 </div>
                             </div>
                         </div>
@@ -535,7 +540,10 @@
                             <div class="mb-3">
                                 <label class="form-check-label">Upload New License File</label>
                                 <div class="input-group">
-                                    <input type="file" class="form-control" (change)="onFileChange($event, 'unlf3')">
+                                    <input type="file" class="form-control" id="unlf3" (change)="onFileChange($event, 'unlf3')">
+                                </div>
+                                <div *ngIf="dataForm.get('unlf3')?.value">
+                                    <img [src]="dataForm.get('unlf3')?.value" alt="DL Front" class="img-thumbnail mt-2" width="120" />
                                 </div>
                             </div>
                         </div>
