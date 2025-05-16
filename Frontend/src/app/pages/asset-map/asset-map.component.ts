@@ -17,6 +17,8 @@ export class AssetMapComponent {
   filterForm: FormGroup;
   assets: any[] = [];
   markers: google.maps.Marker[] = [];
+  offset = 0;
+  limit = 10000;
 
   constructor(
     private assetMapService: FormAPIsService,
@@ -47,9 +49,22 @@ export class AssetMapComponent {
   }
 
   fetchAssets(): void {
+    this.assets = [];
+    this.markers.forEach(m => m.setMap(null));
+    this.markers = [];
+    this.offset = 0;
+    this.loadNextBatch();
+  }
+
+  loadNextBatch(): void {
     const accessId = localStorage.getItem('userId');
     const selectedType = this.filterForm.value.stationType;
-    const payload = { accessId };
+
+    const payload = {
+      accessId,
+      offset: this.offset,
+      limit: this.limit
+    };
 
     const request$ = selectedType === 'charging_stations'
       ? this.assetMapService.assetsStation(payload)
@@ -57,8 +72,13 @@ export class AssetMapComponent {
 
     request$.subscribe({
       next: (data) => {
-        this.assets = data;
+        if (data.length === 0) return;
+
+        this.assets.push(...data);
         this.plotMarkers();
+
+        this.offset += this.limit;
+        setTimeout(() => this.loadNextBatch(), 200); // optional small delay
       },
       error: (err) => console.error(err)
     });

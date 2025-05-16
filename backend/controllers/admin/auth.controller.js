@@ -874,20 +874,22 @@ const downloadMock = async function (req, res) {
 const assetMap = async function (req, res) {
 
   try {
-    const { station, portType } = req.query;
+    // const { station, portType } = req.query;
 
-    const whereClause = {};
-    if (station) {
-      whereClause.station_name = station;
-    }
-    if (portType) {
-      whereClause.port_type = portType;
-    }
+    // const whereClause = {};
+    // if (station) {
+    //   whereClause.station_name = station;
+    // }
+    // if (portType) {
+    //   whereClause.port_type = portType;
+    // }
 
     // const assets = await AssetMap.findAll({
     //   where: whereClause,
     // });
     const assets = await Port.findAll({
+       offset: parseInt(req.body.offset),
+      limit: parseInt(req.body.limit),
       attributes: ["fuel_type_code", "station_name", "street_address", "intersection_directions",
         "city", "state", "zip", "station_phone", "latitude", "longitude"],
     });
@@ -902,24 +904,25 @@ const assetMap = async function (req, res) {
 const assetMap1 = async function (req, res) {
 
   try {
+    
     // const { station, portType } = req.query;
-    const { offset = 0, limit = 10000 } = req.query;
+    // const { offset = 0, limit = 10000 } = req.query;
 
 
     const whereClause = {};
-    if (station) {
-      whereClause.station_name = station;
-    }
-    if (portType) {
-      whereClause.port_type = portType;
-    }
+    // if (station) {
+    //   whereClause.station_name = station;
+    // }
+    // if (portType) {
+    //   whereClause.port_type = portType;
+    // }
 
     // const assets = await AssetMap.findAll({
     //   where: whereClause,
     // });
     const assets = await Charging.findAll({
-      offset: parseInt(offset),
-      limit: parseInt(limit),
+      offset: parseInt(req.body.offset),
+      limit: parseInt(req.body.limit),
       attributes: ["fuel_type_code", "station_name", "street_address", "intersection_directions",
         "city", "state", "zip", "station_phone", "latitude", "longitude"],
     });

@@ -93,13 +93,22 @@ export class FormAPIsService {
     return this.http.post(`${this.baseURL}reset-password`, { in: email, password });
   }
 
-  assetsPort(filters: { station?: string; portType?: string; accessId: any }): Observable<any[]> {
+  // assetsPort(filters: { station?: string; portType?: string; accessId: any }): Observable<any[]> {
+  //   return this.http.post<any[]>(`${this.baseURL}assets-port`, filters);
+  // }
+
+  // assetsStation(filters: { station?: string; portType?: string; accessId: any }): Observable<any[]> {
+  //   return this.http.post<any[]>(`${this.baseURL}assets-charging`, filters);
+  // }
+
+  assetsPort(filters: { station?: string; portType?: string; accessId: any, offset: number, limit: number }): Observable<any[]> {
     return this.http.post<any[]>(`${this.baseURL}assets-port`, filters);
   }
 
-  assetsStation(filters: { station?: string; portType?: string; accessId: any }): Observable<any[]> {
+  assetsStation(filters: { station?: string; portType?: string; accessId: any, offset: number, limit: number }): Observable<any[]> {
     return this.http.post<any[]>(`${this.baseURL}assets-charging`, filters);
   }
+
 
   activeUsers(filters: any): Observable<any[]> {
     return this.http.post<any[]>(`${this.baseURL}active-user`, filters);
