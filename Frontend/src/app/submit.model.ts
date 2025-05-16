@@ -29,4 +29,5 @@ export interface User {
     l1: string;
     ttiawo: boolean;
     [key: string]: any;
+    profile_pic: any;
 }

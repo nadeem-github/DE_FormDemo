@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormAPIsService } from 'src/app/form-apis.service';
@@ -13,7 +13,8 @@ export class UserDashHomeComponent {
 
   userData: User | null = null;
   isLoading = true;
-  imgBaseURL = 'http://localhost:8003/api/admin/';
+  imgBaseURL = 'http://localhost:8003/storage/images/';
+  // imgBaseURL = 'http://50.6.202.250:8003/storage/images/';
 
   // Keys for documents
   docKeys = [
@@ -29,6 +30,8 @@ export class UserDashHomeComponent {
   ];
 
   allDocsMissing = false;
+  allDocsAvailable = false;
+
 
   constructor(
     private shortClipService: FormAPIsService,
@@ -60,7 +63,9 @@ export class UserDashHomeComponent {
     this.shortClipService.userDashData(payload).subscribe(
       res => {
         this.userData = res.data;
-        this.checkIfDocsMissing();
+        console.log('User data:', this.userData);
+
+        this.checkDocumentStatus();
         this.isLoading = false;
       },
       err => {
@@ -71,9 +76,80 @@ export class UserDashHomeComponent {
   }
 
   // Check if all document fields are missing
-  checkIfDocsMissing(): void {
+  checkDocumentStatus(): void {
     this.allDocsMissing = this.docKeys.every(doc => !this.userData?.[doc.key]);
+    this.allDocsAvailable = this.docKeys.every(doc => !!this.userData?.[doc.key]);
   }
+
+
+  currentImageIndex = 0;
+  currentImage: { title: string; src: string } | null = null;
+  availableImages: { title: string; src: string }[] = [];
+
+  imageVisible = false; // For fade animation
+
+  @ViewChild('content', { static: true }) contentRef!: TemplateRef<any>;
+
+  openModal(content: TemplateRef<any>, doc: any): void {
+    this.availableImages = this.docKeys
+      .filter(d => this.userData?.[d.key])
+      .map(d => ({
+        title: d.title,
+        src: this.imgBaseURL + this.userData?.[d.key]
+      }));
+
+    this.currentImageIndex = this.availableImages.findIndex(d => d.title === doc.title);
+    this.setCurrentImage();
+
+    const modalRef = this.modalService.open(content, {
+      size: 'lg',
+      centered: true,
+      backdrop: 'static',
+      keyboard: true,
+    });
+
+    setTimeout(() => {
+      const modalEl = document.querySelector('.modal-body');
+      if (modalEl) (modalEl as HTMLElement).focus();
+    }, 200);
+  }
+
+  setCurrentImage(): void {
+    this.imageVisible = false; // start fade out
+    setTimeout(() => {
+      this.currentImage = this.availableImages[this.currentImageIndex];
+      this.imageVisible = true; // trigger fade in
+    }, 50);
+  }
+
+  onImageLoad(): void {
+    this.imageVisible = true;
+  }
+
+  prevImage(): void {
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+      this.setCurrentImage();
+    }
+  }
+
+  nextImage(): void {
+    if (this.currentImageIndex < this.availableImages.length - 1) {
+      this.currentImageIndex++;
+      this.setCurrentImage();
+    }
+  }
+
+  // Keyboard navigation
+  onArrow(direction: 'prev' | 'next'): void {
+    direction === 'prev' ? this.prevImage() : this.nextImage();
+  }
+
+  // Swipe gesture handlers
+  onSwipe(direction: 'prev' | 'next'): void {
+    direction === 'prev' ? this.prevImage() : this.nextImage();
+  }
+
 
 
 }

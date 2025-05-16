@@ -28,7 +28,7 @@
 
                         <div *ngIf="!isLoading && userData">
                             <div class="d-flex mb-3">
-                                <img [src]="userData.undlf ? (imgBaseURL + userData.undlf) : 'assets/image/male.png'" alt="User Image" class="img-thumbnail me-3 shadow-sm" width="200" height="200" />
+                                <img [src]="userData.profile_pic ? (imgBaseURL + userData.profile_pic) : 'assets/image/male.png'" alt="User Image" class="img-thumbnail me-3 shadow-sm" width="200" height="200" />
                                 <div>
                                     <h5 class="mb-0">{{ userData.fn }} {{ userData.ln }}</h5>
                                     <small class="text-muted">{{ userData.in }}</small>
@@ -46,7 +46,7 @@
 
             <!-- Document Upload Card -->
             <div class="col-lg-6">
-                <div class="card shadow-sm border-0 h-100">
+                <div class="card shadow-sm border-0 h-100 documentUpload">
                     <div class="card-header bg-success text-white">
                         <h5 class="mb-0">Document Upload</h5>
                     </div>
@@ -57,11 +57,12 @@
                         </div>
 
                         <!-- Display Documents if Available -->
-                        <div *ngIf="!allDocsMissing">
-                            <div *ngFor="let doc of docKeys">
+                        <div class="row" *ngIf="!allDocsMissing">
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 mb-2" *ngFor="let doc of docKeys">
                                 <div *ngIf="userData?.[doc.key]">
-                                    <p><strong>{{ doc.title }}:</strong></p>
-                                    <img [src]="imgBaseURL + userData?.[doc.key]" alt="{{ doc.title }}" width="200" class="img-thumbnail mb-2" />
+                                    <!-- <p><strong>{{ doc.title }}:</strong></p> -->
+                                    <!-- <img [src]="imgBaseURL + userData?.[doc.key]" alt="{{ doc.title }}" class="img-fluid" /> -->
+                                    <img [src]="imgBaseURL + userData?.[doc.key]" alt="{{ doc.title }}" class="img-fluid" (click)="openModal(content, doc)"/>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +82,7 @@
             </div>
 
             <!-- Document Missing Card -->
-            <div class="col-lg-6">
+            <div class="col-lg-6" *ngIf="!allDocsAvailable">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-header bg-danger text-white">
                         <h5 class="mb-0">Document Missing</h5>
@@ -101,7 +102,28 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">{{ currentImage?.title }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body text-center" (keydown.arrowLeft)="onArrow('prev')" (keydown.arrowRight)="onArrow('next')"
+        tabindex="0" (swipeleft)="onSwipe('next')" (swiperight)="onSwipe('prev')">
+        <img [src]="currentImage?.src" [alt]="currentImage?.title" [class.image-fade]="true" [class.show]="imageVisible" class="img-thumbnail mb-3" (load)="onImageLoad()" />
+        <div>
+            <button class="btn btn-outline-secondary me-2" (click)="prevImage()" [disabled]="currentImageIndex === 0">
+                Previous
+            </button>
+            <button class="btn btn-outline-secondary" (click)="nextImage()"
+                [disabled]="currentImageIndex === availableImages.length - 1">
+                Next
+            </button>
+        </div>
+    </div>
+</ng-template>
+
