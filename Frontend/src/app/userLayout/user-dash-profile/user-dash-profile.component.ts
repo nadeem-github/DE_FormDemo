@@ -280,7 +280,6 @@ export class UserDashProfileComponent {
       const file = input.files[0];
       this.uploadedFiles[field] = file;
 
-      // Generate preview
       const reader = new FileReader();
       reader.onload = () => {
         this.previewUrls[field] = reader.result as string;
@@ -288,7 +287,6 @@ export class UserDashProfileComponent {
       reader.readAsDataURL(file);
     }
   }
-
 
 
   onSubmit() {
