@@ -20,8 +20,13 @@ export class UserDashProfileComponent {
   longitude: number | null = null;
   uploadedFile: File | null = null;
 
+  baseURL = environment.imgBaseURL;
+
+  filePreviews: { [key: string]: string } = {};
   uploadedFiles: { [key: string]: File | null } = {};
   isFileInvalid: { [key: string]: boolean } = {};
+  fileOriginalPaths: { [key: string]: string } = {};
+
   accessId: any;
   mapUrl: string = '';
 
@@ -211,6 +216,16 @@ export class UserDashProfileComponent {
             tolcp: response.data.tolcp,
             tae1: response.data.tae1,
           });
+          this.setPreviewFromApi('profile_pic', response.data.profile_pic);
+          this.setPreviewFromApi('undlf', response.data.undlf);
+          this.setPreviewFromApi('unp', response.data.unp);
+          this.setPreviewFromApi('uncf', response.data.uncf);
+          this.setPreviewFromApi('uncf1', response.data.uncf1);
+          this.setPreviewFromApi('uncf2', response.data.uncf2);
+          this.setPreviewFromApi('unlf', response.data.unlf);
+          this.setPreviewFromApi('unlf1', response.data.unlf1);
+          this.setPreviewFromApi('unlf2', response.data.unlf2);
+          this.setPreviewFromApi('unlf3', response.data.unlf3);
         }
       },
       (error) => {
@@ -229,21 +244,48 @@ export class UserDashProfileComponent {
     return `${year}-${month}-${day}`;
   }
 
+  setPreviewFromApi(key: string, path: string | null): void {
+    if (path) {
+      const fullUrl = this.baseURL + path;
+      this.filePreviews[key] = fullUrl;
+
+      // 👇 Convert to File & store in uploadedFiles so it gets sent as binary
+      const fileName = path.split('/').pop() || `${key}.png`;
+      this.urlToFile(fullUrl, fileName).then((file) => {
+        this.uploadedFiles[key] = file;
+      });
+    }
+  }
 
   onFileChange(event: Event, fileKey: string): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       this.uploadedFiles[fileKey] = input.files[0];
       this.isFileInvalid[fileKey] = false;
+
+      // ✅ Update preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.filePreviews[fileKey] = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
     } else {
       this.uploadedFiles[fileKey] = null;
       this.isFileInvalid[fileKey] = true;
     }
   }
 
+
   isInvalid(controlName: string): boolean {
     const control = this.dataForm.get(controlName);
     return !!control && control.invalid && (control.touched || control.dirty);
+  }
+
+  async urlToFile(url: string, fileName: string): Promise<File> {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const contentType = blob.type || 'application/octet-stream';
+    return new File([blob], fileName, { type: contentType });
   }
 
   onSubmit(): void {
@@ -339,19 +381,12 @@ export class UserDashProfileComponent {
         microtrax_course_number: 'microtraxCourseNumber'
       };
 
-      for (const [key, controlName] of Object.entries(map)) {
-        const value = this.dataForm.get(controlName)?.value;
-        if (value !== undefined && value !== null) {
-          formData.append(key, value);
+      for (const [key, file] of Object.entries(this.uploadedFiles)) {
+        if (file) {
+          formData.append(key, file); // Always binary
         }
       }
 
-      // Append uploaded files
-      for (const [key, file] of Object.entries(this.uploadedFiles)) {
-        if (file) {
-          formData.append(key, file);
-        }
-      }
 
       formData.append('accessId', this.accessId);
 

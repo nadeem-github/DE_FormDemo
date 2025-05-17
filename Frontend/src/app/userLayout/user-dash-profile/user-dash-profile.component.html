@@ -110,9 +110,12 @@
                                     <label class="form-check-label">None</label>
                                 </div>
                             </div>
-                            <div class="form-group mb-2">
+                            <div class="mb-2">
                                 <label>Profile Pic</label>
                                 <input type="file" class="form-control" (change)="onFileChange($event, 'profile_pic')" />
+                            </div>
+                            <div *ngIf="filePreviews['profile_pic']">
+                                <img [src]="filePreviews['profile_pic'] || 'assets/images/docs.png'" class="img-thumbnail docsImg" alt="Docs" />
                             </div>
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 bgLight px-4 py-3">
@@ -210,14 +213,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-check-label">Upload New Drivers License File</label>
                                 <div class="input-group">
                                     <input type="file" (change)="onFileChange($event, 'undlf')" class="form-control shadow-none" />
                                 </div>
-                                <div *ngIf="isFileInvalid['undlf']" class="text-danger">
-                                    Driver's License file is required.
-                                </div>
+                            </div>
+                            <div *ngIf="filePreviews['undlf']">
+                                <img [src]="filePreviews['undlf'] || 'assets/images/docs.png'" class="img-thumbnail docsImg" alt="Docs" />
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Location Map</label>
@@ -316,14 +319,14 @@
                             <hr class="my-2">
                             <h6 class="text-center mb-0">Tech-Pal Photo</h6>
                             <hr class="my-2">
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-check-label">Upload New Photo</label>
                                 <div class="input-group">
                                     <input type="file" class="form-control" (change)="onFileChange($event, 'unp')">
                                 </div>
-                                <div *ngIf="isFileInvalid['unp']" class="text-danger">
-                                    Photo file is required.
-                                  </div>
+                            </div>
+                            <div *ngIf="filePreviews['unp']">
+                                <img [src]="filePreviews['unp'] || 'assets/images/docs.png'" class="img-thumbnail docsImg" alt="Docs" />
                             </div>
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
@@ -344,14 +347,14 @@
                                     <input type="text" class="form-control shadow-none" formControlName="in1Text" />
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-check-label">Upload New Certification File</label>
                                 <div class="input-group">
                                     <input type="file" class="form-control" (change)="onFileChange($event, 'uncf')">
                                 </div>
-                                <div *ngIf="isFileInvalid['uncf']" class="text-danger">
-                                    Certification file is required.
-                                  </div>
+                            </div>
+                            <div *ngIf="filePreviews['uncf']">
+                                <img [src]="filePreviews['uncf'] || 'assets/images/docs.png'" class="img-thumbnail docsImg" alt="Docs" />
                             </div>
                         </div>
                     </div>
@@ -387,14 +390,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-check-label">Upload New Certification File</label>
                                 <div class="input-group">
                                     <input type="file" class="form-control" (change)="onFileChange($event, 'uncf1')">
                                 </div>
-                                <div *ngIf="isFileInvalid['uncf1']" class="text-danger">
-                                    Photo file is required.
-                                </div>
+                            </div>
+                            <div *ngIf="filePreviews['uncf1']">
+                                <img [src]="filePreviews['uncf1'] || 'assets/images/docs.png'" class="img-thumbnail docsImg" alt="Docs" />
                             </div>
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
@@ -414,14 +417,14 @@
                                     <input type="text" class="form-control shadow-none" formControlName="in2Text" />
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-check-label">Upload New Certification File</label>
                                 <div class="input-group">
                                     <input type="file" class="form-control" (change)="onFileChange($event, 'uncf2')">
                                 </div>
-                                <div *ngIf="isFileInvalid['uncf2']" class="text-danger">
-                                    Photo file is required.
-                                </div>
+                            </div>
+                            <div *ngIf="filePreviews['uncf2']">
+                                <img [src]="filePreviews['uncf2'] || 'assets/images/docs.png'" class="img-thumbnail docsImg" alt="Docs" />
                             </div>
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3 bgLight">
@@ -443,14 +446,14 @@
                                     <input type="text" class="form-control shadow-none" formControlName="in3Text" />
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-check-label">Upload New License File</label>
                                 <div class="input-group">
                                     <input type="file" class="form-control" (change)="onFileChange($event, 'unlf')">
                                 </div>
-                                <div *ngIf="isFileInvalid['unlf']" class="text-danger">
-                                    Photo file is required.
-                                </div>
+                            </div>
+                            <div *ngIf="filePreviews['unlf']">
+                                <img [src]="filePreviews['unlf'] || 'assets/images/docs.png'" class="img-thumbnail docsImg" alt="Docs" />
                             </div>
                         </div>
                     </div>
@@ -477,11 +480,14 @@
                                     <input type="text" class="form-control shadow-none" formControlName="in4Text" />
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-check-label">Upload New License File</label>
                                 <div class="input-group">
                                     <input type="file" class="form-control" (change)="onFileChange($event, 'unlf1')">
                                 </div>
+                            </div>
+                            <div *ngIf="filePreviews['unlf1']">
+                                <img [src]="filePreviews['unlf1'] || 'assets/images/docs.png'" class="img-thumbnail docsImg" alt="Docs" />
                             </div>
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3">
@@ -502,11 +508,14 @@
                                     <input type="text" class="form-control shadow-none" formControlName="in5Text" />
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-check-label">Upload New License File</label>
                                 <div class="input-group">
                                     <input type="file" class="form-control" (change)="onFileChange($event, 'unlf2')">
                                 </div>
+                            </div>
+                            <div *ngIf="filePreviews['unlf2']">
+                                <img [src]="filePreviews['unlf2'] || 'assets/images/docs.png'" class="img-thumbnail docsImg" alt="Docs" />
                             </div>
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 px-4 py-3 bgLight">
@@ -527,11 +536,14 @@
                                     <input type="text" class="form-control shadow-none" formControlName="in6Text" />
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-check-label">Upload New License File</label>
                                 <div class="input-group">
                                     <input type="file" class="form-control" (change)="onFileChange($event, 'unlf3')">
                                 </div>
+                            </div>
+                            <div *ngIf="filePreviews['unlf3']">
+                                <img [src]="filePreviews['unlf3'] || 'assets/images/docs.png'" class="img-thumbnail docsImg" alt="Docs" />
                             </div>
                         </div>
                     </div>
