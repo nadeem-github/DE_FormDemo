@@ -11,39 +11,23 @@ import { environment } from 'src/environments/environment';
 })
 export class UserDashProfileComponent {
   dataForm!: FormGroup;
-  isLoading: boolean = false;
-  userId: string | null = null;
+  locationForm!: FormGroup;
 
-  // Toast state
-  showToast = false;
-  toastMessage = '';
-  toastType: 'success' | 'error' = 'success';
+  userId: string | null = null;
+  isLoading = false;
+  errorMessage: string | null = null;
+  latitude: number | null = null;
+  longitude: number | null = null;
+  uploadedFile: File | null = null;
 
   uploadedFiles: { [key: string]: File | null } = {};
   isFileInvalid: { [key: string]: boolean } = {};
-
-  imgBaseURL = environment.imgBaseURL;
-
+  accessId: any;
   mapUrl: string = '';
-  previewUrls: { [key: string]: string } = {};
 
-  constructor(
-    private fb: FormBuilder,
-    private userService: FormAPIsService,
-    private router: Router
-  ) { }
+  constructor(private fb: FormBuilder, private formDataService: FormAPIsService, private route: ActivatedRoute, private router: Router,) { }
 
   ngOnInit(): void {
-    this.userId = localStorage.getItem('userId');
-    this.initializeForm();
-
-    if (this.userId) {
-      this.fetchUserData();
-    }
-    this.getLocation();
-  }
-
-  initializeForm() {
     this.dataForm = this.fb.group({
       firstName: ['',],
       lastName: ['',],
@@ -99,6 +83,9 @@ export class UserDashProfileComponent {
       tol3Text: ['',],
       ed7: ['',],
       in6Text: ['',],
+      uncf1: [''],
+      uncf2: [''],
+      unlf: [''],
       t: ['',],
       in7: ['',],
       ed8: ['',],
@@ -120,150 +107,118 @@ export class UserDashProfileComponent {
       ed13: ['',],
       tolcp: ['',],
       tae1: ['',],
-      profile_pic: ['',],
-
-      undlf: [''],
-      unlf: [''],
-      unlf1: [''],
-      unlf2: [''],
-      unlf3: [''],
-      uncf: [''],
-      uncf1: [''],
-      uncf2: [''],
-      unp: [''],
-
     });
+
+    const storedUserId = localStorage.getItem('userId');
+    const storedAccessId = localStorage.getItem('userId');
+
+    if (storedUserId && storedAccessId) {
+      this.userId = storedUserId;
+      this.accessId = storedAccessId;
+      this.fetchUserData(this.userId, this.accessId);
+    } else {
+      console.error('User ID or Access ID not found in localStorage.');
+      this.errorMessage = 'User ID or Access ID not found. Please log in again.';
+    }
+
+    this.getLocation();
   }
 
-  fetchUserData() {
-    const payload = {
-      id: this.userId,
-      accessId: this.userId
-    };
-
-    this.userService.editUserData(payload).subscribe({
-      next: (res) => {
-        if (res.success) {
-          const data = res.data;
-
-          // Patch form fields based on API keys
+  fetchUserData(userId: string, accessId: string): void {
+    this.isLoading = true;
+    const requestData = new FormData();
+    requestData.append('id', userId);
+    requestData.append('accessId', accessId);
+    this.formDataService.editUserData(requestData).subscribe(
+      (response: any) => {
+        this.isLoading = false;
+        if (response && response.data) {
+          // console.log('Received data:', response.data);
           this.dataForm.patchValue({
-            firstName: data.fn,
-            lastName: data.ln,
-            phoneNumber: data.pn,
-            ssn: data.ssn,
-            emergencyContactName1: data.ecn,
-            emergencyContactNumber1: data.pn1,
-            emergencyContactName2: data.ecn1,
-            emergencyContactNumber2: data.pn2,
-            address: data.a,
-            cityName: data.city,
-            stateName: data.state,
-            zipCode: data.zc,
-            latitude: data.l,
-            longitude: data.l1,
-            radius: data.r,
-            stateOfLicense: data.sol,
-            ed: data.ed ? data.ed.substring(0, 10) : '', // YYYY-MM-DD
-            identificationNumber: data.in,
-            ttiawo: data.ttiawo,
-            isAcceptingWorkOrders: data.bc || '',
-            securityClearance: data.sc,
-            tpecheckbox: data.tpe,
-            vccheckbox: data.vc,
-            hvscRadio: data.hvsc,
-            fvsc: data.fvsc,
-            rccheckbox: data.rc,
-            cccheckbox: data.cc,
-            uccheckbox: data.uc,
-            pvcheckbox: data.pv,
-            evcheckbox: data.ev,
-            btvcheckbox: data.btv,
-            thermalcheckbox: data.thermal,
-            optionscheckbox: data.options,
-            tocText: data.toc,
-            in1Text: data.in1,
-            toc1Text: data.toc1,
-            toc2Text: data.toc2,
-            tolText: data.tol,
-            thoth: data.thoth,
-            in2Text: data.in2,
-            in3Text: data.in3,
-            tol1Text: data.tol1,
-            in4Text: data.in4,
-            tol2Text: data.tol2,
-            in5Text: data.in5,
-            tol3Text: data.tol3,
-            in6Text: data.in6,
-            ed1: this.formatDate(data.ed1),
-            ed2: this.formatDate(data.ed2),
-            ed3: this.formatDate(data.ed3),
-            ed4: this.formatDate(data.ed4),
-            ed5: this.formatDate(data.ed5),
-            ed6: this.formatDate(data.ed6),
-            ed7: this.formatDate(data.ed7),
-            ed8: this.formatDate(data.ed8),
-            ed9: this.formatDate(data.ed9),
-            ed10: this.formatDate(data.ed10),
-            ed12: this.formatDate(data.ed12),
-            ed13: this.formatDate(data.ed13),
-
-            profile_pic: this.imgBaseURL + data.profile_pic,
-            undlf: this.imgBaseURL + data.undlf,
-            unlf: this.imgBaseURL + data.unlf,
-            unlf1: this.imgBaseURL + data.unlf1,
-            unlf2: this.imgBaseURL + data.unlf2,
-            unlf3: this.imgBaseURL + data.unlf3,
-            uncf: this.imgBaseURL + data.uncf,
-            uncf1: this.imgBaseURL + data.uncf1,
-            uncf2: this.imgBaseURL + data.uncf2,
-            unp: this.imgBaseURL + data.unp,
-
-
-            t: data.t,
-            in7: data.in7,
-            t1: data.t1,
-            in8: data.in8,
-            s: data.s,
-            ev: data.ev,
-            bes: data.bes,
-            t2: data.t2,
-            in9: data.in9,
-            pn3: data.pn3,
-            ed11: data.ed11,
-            pn4: data.pn4,
-            c: data.c,
-            p: data.p,
-            tolcp: data.tolcp,
-            tae1: data.tae1,
-
+            firstName: response.data.fn,
+            lastName: response.data.ln,
+            address: response.data.a,
+            stateOfLicense: response.data.sol,
+            phoneNumber: response.data.pn,
+            ssn: response.data.ssn,
+            emergencyContactName1: response.data.ecn,
+            emergencyContactName2: response.data.ecn1,
+            emergencyContactNumber1: response.data.pn1,
+            emergencyContactNumber2: response.data.pn2,
+            isAcceptingWorkOrders: response.data.ttiawo,
+            stateName: response.data.state,
+            cityName: response.data.city,
+            zipCode: response.data.zc,
+            latitude: response.data.l,
+            longitude: response.data.l1,
+            radius: response.data.r,
+            identificationNumber: response.data.in,
+            ttiawo: response.data.ttiawo,
+            securityClearance: response.data.sc,
+            tpecheckbox: response.data.tpe,
+            vccheckbox: response.data.vc,
+            hvscRadio: response.data.hvsc,
+            fvsc: response.data.fvsc,
+            rccheckbox: response.data.rc,
+            cccheckbox: response.data.cc,
+            uccheckbox: response.data.uc,
+            pvcheckbox: response.data.pv,
+            evcheckbox: response.data.ev,
+            btvcheckbox: response.data.btv,
+            thermalcheckbox: response.data.thermal,
+            optionscheckbox: response.data.options,
+            tocText: response.data.toc,
+            in1Text: response.data.in1,
+            toc1Text: response.data.toc1,
+            toc2Text: response.data.toc2,
+            tolText: response.data.tol,
+            thoth: response.data.thoth,
+            in2Text: response.data.in2,
+            in3Text: response.data.in3,
+            tol1Text: response.data.tol1,
+            in4Text: response.data.in4,
+            tol2Text: response.data.tol2,
+            in5Text: response.data.in5,
+            tol3Text: response.data.tol3,
+            in6Text: response.data.in6,
+            ed: this.formatDate(response.data.ed),
+            ed1: this.formatDate(response.data.ed1),
+            ed2: this.formatDate(response.data.ed2),
+            ed3: this.formatDate(response.data.ed3),
+            ed4: this.formatDate(response.data.ed4),
+            ed5: this.formatDate(response.data.ed5),
+            ed6: this.formatDate(response.data.ed6),
+            ed7: this.formatDate(response.data.ed7),
+            ed8: this.formatDate(response.data.ed8),
+            ed9: this.formatDate(response.data.ed9),
+            ed10: this.formatDate(response.data.ed10),
+            ed12: this.formatDate(response.data.ed12),
+            ed13: this.formatDate(response.data.ed13),
+            t: response.data.t,
+            in7: response.data.in7,
+            t1: response.data.t1,
+            in8: response.data.in8,
+            s: response.data.s,
+            ev: response.data.ev,
+            bes: response.data.bes,
+            t2: response.data.t2,
+            in9: response.data.in9,
+            pn3: response.data.pn3,
+            ed11: response.data.ed11,
+            pn4: response.data.pn4,
+            c: response.data.c,
+            p: response.data.p,
+            tolcp: response.data.tolcp,
+            tae1: response.data.tae1,
           });
-          // Set preview image URLs
-          this.previewUrls['profile_pic'] = this.imgBaseURL + data.profile_pic;
-          this.previewUrls['undlf'] = this.imgBaseURL + data.undlf;
-          this.previewUrls['unlf'] = this.imgBaseURL + data.unlf;
-          this.previewUrls['unlf1'] = this.imgBaseURL + data.unlf1;
-          this.previewUrls['unlf2'] = this.imgBaseURL + data.unlf2;
-          this.previewUrls['unlf3'] = this.imgBaseURL + data.unlf3;
-          this.previewUrls['uncf'] = this.imgBaseURL + data.uncf;
-          this.previewUrls['unlf1'] = this.imgBaseURL + data.unlf1;
-          this.previewUrls['unlf2'] = this.imgBaseURL + data.unlf2;
-          this.previewUrls['unp'] = this.imgBaseURL + data.unp;
         }
       },
-      error: () => {
-        // this.toastr.error('Failed to fetch user data');
+      (error) => {
+        this.isLoading = false;
+        this.errorMessage = 'Failed to fetch user data. Please try again.';
+        console.error('Error fetching user data:', error);
       }
-    });
-  }
-
-  showCustomToast(message: string, type: 'success' | 'error') {
-    this.toastMessage = message;
-    this.toastType = type;
-    this.showToast = true;
-
-    // Auto-hide after 3 seconds
-    setTimeout(() => this.showToast = false, 3000);
+    );
   }
 
   formatDate(date: string): string {
@@ -274,129 +229,149 @@ export class UserDashProfileComponent {
     return `${year}-${month}-${day}`;
   }
 
-  onFileChange(event: Event, field: string): void {
+
+  onFileChange(event: Event, fileKey: string): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
-      const file = input.files[0];
-      this.uploadedFiles[field] = file;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrls[field] = reader.result as string;
-      };
-      reader.readAsDataURL(file);
+      this.uploadedFiles[fileKey] = input.files[0];
+      this.isFileInvalid[fileKey] = false;
+    } else {
+      this.uploadedFiles[fileKey] = null;
+      this.isFileInvalid[fileKey] = true;
     }
   }
 
+  isInvalid(controlName: string): boolean {
+    const control = this.dataForm.get(controlName);
+    return !!control && control.invalid && (control.touched || control.dirty);
+  }
 
-  onSubmit() {
-    if (this.dataForm.invalid) {
-
+  onSubmit(): void {
+    if (this.dataForm.valid && this.userId) {
       const formData = new FormData();
+      this.isLoading = true;
+      formData.append('id', this.userId);
 
-      formData.append('fn', this.dataForm.get('firstName')?.value);
-      formData.append('ln', this.dataForm.get('lastName')?.value);
-      formData.append('a', this.dataForm.get('address')?.value);
-      formData.append('sol', this.dataForm.get('stateOfLicense')?.value);
-      formData.append('pn', this.dataForm.get('phoneNumber')?.value);
-      formData.append('ssn', this.dataForm.get('ssn')?.value);
-      formData.append('ecn', this.dataForm.get('emergencyContactName1')?.value);
-      formData.append('ecn1', this.dataForm.get('emergencyContactName2')?.value);
-      formData.append('pn1', this.dataForm.get('emergencyContactNumber1')?.value);
-      formData.append('pn2', this.dataForm.get('emergencyContactNumber2')?.value);
-      formData.append('ttiawo', this.dataForm.get('isAcceptingWorkOrders')?.value);
-      formData.append('city', this.dataForm.get('cityName')?.value);
-      formData.append('zc', this.dataForm.get('zipCode')?.value);
-      formData.append('ed', this.dataForm.get('ed')?.value);
-      formData.append('state', this.dataForm.get('stateName')?.value);
-      formData.append('in', this.dataForm.get('identificationNumber')?.value);
-      formData.append('l', this.dataForm.get('latitude')?.value);
-      formData.append('l1', this.dataForm.get('longitude')?.value);
-      formData.append('r', this.dataForm.get('radius')?.value);
-      formData.append('ttiawo', this.dataForm.get('ttiawo')?.value);
-      formData.append('sc', this.dataForm.get('securityClearance')?.value);
-      formData.append('tpe', this.dataForm.get('tpecheckbox')?.value);
-      formData.append('vc', this.dataForm.get('vccheckbox')?.value);
-      formData.append('hvsc', this.dataForm.get('hvscRadio')?.value);
-      formData.append('fvsc', this.dataForm.get('fvsc')?.value);
-      formData.append('rc', this.dataForm.get('rccheckbox')?.value);
-      formData.append('cc', this.dataForm.get('cccheckbox')?.value);
-      formData.append('uc', this.dataForm.get('uccheckbox')?.value);
-      formData.append('pv', this.dataForm.get('pvcheckbox')?.value);
-      formData.append('ev', this.dataForm.get('evcheckbox')?.value);
-      formData.append('btv', this.dataForm.get('btvcheckbox')?.value);
-      formData.append('thermal', this.dataForm.get('thermalcheckbox')?.value);
-      formData.append('options', this.dataForm.get('optionscheckbox')?.value);
-      formData.append('toc', this.dataForm.get('tocText')?.value);
-      formData.append('ed1', this.dataForm.get('ed1')?.value);
-      formData.append('in1', this.dataForm.get('in1Text')?.value);
-      formData.append('toc1', this.dataForm.get('toc1Text')?.value);
-      formData.append('ed2', this.dataForm.get('ed2')?.value);
-      formData.append('toc2', this.dataForm.get('toc2Text')?.value);
-      formData.append('ed3', this.dataForm.get('ed3')?.value);
-      formData.append('ed4', this.dataForm.get('ed4')?.value);
-      formData.append('tol', this.dataForm.get('tolText')?.value);
-      formData.append('thoth', this.dataForm.get('thoth')?.value);
-      formData.append('in2', this.dataForm.get('in2Text')?.value);
-      formData.append('in3', this.dataForm.get('in3Text')?.value);
-      formData.append('tol1', this.dataForm.get('tol1Text')?.value);
-      formData.append('ed5', this.dataForm.get('ed5')?.value);
-      formData.append('in4', this.dataForm.get('in4Text')?.value);
-      formData.append('tol2', this.dataForm.get('tol2Text')?.value);
-      formData.append('ed6', this.dataForm.get('ed6')?.value);
-      formData.append('in5', this.dataForm.get('in5Text')?.value);
-      formData.append('tol3', this.dataForm.get('tol3Text')?.value);
-      formData.append('ed7', this.dataForm.get('ed7')?.value);
-      formData.append('in6', this.dataForm.get('in6Text')?.value);
-      formData.append('profile_pic', this.dataForm.get('profile_pic')?.value);
+      const map: { [key: string]: string } = {
+        fn: 'firstName',
+        ln: 'lastName',
+        a: 'address',
+        sol: 'stateOfLicense',
+        ed: 'ed',
+        pn: 'phoneNumber',
+        ssn: 'ssn',
+        city: 'cityName',
+        in: 'identificationNumber',
+        ecn: 'emergencyContactName1',
+        ecn1: 'emergencyContactName2',
+        pn1: 'emergencyContactNumber1',
+        pn2: 'emergencyContactNumber2',
+        state: 'stateName',
+        zc: 'zipCode',
+        l: 'latitude',
+        l1: 'longitude',
+        ttiawo: 'isAcceptingWorkOrders',
+        r: 'radius',
+        sc: 'securityClearance',
+        fvsc: 'fvsc',
+        uc: 'uccheckbox',
+        cc: 'cccheckbox',
+        tpe: 'tpecheckbox',
+        vc: 'vccheckbox',
+        hvsc: 'hvscRadio',
+        rc: 'rccheckbox',
+        pv: 'pvcheckbox',
+        ev: 'evcheckbox',
+        btv: 'btvcheckbox',
+        thermal: 'thermalcheckbox',
+        options: 'optionscheckbox',
+        tae: 'tae',
+        toc: 'tocText',
+        ed1: 'ed1',
+        sr: 'sr',
+        in1: 'in1Text',
+        unp: 'unp',
+        uncf: 'uncf',
+        toc1: 'toc1Text',
+        ed2: 'ed2',
+        toc2: 'toc2Text',
+        ed3: 'ed3',
+        tol: 'tolText',
+        ed4: 'ed4',
+        thoth: 'thoth',
+        in2: 'in2Text',
+        in3: 'in3Text',
+        uncf1: 'uncf1',
+        uncf2: 'uncf2',
+        unlf: 'unlf',
+        tol1: 'tol1Text',
+        ed5: 'ed5',
+        tol2: 'tol2Text',
+        ed6: 'ed6',
+        tol3: 'tol3Text',
+        ed7: 'ed7',
+        in4: 'in4Text',
+        in5: 'in5Text',
+        in6: 'in6Text',
+        unlf1: 'unlf1',
+        unlf2: 'unlf2',
+        unlf3: 'unlf3',
+        in7: 'in7',
+        ed8: 'ed8',
+        in8: 'in8',
+        ed9: 'ed9',
+        bes: 'bes',
+        t: 't',
+        t1: 't1',
+        s: 's',
+        t2: 't2',
+        pn3: 'pn3',
+        ed10: 'ed10',
+        pn4: 'pn4',
+        ed11: 'ed11',
+        in9: 'in9',
+        ed12: 'ed12',
+        c: 'c',
+        tae1: 'tae1',
+        tolcp: 'tolcp',
+        p: 'p',
+        microtrax_course_name: 'microtraxCourseName',
+        microtrax_course_number: 'microtraxCourseNumber'
+      };
 
+      for (const [key, controlName] of Object.entries(map)) {
+        const value = this.dataForm.get(controlName)?.value;
+        if (value !== undefined && value !== null) {
+          formData.append(key, value);
+        }
+      }
+
+      // Append uploaded files
       for (const [key, file] of Object.entries(this.uploadedFiles)) {
         if (file) {
           formData.append(key, file);
         }
       }
 
-      // Optionally, append any files if necessary
-      for (const [key, file] of Object.entries(this.uploadedFiles)) {
-        if (file) {
-          formData.append(key, file);
-        }
-      }
+      formData.append('accessId', this.accessId);
 
-    }
-
-    const formValues = this.dataForm.value;
-
-    const payload = {
-      ...formValues,
-      id: this.userId,
-      accessId: this.userId
-    };
-
-    this.isLoading = true;
-
-    this.userService.updateUserData(payload).subscribe({
-      next: (res) => {
-        this.isLoading = false;
-        if (res.success) {
+      this.formDataService.updateUserData(formData).subscribe(
+        (response: any) => {
+          this.isLoading = false;
           alert('Record updated successfully!');
           this.router.navigate(['/userHome']);
-        } else {
-          // this.toastr.error('Failed to update user data');
+        },
+        (error) => {
+          this.isLoading = false;
+          this.errorMessage = 'Failed to update data. Please try again.';
+          console.error('Error updating data:', error);
         }
-      },
-      error: () => {
-        this.isLoading = false;
-        // this.toastr.error('Something went wrong while updating');
-      }
-    });
+      );
+    } else {
+      this.dataForm.markAllAsTouched();
+    }
   }
 
-  // Helper for validation in template
-  isInvalid(controlName: string) {
-    const control = this.dataForm.get(controlName);
-    return control?.touched && control?.invalid;
-  }
 
   getLocation() {
     if (!navigator.geolocation) {
@@ -427,4 +402,5 @@ export class UserDashProfileComponent {
       }
     );
   }
+
 }

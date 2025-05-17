@@ -309,13 +309,6 @@ export class TechFormEditComponent {
         }
       }
 
-      // Optionally, append any files if necessary
-      for (const [key, file] of Object.entries(this.uploadedFiles)) {
-        if (file) {
-          formData.append(key, file);
-        }
-      }
-
       formData.append('accessId', this.accessId);
       
       // Call the API to update the data
