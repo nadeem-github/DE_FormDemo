@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormAPIsService } from 'src/app/form-apis.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-user-dash-profile',
@@ -21,8 +22,7 @@ export class UserDashProfileComponent {
   uploadedFiles: { [key: string]: File | null } = {};
   isFileInvalid: { [key: string]: boolean } = {};
 
-  // imgBaseURL = 'http://localhost:8003/storage/images/';
-  imgBaseURL = 'http://50.6.202.250:8003/storage/images/';
+  imgBaseURL = environment.imgBaseURL;
 
   mapUrl: string = '';
   previewUrls: { [key: string]: string } = {};

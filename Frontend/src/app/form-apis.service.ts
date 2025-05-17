@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { submitForm, User } from './submit.model';
 import { Asset } from './models/asset/asset.module';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,7 @@ import { Asset } from './models/asset/asset.module';
 
 export class FormAPIsService {
 
-  // baseURL = 'http://localhost:8003/api/admin/';
-  // baseURL = 'http://50.6.202.250:8002/api/admin/';
-  baseURL = 'http://50.6.202.250:8003/api/admin/';
-
+  baseURL = environment.baseURL;
 
   constructor(private http: HttpClient) { }
 
