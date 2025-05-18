@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormAPIsService } from 'src/app/form-apis.service';
 import { User } from 'src/app/submit.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-user-dash-home',
@@ -13,8 +14,8 @@ export class UserDashHomeComponent {
 
   userData: User | null = null;
   isLoading = true;
-  // imgBaseURL = 'http://localhost:8003/storage/images/';
-  imgBaseURL = 'http://50.6.202.250:8003/storage/images/';
+  
+  imgBaseURL = environment.imgBaseURL;
 
   // Keys for documents
   docKeys = [
