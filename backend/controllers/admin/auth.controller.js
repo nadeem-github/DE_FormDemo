@@ -1227,10 +1227,10 @@ const getActiveUser = async function (req, res) {
     const data = await MockVerify.findAll({
       attributes: ["l", "l1", "fn", "ln", "a", "sol", "city"],
       order: [['id', 'DESC']],
-      where: {
-        state,
-        city
-      },
+      // where: {
+      //   state,
+      //   city
+      // },
       limit: 5
     });
     // const count = await MockVerify.count();

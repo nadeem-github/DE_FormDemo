@@ -91,22 +91,13 @@ export class FormAPIsService {
     return this.http.post(`${this.baseURL}reset-password`, { in: email, password });
   }
 
-  // assetsPort(filters: { station?: string; portType?: string; accessId: any }): Observable<any[]> {
-  //   return this.http.post<any[]>(`${this.baseURL}assets-port`, filters);
-  // }
-
-  // assetsStation(filters: { station?: string; portType?: string; accessId: any }): Observable<any[]> {
-  //   return this.http.post<any[]>(`${this.baseURL}assets-charging`, filters);
-  // }
-
-  assetsPort(filters: { station?: string; portType?: string; accessId: any, offset: number, limit: number }): Observable<any[]> {
+  assetsPort(filters: { station?: string; portType?: string; accessId: any }): Observable<any[]> {
     return this.http.post<any[]>(`${this.baseURL}assets-port`, filters);
   }
 
-  assetsStation(filters: { station?: string; portType?: string; accessId: any, offset: number, limit: number }): Observable<any[]> {
+  assetsStation(filters: { station?: string; portType?: string; accessId: any }): Observable<any[]> {
     return this.http.post<any[]>(`${this.baseURL}assets-charging`, filters);
   }
-
 
   activeUsers(filters: any): Observable<any[]> {
     return this.http.post<any[]>(`${this.baseURL}active-user`, filters);
@@ -127,6 +118,52 @@ export class FormAPIsService {
     const url = `${this.baseURL}update-mock-user`;
     return this.http.post<any>(url, formData).pipe(catchError(this.handleError));
   }
+
+  // Asset Charging Stations Map APIs
+  getStates(): Observable<{ states: { state: string }[] }> {
+    const url = `${this.baseURL}charging-states`;
+    return this.http.post<{ states: { state: string }[] }>(url, {}).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getCities(state: string): Observable<{ cities: { city: string }[] }> {
+    const url = `${this.baseURL}charging-cities`;
+    return this.http.post<{ cities: { city: string }[] }>(url, { state }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getAssets(state: string, city: string): Observable<any[]> {
+    const url = `${this.baseURL}assets-charging`;
+    return this.http.post<any[]>(url, { state, city }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Asset Charging Ports Map APIs
+  
+  getStatesPort(): Observable<{ states: { state: string }[] }> {
+    const url = `${this.baseURL}port-states`;
+    return this.http.post<{ states: { state: string }[] }>(url, {}).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getCitiesPort(state: string): Observable<{ cities: { city: string }[] }> {
+    const url = `${this.baseURL}port-cities`;
+    return this.http.post<{ cities: { city: string }[] }>(url, { state }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getAssetsPort(state: string, city: string): Observable<any[]> {
+    const url = `${this.baseURL}assets-port`;
+    return this.http.post<any[]>(url, { state, city }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 
 
   private handleError(error: HttpErrorResponse): Observable<never> {

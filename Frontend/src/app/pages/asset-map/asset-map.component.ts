@@ -11,76 +11,68 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./asset-map.component.scss']
 })
 export class AssetMapComponent {
+
   @ViewChild('mapContainer', { static: false }) gmap!: ElementRef;
 
   map!: google.maps.Map;
   filterForm: FormGroup;
   assets: any[] = [];
   markers: google.maps.Marker[] = [];
-  offset = 0;
-  limit = 10000;
+
+  states: { state: string }[] = [];
+  cities: { city: string }[] = [];
 
   constructor(
-    private assetMapService: FormAPIsService,
+    private chargingService: FormAPIsService,
     private fb: FormBuilder
   ) {
     this.filterForm = this.fb.group({
-      stationType: ['charging_stations']
+      state: [''],
+      city: ['']
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.filterForm = this.fb.group({
+      stationType: ['charging_stations'],
+      state: [''],
+      city: ['']
+    });
+
+    this.filterForm.get('stationType')?.valueChanges.subscribe(type => {
+      this.resetLocation();
+      this.loadStates(); // switch states as per type
+    });
+
+    this.loadStates(); // load default (charging_stations) on load
+  }
+
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.fetchAssets();
   }
 
   initMap(): void {
     const mapOptions: google.maps.MapOptions = {
-      center: new google.maps.LatLng(37.7749, -122.4194), // valid coordinates
+      center: new google.maps.LatLng(37.7749, -122.4194), // Default center
       zoom: 5
     };
     this.map = new google.maps.Map(this.gmap.nativeElement, mapOptions);
 
-    this.map.addListener('zoom_changed', () => {
-      this.updateMarkerIcons();
-    });
+    this.map.addListener('zoom_changed', () => this.updateMarkerIcons());
   }
 
-  fetchAssets(): void {
-    this.assets = [];
-    this.markers.forEach(m => m.setMap(null));
-    this.markers = [];
-    this.offset = 0;
-    this.loadNextBatch();
-  }
+  onFilter(): void {
+    const { state, city } = this.filterForm.value;
 
-  loadNextBatch(): void {
-    const accessId = localStorage.getItem('userId');
-    const selectedType = this.filterForm.value.stationType;
+    if (!state || !city) return;
 
-    const payload = {
-      accessId,
-      offset: this.offset,
-      limit: this.limit
-    };
-
-    const request$ = selectedType === 'charging_stations'
-      ? this.assetMapService.assetsStation(payload)
-      : this.assetMapService.assetsPort(payload);
-
-    request$.subscribe({
+    this.chargingService.getAssets(state, city).subscribe({
       next: (data) => {
-        if (data.length === 0) return;
-
-        this.assets.push(...data);
+        this.assets = data;
         this.plotMarkers();
-
-        this.offset += this.limit;
-        setTimeout(() => this.loadNextBatch(), 200); // optional small delay
       },
-      error: (err) => console.error(err)
+      error: (err) => console.error('Asset fetch error:', err)
     });
   }
 
@@ -89,21 +81,23 @@ export class AssetMapComponent {
     this.markers = [];
 
     const bounds = new google.maps.LatLngBounds();
-    const selectedType = this.filterForm.value.stationType;
+    const zoom = this.map.getZoom() || 5;
+    let size = 25;
 
+    if (zoom >= 10) {
+      size = 40;
+    } else if (zoom >= 7) {
+      size = 30;
+    }
     this.assets.forEach(asset => {
       const position = new google.maps.LatLng(+asset.latitude, +asset.longitude);
-
-      const iconUrl = selectedType === 'charging_ports'
-        ? 'assets/image/charging-ports.png'
-        : 'assets/image/charging-station.png';
 
       const marker = new google.maps.Marker({
         position,
         map: this.map,
         icon: {
-          url: iconUrl,
-          scaledSize: new google.maps.Size(25, 25)
+          url: 'assets/image/charging-station.png',
+          scaledSize: new google.maps.Size(size, size)
         },
         title: asset.station_name
       });
@@ -112,9 +106,7 @@ export class AssetMapComponent {
         content: this.generateInfoWindowContent(asset)
       });
 
-      marker.addListener('click', () => {
-        infoWindow.open(this.map, marker);
-      });
+      marker.addListener('click', () => infoWindow.open(this.map, marker));
 
       this.markers.push(marker);
       bounds.extend(position);
@@ -128,17 +120,10 @@ export class AssetMapComponent {
   generateInfoWindowContent(asset: any): string {
     return `
     <div class="custom-info-window">
-      <p class="station-name font-14 mb-2">
-        <strong>Station Name:</strong>
-        ${asset.station_name || 'N/A'}
-      </p>
-      <p class="address mb-2">
-        <strong>Address:</strong>
-        ${asset.street_address || ''}
-        ${asset.city || ''}, ${asset.state || ''} ${asset.zip || ''}
-      </p>
-      <p class="info-line mb-2"><strong>Phone:</strong> ${asset.station_phone || 'N/A'}</p>
-      <p class="info-line mb-2"><strong>Fuel Type:</strong> ${asset.fuel_type_code || 'N/A'}</p>
+      <p><strong>Station:</strong> ${asset.station_name || 'N/A'}</p>
+      <p><strong>Address:</strong> ${asset.street_address || ''}, ${asset.city || ''}, ${asset.state || ''} ${asset.zip || ''}</p>
+      <p><strong>Phone:</strong> ${asset.station_phone || 'N/A'}</p>
+      <p><strong>Fuel Type:</strong> ${asset.fuel_type_code || 'N/A'}</p>
     </div>
   `;
   }
@@ -153,22 +138,86 @@ export class AssetMapComponent {
       size = 30;
     }
 
-    const selectedType = this.filterForm.value.stationType;
-
     this.markers.forEach(marker => {
-      const iconUrl = selectedType === 'charging_ports'
-        ? 'assets/image/charging-ports.png'
-        : 'assets/image/charging-station.png';
-
       marker.setIcon({
-        url: iconUrl,
+        url: 'assets/image/charging-station.png',
         scaledSize: new google.maps.Size(size, size)
       });
     });
   }
 
-  onFilter(): void {
-    this.fetchAssets();
+  onStateChange(): void {
+    const selectedState = this.filterForm.value.state;
+    this.filterForm.patchValue({ city: '' });
+    this.assets = [];
+    this.clearMarkers();
+
+    if (!selectedState) {
+      this.cities = [];
+      return;
+    }
+
+    const selectedType = this.filterForm.value.stationType;
+
+    if (selectedType === 'charging_ports') {
+      this.chargingService.getCitiesPort(selectedState).subscribe({
+        next: res => this.cities = res.cities,
+        error: err => console.error('Port cities error:', err)
+      });
+    } else {
+      this.chargingService.getCities(selectedState).subscribe({
+        next: res => this.cities = res.cities,
+        error: err => console.error('Station cities error:', err)
+      });
+    }
+  }
+
+
+  onCityChange(): void {
+    const { state, city, stationType } = this.filterForm.value;
+
+    if (!state || !city) return;
+
+    const request$ = stationType === 'charging_ports'
+      ? this.chargingService.getAssetsPort(state, city)
+      : this.chargingService.getAssets(state, city);
+
+    request$.subscribe({
+      next: data => {
+        this.assets = data || [];
+        this.plotMarkers();
+      },
+      error: err => console.error('Assets fetch error:', err)
+    });
+  }
+
+  clearMarkers(): void {
+    this.markers.forEach(marker => marker.setMap(null));
+    this.markers = [];
+  }
+
+  loadStates(): void {
+    const selectedType = this.filterForm.value.stationType;
+
+    if (selectedType === 'charging_ports') {
+      this.chargingService.getStatesPort().subscribe({
+        next: res => this.states = res.states,
+        error: err => console.error('Port states error:', err)
+      });
+    } else {
+      this.chargingService.getStates().subscribe({
+        next: res => this.states = res.states,
+        error: err => console.error('Station states error:', err)
+      });
+    }
+  }
+
+  resetLocation(): void {
+    this.states = [];
+    this.cities = [];
+    this.assets = [];
+    this.clearMarkers();
+    this.filterForm.patchValue({ state: '', city: '' });
   }
 
 }

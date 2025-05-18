@@ -1,28 +1,51 @@
-<div class="asset-map p-3">
-    <h3 class="mb-3">Asset Map</h3>
+<div class="asset-map bg-white rounded-3 shadow p-3">
+    <h3 class="mb-3 fw-bold">Asset Map</h3>
 
-    <form [formGroup]="filterForm" class="row g-3 align-items-end mb-4">
-        <ul class="list-group list-group-horizontal">
-            <li class="list-group-item">
-                <div class="form-check d-flex align-items-center justify-content-center">
-                    <input class="form-check-input me-2" type="radio" formControlName="stationType"
-                        value="charging_stations" id="chargingStations" (change)="onFilter()">
-                    <label class="form-check-label fw-bold" for="chargingStations">
-                        Charging Stations
-                    </label>
+    
+    <form [formGroup]="filterForm" class="form-container">
+        <div class="row">
+            <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-6 col-sm-12 align-self-end mb-3">
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item">
+                        <div class="form-check d-flex align-items-center justify-content-center">
+                            <input class="form-check-input me-2" type="radio" id="station" formControlName="stationType"
+                                value="charging_stations" />
+                            <label class="form-check-label fw-bold" for="station">Charging Stations</label>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="form-check d-flex align-items-center justify-content-center">
+                            <input class="form-check-input me-2" type="radio" id="port" formControlName="stationType"
+                                value="charging_ports" />
+                            <label class="form-check-label fw-bold" for="port">Charging Ports</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xxl-7 col-xl-7 col-lg-7 col-md-6 col-sm-12">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-semibold" for="state">Select State:</label>
+                        <select id="state" class="form-select rounded-1 shadow-none" formControlName="state" (change)="onStateChange()">
+                            <option value="">-- Select State --</option>
+                            <option *ngFor="let s of states" [value]="s.state">{{ s.state }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-semibold" for="city">Select City:</label>
+                        <select id="city" class="form-select rounded-1 shadow-none" formControlName="city" [disabled]="cities.length === 0"
+                            (change)="onCityChange()">
+                            <option value="">-- Select City --</option>
+                            <option *ngFor="let c of cities" [value]="c.city">{{ c.city }}</option>
+                        </select>
+                    </div>
                 </div>
-            </li>
-            <li class="list-group-item">
-                <div class="form-check d-flex align-items-center justify-content-center">
-                    <input class="form-check-input me-2" type="radio" formControlName="stationType"
-                        value="charging_ports" id="chargingPorts" (change)="onFilter()">
-                    <label class="form-check-label fw-bold" for="chargingPorts">
-                        Charging Ports
-                    </label>
-                </div>
-            </li>
-        </ul>
+            </div>
+        </div>
     </form>
 
-    <div #mapContainer id="map"></div>
+    <!-- Map container -->
+    <div #mapContainer class="img-fluid assetMap rounded-3"></div>
+
+
 </div>
