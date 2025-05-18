@@ -875,7 +875,7 @@ const assetMap = async function (req, res) {
 
   try {
     // const { station, portType } = req.query;
-
+    const { state, city } = req.body;
     // const whereClause = {};
     // if (station) {
     //   whereClause.station_name = station;
@@ -888,8 +888,10 @@ const assetMap = async function (req, res) {
     //   where: whereClause,
     // });
     const assets = await Port.findAll({
-       offset: parseInt(req.body.offset),
-      limit: parseInt(req.body.limit),
+      where: {
+        state,
+        city
+      },
       attributes: ["fuel_type_code", "station_name", "street_address", "intersection_directions",
         "city", "state", "zip", "station_phone", "latitude", "longitude"],
     });
@@ -904,8 +906,8 @@ const assetMap = async function (req, res) {
 const assetMap1 = async function (req, res) {
 
   try {
-    
-    // const { station, portType } = req.query;
+
+    const { state, city } = req.body;
     // const { offset = 0, limit = 10000 } = req.query;
 
 
@@ -921,8 +923,12 @@ const assetMap1 = async function (req, res) {
     //   where: whereClause,
     // });
     const assets = await Charging.findAll({
-      offset: parseInt(req.body.offset),
-      limit: parseInt(req.body.limit),
+      // offset: parseInt(req.body.offset),
+      // limit: parseInt(req.body.limit),
+      where: {
+        state,
+        city
+      },
       attributes: ["fuel_type_code", "station_name", "street_address", "intersection_directions",
         "city", "state", "zip", "station_phone", "latitude", "longitude"],
     });
@@ -1147,6 +1153,95 @@ const importAsset = async function (req, res) {
     return ReE(res, { message: "Somthing Went Wrong", err: error }, 200);
   }
 };
+const getChargingState = async function (req, res) {
+  try {
+    const states = await Charging.findAll({
+      attributes: ['state'],
+      group: ['state'],
+      raw: true
+    });
+    return ReS(res, { states });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+
+};
+const getChargingCity = async function (req, res) {
+  try {
+    const { state } = req.body; // assuming state is sent in request body
+
+    if (!state) {
+      return res.status(400).json({ message: "State is required" });
+    }
+
+    const cities = await Charging.findAll({
+      where: { state },
+      attributes: ['city'],
+      group: ['city'],
+      raw: true
+    });
+
+    return ReS(res, { cities });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+
+};
+const getPortState = async function (req, res) {
+  try {
+    const states = await Port.findAll({
+      attributes: ['state'],
+      group: ['state'],
+      raw: true
+    });
+    return ReS(res, { states });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+
+};
+const getPortCity = async function (req, res) {
+  try {
+    const { state } = req.body; // assuming state is sent in request body
+
+    if (!state) {
+      return res.status(400).json({ message: "State is required" });
+    }
+
+    const cities = await Port.findAll({
+      where: { state },
+      attributes: ['city'],
+      group: ['city'],
+      raw: true
+    });
+
+    return ReS(res, { cities });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+
+};
+const getActiveUser = async function (req, res) {
+  try {
+    const { state, city } = req.body;
+    const data = await MockVerify.findAll({
+      attributes: ["l", "l1", "fn", "ln", "a", "sol", "city"],
+      order: [['id', 'DESC']],
+      where: {
+        state,
+        city
+      },
+      limit: 5
+    });
+    // const count = await MockVerify.count();
+    if (!data) {
+      return ReE(res, { message: "No Data Found" }, 200);
+    }
+    return ReS(res, { data: data, message: "success" });
+  } catch (error) {
+    return ReE(res, { message: "Somthing Went Wrong", err: error }, 200);
+  }
+};
 
 module.exports = {
   login,
@@ -1168,5 +1263,10 @@ module.exports = {
   uploadExcelToDatabase,
   uploadExcelToDatabase1,
   activeUsers,
-  importAsset
+  importAsset,
+  getChargingState,
+  getChargingCity,
+  getPortState,
+  getPortCity,
+  getActiveUser
 };
