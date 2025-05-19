@@ -76,7 +76,7 @@ export class ActiveUserComponent {
         map: this.map,
         icon: {
           url: iconUrl,
-          scaledSize: new google.maps.Size(35, 35)
+          scaledSize: new google.maps.Size(30, 30)
         },
         title: `${asset.firstName} ${asset.lastName}`
       });
