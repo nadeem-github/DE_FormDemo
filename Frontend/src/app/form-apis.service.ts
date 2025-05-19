@@ -142,7 +142,7 @@ export class FormAPIsService {
   }
 
   // Asset Charging Ports Map APIs
-  
+
   getStatesPort(): Observable<{ states: { state: string }[] }> {
     const url = `${this.baseURL}port-states`;
     return this.http.post<{ states: { state: string }[] }>(url, {}).pipe(
@@ -163,6 +163,13 @@ export class FormAPIsService {
       catchError(this.handleError)
     );
   }
+
+  getActiveUsers(state: string, city: string): Observable<any> {
+    return this.http.post<any>(`${this.baseURL}active-user-asset`, { state, city }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 
 
 

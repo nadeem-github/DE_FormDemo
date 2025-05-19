@@ -28,6 +28,7 @@ import { AssetMapComponent } from './pages/asset-map/asset-map.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { ActiveUserComponent } from './pages/active-user/active-user.component';
 import { SafeUrlPipe } from './safeUrl';
+import { ActiveUsersMapModalComponent } from './pages/active-users-map-modal/active-users-map-modal.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { SafeUrlPipe } from './safeUrl';
     AssetMapComponent,
     ActiveUserComponent,
     SafeUrlPipe,
+    ActiveUsersMapModalComponent,
   ],
   imports: [
     BrowserModule,

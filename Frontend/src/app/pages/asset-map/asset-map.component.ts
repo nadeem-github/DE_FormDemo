@@ -4,6 +4,7 @@ import { FormAPIsService } from 'src/app/form-apis.service';
 import { Asset } from 'src/app/models/asset/asset.module';
 import * as L from 'leaflet';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActiveUsersMapModalComponent } from '../active-users-map-modal/active-users-map-modal.component';
 
 @Component({
   selector: 'app-asset-map',
@@ -24,7 +25,8 @@ export class AssetMapComponent {
 
   constructor(
     private chargingService: FormAPIsService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private modalService: NgbModal
   ) {
     this.filterForm = this.fb.group({
       state: [''],
@@ -50,6 +52,11 @@ export class AssetMapComponent {
 
   ngAfterViewInit(): void {
     this.initMap();
+    window.addEventListener('open-active-users', (e: any) => {
+      const { state, city } = e.detail;
+      this.openActiveUsersModal(state, city);
+    });
+
   }
 
   initMap(): void {
@@ -124,9 +131,13 @@ export class AssetMapComponent {
       <p><strong>Address:</strong> ${asset.street_address || ''}, ${asset.city || ''}, ${asset.state || ''} ${asset.zip || ''}</p>
       <p><strong>Phone:</strong> ${asset.station_phone || 'N/A'}</p>
       <p><strong>Fuel Type:</strong> ${asset.fuel_type_code || 'N/A'}</p>
+      <button class="btn btn-sm btn-primary mt-0" onclick="window.dispatchEvent(new CustomEvent('open-active-users', { detail: { state: '${asset.state}', city: '${asset.city}' } }))">
+        Active Users
+      </button>
     </div>
   `;
   }
+
 
   updateMarkerIcons(): void {
     const zoom = this.map.getZoom() || 5;
@@ -218,6 +229,12 @@ export class AssetMapComponent {
     this.assets = [];
     this.clearMarkers();
     this.filterForm.patchValue({ state: '', city: '' });
+  }
+
+  openActiveUsersModal(state: string, city: string): void {
+    const modalRef = this.modalService.open(ActiveUsersMapModalComponent, { size: 'xl', backdrop: 'static', keyboard: false, centered: true });
+    modalRef.componentInstance.state = state;
+    modalRef.componentInstance.city = city;
   }
 
 }
