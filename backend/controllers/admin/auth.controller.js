@@ -16,6 +16,8 @@ const fs = require("fs");
 const path = require("path");
 const nodemailer = require('nodemailer');
 const xlsx = require('xlsx');
+const axios = require('axios');
+const GOOGLE_API_KEY = 'AIzaSyBIBhX5WOayhJiNBVWh-7Kb_Z0U-TTXQ-o'; // .env se lena recommended
 
 
 const login = async function (req, res) {
@@ -1233,12 +1235,38 @@ const getActiveUser = async function (req, res) {
       // },
       limit: 5
     });
+    const results = [];
+    for (const tech of data) {
+      const address = encodeURIComponent(tech.a); // tech.a is address
+      const geoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_API_KEY}`;
+      try {
+        const response = await axios.get(geoURL);
+
+        if (response.data.status === 'OK') {
+          const location = response.data.results[0].geometry.location;
+          results.push({
+            name: `${tech.fn} ${tech.ln}`,
+            city: tech.city,
+            address: tech.a,
+            lat: location.lat,
+            long: location.lng,
+            phone: tech.sol
+          });
+        } else {
+          console.warn(`Failed to geocode address: ${tech.a}`);
+        }
+
+      } catch (error) {
+        console.error('Geocoding error:', error.message);
+      }
+    }
     // const count = await MockVerify.count();
     if (!data) {
       return ReE(res, { message: "No Data Found" }, 200);
     }
-    return ReS(res, { data: data, message: "success" });
+    return ReS(res, {  data: results, message: "success" });
   } catch (error) {
+    console.log("error", error)
     return ReE(res, { message: "Somthing Went Wrong", err: error }, 200);
   }
 };

@@ -21,11 +21,11 @@ adminRouter.post("/charging-states", AuthController.getChargingState);
 adminRouter.post("/charging-cities", AuthController.getChargingCity);
 adminRouter.post("/port-states", AuthController.getPortState);
 adminRouter.post("/port-cities", AuthController.getPortCity);
-adminRouter.post("/active-user", AuthController.getActiveUser);
+adminRouter.post("/active-user-asset", AuthController.getActiveUser);
 
 
 //admin access
-// adminRouter.post("/active-user",adminMidd.adminUser, AuthController.activeUsers);
+adminRouter.post("/active-user",adminMidd.adminUser, AuthController.activeUsers);
 adminRouter.post("/create-mock",adminMidd.adminUser, AuthController.createMock);
 adminRouter.post("/create-mock1",adminMidd.adminUser, AuthController.createMock1);
 adminRouter.post("/fetch-mock",adminMidd.adminUser, AuthController.fetchMock);
