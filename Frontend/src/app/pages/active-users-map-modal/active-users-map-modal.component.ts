@@ -42,7 +42,11 @@ export class ActiveUsersMapModalComponent {
           const marker = new google.maps.Marker({
             map: this.map,
             position,
-            title: user.name
+            title: user.name,
+            icon: {
+              url: 'assets/image/user-location.png', // path relative to src/
+              scaledSize: new google.maps.Size(32, 32) // adjust size as needed
+            }
           });
 
           const infoWindow = new google.maps.InfoWindow({
