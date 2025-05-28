@@ -1062,13 +1062,39 @@ const activeUsers = async function (req, res) {
     //   whereClause.port_type = portType;
     // }
 
-    const assets = await MockVerify.findAll({
+    const assets2 = await MockVerify.findAll({
       attributes: ["l", "l1", "fn", "ln", "a", "sol", "city"],
-      where: {
-        l: { [Op.ne]: null },
-        l1: { [Op.ne]: null }
-      }
+      // where: {
+      //   l: { [Op.ne]: null },
+      //   l1: { [Op.ne]: null }
+      // }
     });
+     const assets = [];
+    for (const tech of assets2) {
+      const address = encodeURIComponent(tech.a); // tech.a is address
+      const geoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GOOGLE_API_KEY}`;
+      try {
+        const response = await axios.get(geoURL);
+
+        if (response.data.status === 'OK') {
+          const location = response.data.results[0].geometry.location;
+          assets.push({
+            fn: tech.fn,
+            ln: tech.ln,
+            city: tech.city,
+            a: tech.a,
+            l: location.lat,
+            l1: location.lng,
+            sol: tech.sol
+          });
+        } else {
+          console.warn(`Failed to geocode address: ${tech.a}`);
+        }
+
+      } catch (error) {
+        console.error('Geocoding error:', error.message);
+      }
+    }
 
     res.json(assets);
   } catch (error) {
