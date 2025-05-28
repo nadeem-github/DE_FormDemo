@@ -390,6 +390,61 @@ export class UserDashProfileComponent {
 
       formData.append('accessId', this.accessId);
 
+      formData.append('fn', this.dataForm.get('firstName')?.value);
+      formData.append('ln', this.dataForm.get('lastName')?.value);
+      formData.append('a', this.dataForm.get('address')?.value);
+      formData.append('sol', this.dataForm.get('stateOfLicense')?.value);
+      formData.append('pn', this.dataForm.get('phoneNumber')?.value);
+      formData.append('ssn', this.dataForm.get('ssn')?.value);
+      formData.append('ecn', this.dataForm.get('emergencyContactName1')?.value);
+      formData.append('ecn1', this.dataForm.get('emergencyContactName2')?.value);
+      formData.append('pn1', this.dataForm.get('emergencyContactNumber1')?.value);
+      formData.append('pn2', this.dataForm.get('emergencyContactNumber2')?.value);
+      formData.append('ttiawo', this.dataForm.get('isAcceptingWorkOrders')?.value);
+      formData.append('city', this.dataForm.get('cityName')?.value);
+      formData.append('zc', this.dataForm.get('zipCode')?.value);
+      formData.append('ed', this.dataForm.get('ed')?.value);
+      formData.append('state', this.dataForm.get('stateName')?.value);
+      formData.append('in', this.dataForm.get('identificationNumber')?.value);
+      formData.append('l', this.dataForm.get('latitude')?.value);
+      formData.append('l1', this.dataForm.get('longitude')?.value);
+      formData.append('r', this.dataForm.get('radius')?.value);
+      formData.append('ttiawo', this.dataForm.get('ttiawo')?.value);
+      formData.append('sc', this.dataForm.get('securityClearance')?.value);
+      formData.append('tpe', this.dataForm.get('tpecheckbox')?.value);
+      formData.append('vc', this.dataForm.get('vccheckbox')?.value);
+      formData.append('hvsc', this.dataForm.get('hvscRadio')?.value);
+      formData.append('fvsc', this.dataForm.get('fvsc')?.value);
+      formData.append('rc', this.dataForm.get('rccheckbox')?.value);
+      formData.append('cc', this.dataForm.get('cccheckbox')?.value);
+      formData.append('uc', this.dataForm.get('uccheckbox')?.value);
+      formData.append('pv', this.dataForm.get('pvcheckbox')?.value);
+      formData.append('ev', this.dataForm.get('evcheckbox')?.value);
+      formData.append('btv', this.dataForm.get('btvcheckbox')?.value);
+      formData.append('thermal', this.dataForm.get('thermalcheckbox')?.value);
+      formData.append('options', this.dataForm.get('optionscheckbox')?.value);
+      formData.append('toc', this.dataForm.get('tocText')?.value);
+      formData.append('ed1', this.dataForm.get('ed1')?.value);
+      formData.append('in1', this.dataForm.get('in1Text')?.value);
+      formData.append('toc1', this.dataForm.get('toc1Text')?.value);
+      formData.append('ed2', this.dataForm.get('ed2')?.value);
+      formData.append('toc2', this.dataForm.get('toc2Text')?.value);
+      formData.append('ed3', this.dataForm.get('ed3')?.value);
+      formData.append('ed4', this.dataForm.get('ed4')?.value);
+      formData.append('tol', this.dataForm.get('tolText')?.value);
+      formData.append('thoth', this.dataForm.get('thoth')?.value);
+      formData.append('in2', this.dataForm.get('in2Text')?.value);
+      formData.append('in3', this.dataForm.get('in3Text')?.value);
+      formData.append('tol1', this.dataForm.get('tol1Text')?.value);
+      formData.append('ed5', this.dataForm.get('ed5')?.value);
+      formData.append('in4', this.dataForm.get('in4Text')?.value);
+      formData.append('tol2', this.dataForm.get('tol2Text')?.value);
+      formData.append('ed6', this.dataForm.get('ed6')?.value);
+      formData.append('in5', this.dataForm.get('in5Text')?.value);
+      formData.append('tol3', this.dataForm.get('tol3Text')?.value);
+      formData.append('ed7', this.dataForm.get('ed7')?.value);
+      formData.append('in6', this.dataForm.get('in6Text')?.value);
+
       this.formDataService.updateUserData(formData).subscribe(
         (response: any) => {
           this.isLoading = false;

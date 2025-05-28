@@ -69,13 +69,13 @@
                             </div>
                         </td>
                         <td class="texEtllips" placement="top" [title]="item.fn + item.ln">
-                            {{ item.fn }} {{ item.ln }}
+                            {{ item.fn || 'Not added' }} {{ item.ln || 'Not added' }}
                         </td>
-                        <td>{{ item.in }}</td>
-                        <td>{{ item.sol }}</td>
-                        <td>{{ item.city}}</td>
-                        <td>{{ item.undlf }}</td>
-                        <td class="texEtllips">{{ item.a }}</td>
+                        <td>{{ item.in || 'Not added' }}</td>
+                        <td>{{ item.pn || 'Not added' }}</td>
+                        <td>{{ item.pn1 || 'Not added' }}</td>
+                        <td>{{ item.undlf || 'Not added' }}</td>
+                        <td class="texEtllips">{{ item.a || 'Not added' }}</td>
                         <td>
                             <button class="btn btn-sm btn-primary" (click)="editUser(item.id)">
                                 <i class="fa fa-pencil-square" aria-hidden="true"></i>
