@@ -121,6 +121,13 @@ export class AssetMapComponent {
 
     if (this.assets.length > 0) {
       this.map.fitBounds(bounds);
+      const listener = google.maps.event.addListenerOnce(this.map, 'bounds_changed', () => {
+        const currentZoom = this.map.getZoom() ?? 5;
+        const maxZoom = 14; // Customize max zoom (14 is usually a good detailed city-level zoom)
+        if (this.assets.length <= 2 && currentZoom > maxZoom) {
+          this.map.setZoom(maxZoom);
+        }
+      });
     }
   }
 
